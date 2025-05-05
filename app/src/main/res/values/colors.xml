@@ -2,4 +2,28 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="bonda_brown">#524545</color>
+
+    <color name="pink01">#FDFAFA</color>
+    <color name="pink02">#DD9797</color>
+    <color name="green01">#F9FCF9</color>
+    <color name="green02">#85C88E</color>
+    <color name="blue01">#F9FBFD</color>
+    <color name="blue02">#90B7D5</color>
+
+    <color name="chips_beige">#F2EDE1</color>
+
+    <color name="warmgray01">#FDFDFD</color>
+    <color name="warmgray02">#F8F6F3</color>
+    <color name="warmgray03">#EEEDEC</color>
+    <color name="warmgray04">#E8E7E6</color>
+    <color name="warmgray05">#E1E0DF</color>
+
+    <color name="gray01">#EAEAEA</color>
+    <color name="gray02">#D4D4D4</color>
+    <color name="gray03">#B2B2B2</color>
+    <color name="gray04">#A1A1A1</color>
+    <color name="gray05">#6E6E6E</color>
+    <color name="gray06">#292929</color>
 </resources>
