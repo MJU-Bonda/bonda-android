@@ -110,4 +110,8 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="nav_home_title">홈</string>
+    <string name="nav_books_title">도서</string>
+    <string name="nav_library_title">서재</string>
+    <string name="nav_profile_title">마이</string>
 </resources>
