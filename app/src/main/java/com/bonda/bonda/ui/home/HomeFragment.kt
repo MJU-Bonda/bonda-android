@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentHomeBinding
-import com.bonda.bonda.ui.article.detail.ArticleDetailActivity
+import com.bonda.bonda.ui.article.ArticleActivity
 
 class HomeFragment : Fragment() {
 
@@ -39,7 +39,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonDebug.setOnClickListener {
-            val intent = Intent(requireContext(), ArticleDetailActivity::class.java)
+            val intent = Intent(requireContext(), ArticleActivity::class.java)
             startActivity(intent)
         }
     }

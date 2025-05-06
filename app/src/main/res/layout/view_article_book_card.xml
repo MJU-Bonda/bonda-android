@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="32sp"
     android:background="@color/article_book_card_background"
-    tools:context=".ui.article.detail.ArticleDetailActivity">
+    tools:context=".ui.article.ArticleActivity">
 
     <TextView
         android:id="@+id/book_card_index"
