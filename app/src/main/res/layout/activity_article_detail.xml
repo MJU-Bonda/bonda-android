@@ -7,24 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/article_background"
     tools:context=".ui.article.detail.ArticleDetailActivity">
-
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
-<!--        app:layout_constraintStart_toStartOf="@id/container"-->
-<!--        app:layout_constraintTop_toTopOf="@id/container">-->
-
-<!--        <androidx.appcompat.widget.Toolbar-->
-<!--            android:id="@+id/toolbar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="?attr/actionBarSize"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            app:title="투명 액션바"-->
-<!--            app:titleTextColor="@android:color/white"-->
-<!--            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />-->
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -35,17 +19,91 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include
-                layout="@layout/view_article_detail_header"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/article_image"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@drawable/dummy_book1"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/article_view_image_description"
+                    android:tint="#80000000"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"/>
+
+                <TextView
+                    android:id="@+id/article_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16sp"
+                    android:text="@string/article_view_title"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    app:layout_constraintBottom_toTopOf="@id/article_subtitle"
+                    app:layout_constraintLeft_toLeftOf="@id/article_image"/>
+
+                <TextView
+                    android:id="@+id/article_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16sp"
+                    android:layout_marginVertical="32sp"
+                    android:text="@string/article_view_subtitle"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/article_image"
+                    app:layout_constraintLeft_toLeftOf="@id/article_image"/>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/article_category_chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16sp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@+id/article_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <include layout="@layout/view_chip_theme" />
+                    <include layout="@layout/view_chip_publisher" />
+                </com.google.android.material.chip.ChipGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/article_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/large_text"
-                android:padding="16dp" />
+                android:text="@string/article_view_body"
+                android:padding="26dp"
+                android:textSize="16sp"
+                android:lineSpacingMultiplier="1.2"/>
+
+
+            <!--    도서 정보 표시    -->
+            <include
+                layout="@layout/view_article_detail_book_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"/>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="48dp"
+                app:dividerThickness="1dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="테스트테스트" />
+
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

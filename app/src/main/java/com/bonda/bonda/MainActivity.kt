@@ -31,12 +31,12 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.bottomNav
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_books, R.id.navigation_library, R.id.navigation_profile
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.navigation_home, R.id.navigation_books, R.id.navigation_library, R.id.navigation_profile
+//            )
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
 }

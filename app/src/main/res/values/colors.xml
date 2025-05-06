@@ -14,6 +14,8 @@
 
     <color name="chips_beige">#F2EDE1</color>
 
+    <color name="warmgray50">#FCFCFB</color>
+
     <color name="warmgray01">#FDFDFD</color>
     <color name="warmgray02">#F8F6F3</color>
     <color name="warmgray03">#EEEDEC</color>
@@ -26,4 +28,7 @@
     <color name="gray04">#A1A1A1</color>
     <color name="gray05">#6E6E6E</color>
     <color name="gray06">#292929</color>
+
+    <color name="article_background">#FCFCFB</color>
+    <color name="article_book_card_background">#F9FCFE</color>
 </resources>
