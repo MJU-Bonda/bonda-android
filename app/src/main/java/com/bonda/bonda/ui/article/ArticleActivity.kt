@@ -17,7 +17,7 @@ class ArticleActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         supportActionBar?.apply {
-            title = "화면 제목"
+            title = "BONDA"
             setDisplayHomeAsUpEnabled(true)
         }
 
