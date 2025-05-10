@@ -10,7 +10,8 @@
     <string name="article_chip_indie_bookshop">독립서점</string>
     <string name="article_chip_theme">테마</string>
 
-    <string name="article_view_image_description">ArticleViewImage</string>
+    <string name="article_image_description">아티클 이미지</string>
+    <string name="article_bookmark_button_description">북마크 버튼</string>
 
     <string name="book_card_body">
         길을 걷다 문득 마주친 하트 모양, 우연히 발견한 작은 순간들을 기록한 사진집이에요.\n\n
