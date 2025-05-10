@@ -27,14 +27,22 @@
                     android:id="@+id/article_image"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:src="@drawable/dummy_book1"
+                    android:src="@drawable/dummy_article_cover1"
                     android:scaleType="centerCrop"
-                    android:contentDescription="@string/article_view_image_description"
-                    android:tint="#80000000"
+                    android:contentDescription="@string/article_image_description"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintDimensionRatio="1:1"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/gradient_overlay"
+                    app:layout_constraintStart_toStartOf="@id/article_image"
+                    app:layout_constraintEnd_toEndOf="@id/article_image"
+                    app:layout_constraintTop_toTopOf="@id/article_image"
+                    app:layout_constraintBottom_toBottomOf="@id/article_image" />
 
                 <TextView
                     android:id="@+id/article_title"
@@ -68,7 +76,6 @@
                     app:layout_constraintStart_toStartOf="parent">
 
                     <include layout="@layout/view_chip_theme" />
-                    <include layout="@layout/view_chip_publisher" />
                 </com.google.android.material.chip.ChipGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -139,30 +146,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="26dp"
-
                 android:text="@string/article_curation_list_explain"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
-            <TextView
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/articles_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="큐레이션 목록이 들어갑니다"
-                android:textSize="24sp"
-                android:padding="32dp"
-                android:textAlignment="center"/>
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/article_banner_container"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
-
-<!--                <include layout="@layout/view_article_detail_banner" />-->
-<!--                <include layout="@layout/view_article_detail_banner" />-->
-<!--                <include layout="@layout/view_article_detail_banner" />-->
-<!--                <include layout="@layout/view_article_detail_banner" />-->
-<!--            </LinearLayout>-->
+                android:layout_marginVertical="64dp"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

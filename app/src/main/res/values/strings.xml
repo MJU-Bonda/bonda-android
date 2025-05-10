@@ -6,7 +6,7 @@
     <string name="nav_library_title">서재</string>
     <string name="nav_profile_title">마이</string>
 
-    <string name="article_chip_publisher">작사/출판사</string>
+    <string name="article_chip_publisher">작가/출판사</string>
     <string name="article_chip_indie_bookshop">독립서점</string>
     <string name="article_chip_theme">테마</string>
 

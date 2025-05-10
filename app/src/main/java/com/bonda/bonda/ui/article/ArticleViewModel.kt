@@ -3,10 +3,12 @@ package com.bonda.bonda.ui.article
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bonda.bonda.R
 
 class ArticleViewModel : ViewModel() {
     private val _id = MutableLiveData<Int>()
     private val _isSaved = MutableLiveData<Boolean>()
+    private val _coverImage = MutableLiveData<Int>()
     private val _category = MutableLiveData<String>()
     private val _title = MutableLiveData<String>()
     private val _subTitle = MutableLiveData<String>()
@@ -17,6 +19,7 @@ class ArticleViewModel : ViewModel() {
     // read-only properties
     val id: LiveData<Int> = _id
     val isSaved: LiveData<Boolean> = _isSaved
+    val coverImage: LiveData<Int> = _coverImage
     val category: LiveData<String> = _category
     val title: LiveData<String> = _title
     val subTitle: LiveData<String> = _subTitle
@@ -27,6 +30,7 @@ class ArticleViewModel : ViewModel() {
     // data-class declaration
     data class Book(
         val id: Int,
+//        val coverImage: Int,
         val category: String,
         val title: String,
         val author: String,
@@ -34,6 +38,7 @@ class ArticleViewModel : ViewModel() {
     )
     data class Article(
         val id: Int,
+        val coverImage: Int,
         val category : String,
         val title: String
     )
@@ -43,6 +48,7 @@ class ArticleViewModel : ViewModel() {
     init {
         _id.value = 1
         _isSaved.value = false
+        _coverImage.value = R.drawable.dummy_article_cover1
         _category.value = "테마"
         _title.value = "한 가지 사물, 수백 가지 이야기"
         _subTitle.value = "한 가지 사물에 숨겨진 다채로운 순간들"
@@ -63,10 +69,9 @@ class ArticleViewModel : ViewModel() {
             Book(4, "테마", "엿책", "박민수", "엿의 재치 있는 순간을 담은 포토북")
         )
         _articles.value = listOf(
-            Article(1, "포토북", "일상의 사물에 숨겨진 이야기"),
-            Article(2, "인터뷰", "작가가 말하는 관찰의 힘"),
-            Article(3, "리뷰", "『하트책』을 읽고 느낀 점"),
-            Article(4, "칼럼", "물건이 전하는 메시지")
+            Article(1, R.drawable.dummy_article_cover1, "작가/출판사", "오수영 작가의 사색과 감성"),
+            Article(2, R.drawable.dummy_article_cover4, "테마", "함께 살아가는 따뜻 이야기"),
+            Article(3, R.drawable.dummy_article_cover3, "테마", "집, 우리 삶의 거울"),
         )
     }
     // -------------------------------------------- >8 --------------------------------------------
