@@ -5,13 +5,17 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
 
+    app:chipStartPadding="4dp"
+    app:chipEndPadding="4dp"
+    app:chipMinTouchTargetSize="0dp"
+
     app:chipStrokeWidth="0dp"
     app:chipBackgroundColor="#F9FCFE"
     app:chipCornerRadius="16dp"
 
     android:text="@string/article_chip_theme"
     android:textColor="#557B97"
-    android:textSize="12sp"
+    android:textSize="14sp"
 
     android:clickable="false"
     android:focusable="false"

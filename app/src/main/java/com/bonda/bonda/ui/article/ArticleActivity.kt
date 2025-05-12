@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
+import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewChipPublisherBinding
@@ -33,6 +34,32 @@ class ArticleActivity : AppCompatActivity() {
         articleViewModel.title.observe(this) { binding.articleTitle.text = it }
         articleViewModel.subTitle.observe(this) { binding.articleSubtitle.text = it }
         articleViewModel.body.observe(this) { binding.articleBody.text = it }
+        articleViewModel.coverImage.observe(this) {binding.articleImage.setImageResource(it) }
+
+        articleViewModel.category.observe(this) { category ->
+            binding.articleCategoryChipGroup.removeAllViews()
+
+            when (category) {
+                "테마" -> ViewChipThemeBinding.inflate(
+                    layoutInflater,
+                    binding.articleCategoryChipGroup,
+                    true
+                )
+                "작가/출판사" -> ViewChipThemeBinding.inflate(
+                    layoutInflater,
+                    binding.articleCategoryChipGroup,
+                    true
+                )
+            }
+        }
+
+        articleViewModel.isSaved.observe(this) { isSaved ->
+            if (isSaved) {
+                binding.articleButtonBookmark.setImageResource(R.drawable.ic_bookmark_saved_36dp)
+            } else {
+                binding.articleButtonBookmark.setImageResource((R.drawable.ic_bookmark_36dp))
+            }
+        }
 
         articleViewModel.articles.observe(this) { list ->
             binding.articlesContainer.removeAllViews()
@@ -49,7 +76,7 @@ class ArticleActivity : AppCompatActivity() {
                 itemBinding.root.id = View.generateViewId()
 
                 // view-model binding
-                itemBinding.articeImage.setImageResource(article.coverImage)
+                itemBinding.articleImage.setImageResource(article.coverImage)
                 itemBinding.articleTitle.text = article.title
 
                 if (article.category == "테마") {

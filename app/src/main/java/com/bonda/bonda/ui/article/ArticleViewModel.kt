@@ -48,9 +48,9 @@ class ArticleViewModel : ViewModel() {
     init {
         _id.value = 1
         _isSaved.value = false
-        _coverImage.value = R.drawable.dummy_article_cover1
+        _coverImage.value = R.drawable.dummy_article_cover2
         _category.value = "테마"
-        _title.value = "한 가지 사물, 수백 가지 이야기"
+        _title.value = "한 가지 사물,\n수백 가지 이야기"
         _subTitle.value = "한 가지 사물에 숨겨진 다채로운 순간들"
         _body.value = """
             작은 사물 하나에도 수많은 이야기가 숨어 있습니다. 하지만, 우리는 그 사실을 잊을 때가 많죠.
