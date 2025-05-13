@@ -15,7 +15,7 @@
         android:text="01 / 04"
         android:textSize="14sp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/book_image_holder"/>
+        app:layout_constraintBottom_toTopOf="@id/book_image_holder" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/book_image_holder"
@@ -55,25 +55,25 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:text="제목 오류"
+        android:text="@string/status_loading"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/book_image_holder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/book_category_chip_group"
-        app:layout_constraintBottom_toTopOf="@id/book_author"/>
+        app:layout_constraintBottom_toTopOf="@id/book_author" />
 
     <TextView
         android:id="@+id/book_author"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:text="저자 오류"
+        android:text="@string/status_loading"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/book_image_holder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/book_title"
-        app:layout_constraintBottom_toBottomOf="@id/book_image_holder"/>
+        app:layout_constraintBottom_toBottomOf="@id/book_image_holder" />
 
     <View
         android:id="@+id/divider"
@@ -81,25 +81,24 @@
         android:layout_height="1dp"
         android:background="?attr/colorOutline"
         app:layout_constraintTop_toBottomOf="@id/book_image_holder"
-        app:layout_constraintBottom_toTopOf="@id/book_body"/>
+        app:layout_constraintBottom_toTopOf="@id/book_body" />
 
     <TextView
         android:id="@+id/book_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
-        android:text=" 길을 걷다 문득 마주친 하트 모양, 우연히 발견한 작은 순간들을 기록한 사진집이에요. \n\n 다양한 형태의 사랑이 존재하는 것처럼, 하트도 가지각색 분위기로 존재하는데요. 꾸준히 모아온 이 책 속 하트들은 보는 것만으로도 마음을 따뜻하게 만들어줍니다. 하트는 단순한 모양이 아니라, 사랑과 감정을 전하는 강력한 상징이잖아요. 마음속에 작은 하트를 품고 싶은 날, 이 책이 당신의 일상을 더욱 사랑스럽게 만들어줄 거예요. ♡"
+        android:text="@string/status_loading"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/divider"
-        app:layout_constraintBottom_toTopOf="@id/book_button"/>
+        app:layout_constraintTop_toBottomOf="@id/divider" />
 
     <Button
         android:id="@+id/book_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        android:text="도서 정보 확인하기 >"
+        android:text="@string/get_book_detail"
         app:layout_constraintTop_toBottomOf="@id/book_body"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
