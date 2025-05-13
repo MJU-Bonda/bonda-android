@@ -30,7 +30,7 @@ class ArticleViewModel : ViewModel() {
     // data-class declaration
     data class Book(
         val id: Int,
-//        val coverImage: Int,
+        val coverImage: Int,
         val category: String,
         val title: String,
         val author: String,
@@ -63,10 +63,10 @@ class ArticleViewModel : ViewModel() {
             기발한 발상과 사진가의 유쾌한 시선이 돋보이는 이 포토북은 일상 속 물건을 새로운 시각으로 바라보게 만들 거예요.
         """.trimIndent()
         _books.value = listOf(
-            Book(1, "테마", "하트책", "홍길동", "사랑스러운 하트 모양을 담은 포토북"),
-            Book(2, "테마", "가구 산", "김철수", "가구가 만들어 내는 풍경을 포착한 포토북"),
-            Book(3, "테마", "오로지 계란후라이", "이영희", "계란후라이의 다양한 얼굴을 담은 포토북"),
-            Book(4, "테마", "엿책", "박민수", "엿의 재치 있는 순간을 담은 포토북")
+            Book(1, R.drawable.dummy_book1, "테마", "하트책", "홍길동", "사랑스러운 하트 모양을 담은 포토북"),
+            Book(2, R.drawable.dummy_book2, "테마", "가구 산", "김철수", "가구가 만들어 내는 풍경을 포착한 포토북"),
+            Book(3, R.drawable.dummy_book3, "테마", "오로지 계란후라이", "이영희", "계란후라이의 다양한 얼굴을 담은 포토북"),
+            Book(4, R.drawable.dummy_book4, "테마", "엿책", "박민수", "엿의 재치 있는 순간을 담은 포토북")
         )
         _articles.value = listOf(
             Article(1, R.drawable.dummy_article_cover1, "작가/출판사", "오수영 작가의 사색과 감성"),

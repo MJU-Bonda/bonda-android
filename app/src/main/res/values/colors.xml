@@ -33,4 +33,5 @@
     <color name="article_book_card_background">#F9FCFE</color>
 
     <color name="splash_background">#524545</color>
+    <color name="text_accent_primary">#524545</color>
 </resources>
