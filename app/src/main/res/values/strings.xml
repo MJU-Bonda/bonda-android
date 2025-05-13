@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">Bonda</string>
+
+    <string name="nav_home_title">홈</string>
+    <string name="nav_books_title">도서</string>
+    <string name="nav_library_title">서재</string>
+    <string name="nav_profile_title">마이</string>
+
+    <string name="article_chip_publisher">작가/출판사</string>
+    <string name="article_chip_indie_bookshop">독립서점</string>
+    <string name="article_chip_theme">테마</string>
+
+    <string name="article_image_description">아티클 이미지</string>
+    <string name="article_bookmark_button_description">북마크 버튼</string>
+
+    <string name="book_card_body">
+        길을 걷다 문득 마주친 하트 모양, 우연히 발견한 작은 순간들을 기록한 사진집이에요.\n\n
+        다양한 형태의 사랑이 존재하는 것처럼, 하트도 가지각색 분위기로 존재하는데요. 꾸준히 모아온 이 책 속 하트들은 보는 것만으로도 마음을 따뜻하게 만들어줍니다. 하트는 단순한 모양이 아니라, 사랑과 감정을 전하는 강력한 상징이잖아요. 마음속에 작은 하트를 품고 싶은 날, 이 책이 당신의 일상을 더욱 사랑스럽게 만들어줄 거예요. ♡
+    </string>
+    <string name="article_curation_list">큐레이션 목록</string>
+    <string name="article_curation_list_explain">다른 큐레이션도 살펴보세요</string>
+    <string name="article_book_list">도서 목록</string>
+    <string name="article_book_list_explain">해당 큐레이션 도서를 모아봤어요</string>
+    <string name="status_loading">불러오는중</string>
+    <string name="book_image_description">책 이미지</string>
+    <string name="get_book_detail"><![CDATA[도서 정보 확인하기 >]]></string>
+    <string name="activity_book_page_length">페이지</string>
+    <string name="activity_book_book_size">판형</string>
+    <string name="activity_book_publisher">출판사</string>
+    <string name="activity_book_author">저자</string>
+    <string name="book_theme_header">주제/소재</string>
+    <string name="book_body_header">도서 소개</string>
+    <string name="book_articles_header">해당 도서가 포함된 아티클</string>
 </resources>

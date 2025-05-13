@@ -1,9 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Bonda" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.Bonda" parent="Theme.Material3.Light.NoActionBar">
+        <!-- base light theme -->
     </style>
 
-    <style name="Theme.Bonda" parent="Base.Theme.Bonda" />
+    <style name="Theme.Bonda" parent="Base.Theme.Bonda">
+        <item name="android:windowSplashScreenBackground">@color/splash_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+    </style>
 </resources>
