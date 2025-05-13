@@ -26,6 +26,7 @@ class ArticleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityArticleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         enableEdgeToEdge()
 
         supportActionBar?.apply {
@@ -34,7 +35,7 @@ class ArticleActivity : AppCompatActivity() {
         }
 
         // view-model apply
-        val articleViewModel = ViewModelProvider(this).get(ArticleViewModel::class.java)
+        val articleViewModel = ViewModelProvider(this)[ArticleViewModel::class.java]
 
         articleViewModel.title.observe(this) { binding.articleTitle.text = it }
         articleViewModel.subTitle.observe(this) { binding.articleSubtitle.text = it }
@@ -70,7 +71,7 @@ class ArticleActivity : AppCompatActivity() {
         articleViewModel.books.observe(this) { books ->
             binding.booksGridContainer.removeAllViews()
 
-            books.forEachIndexed { index, book ->
+            books.forEach { book ->
                 val itemBinding = ViewBookBinding.inflate(
                     layoutInflater,
                     binding.booksGridContainer,

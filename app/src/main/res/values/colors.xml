@@ -33,5 +33,10 @@
     <color name="article_book_card_background">#F9FCFE</color>
 
     <color name="splash_background">#524545</color>
-    <color name="text_accent_primary">#524545</color>
+    <color name="chip_foreground_book_category">#524545</color>
+    <color name="chip_foreground_theme">#557B97</color>
+    <color name="chip_background_theme">#F9FCFE</color>
+    <color name="chip_background_publisher">#FDF9F9</color>
+    <color name="chip_foreground_publisher">#A46667</color>
+    <color name="chip_background_book_category">#F5F4F3</color>
 </resources>

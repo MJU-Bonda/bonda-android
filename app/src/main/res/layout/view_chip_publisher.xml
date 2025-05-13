@@ -5,16 +5,16 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
 
-    app:chipStartPadding="4dp"
-    app:chipEndPadding="4dp"
+    app:chipStartPadding="@dimen/chip_padding_horizontal"
+    app:chipEndPadding="@dimen/chip_padding_horizontal"
     app:chipMinTouchTargetSize="0dp"
 
     app:chipStrokeWidth="0dp"
-    app:chipBackgroundColor="#FDF9F9"
+    app:chipBackgroundColor="@color/chip_background_publisher"
     app:chipCornerRadius="16dp"
 
     android:text="@string/article_chip_publisher"
-    android:textColor="#A46667"
+    android:textColor="@color/chip_foreground_publisher"
     android:textSize="14sp"
 
     android:clickable="false"

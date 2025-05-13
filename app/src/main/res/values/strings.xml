@@ -24,4 +24,11 @@
     <string name="status_loading">불러오는중</string>
     <string name="book_image_description">책 이미지</string>
     <string name="get_book_detail"><![CDATA[도서 정보 확인하기 >]]></string>
+    <string name="activity_book_page_length">페이지</string>
+    <string name="activity_book_book_size">판형</string>
+    <string name="activity_book_publisher">출판사</string>
+    <string name="activity_book_author">저자</string>
+    <string name="book_theme_header">주제/소재</string>
+    <string name="book_body_header">도서 소개</string>
+    <string name="book_articles_header">해당 도서가 포함된 아티클</string>
 </resources>
