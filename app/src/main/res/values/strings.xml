@@ -31,4 +31,10 @@
     <string name="book_theme_header">주제/소재</string>
     <string name="book_body_header">도서 소개</string>
     <string name="book_articles_header">해당 도서가 포함된 아티클</string>
+    <string name="onboarding_close_button_description">닫기 버튼</string>
+    <string name="onboarding_next_button">다음으로</string>
+    <string name="onboarding1_heading1">카테고리별 독립출판도서\n큐레이션</string>
+    <string name="onboarding1_heading2">3가지 큐레이션 카테고리에서\n유니크한 도서를 탐색해요</string>
+    <string name="onboarding2_heading1">아티클을 통해 도서를 발견하는\n홈</string>
+    <string name="onboarding2_heading2">다양한 시선과 감성을 담은 독립출판도서 아티클을\n확인해보세요</string>
 </resources>

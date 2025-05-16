@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentLibraryBinding
+import com.bonda.bonda.ui.detail.onboarding.OnboardingActivity
 import com.bonda.bonda.ui.test.TestActivity
 
 class LibraryFragment : Fragment() {
@@ -39,7 +40,7 @@ class LibraryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.button.setOnClickListener {
-            val intent = Intent(requireContext(), TestActivity::class.java)
+            val intent = Intent(requireContext(), OnboardingActivity::class.java)
             startActivity(intent)
         }
     }
