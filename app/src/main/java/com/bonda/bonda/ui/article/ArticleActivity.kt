@@ -69,6 +69,10 @@ class ArticleActivity : AppCompatActivity() {
         }
 
         articleViewModel.books.observe(this) { books ->
+
+        }
+
+        articleViewModel.books.observe(this) { books ->
             binding.booksGridContainer.removeAllViews()
 
             books.forEach { book ->
