@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.home
+package com.bonda.bonda.ui.main.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import com.bonda.bonda.databinding.FragmentHomeBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
 import com.bonda.bonda.databinding.ViewChipPublisherBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
-import com.bonda.bonda.ui.article.ArticleActivity
+import com.bonda.bonda.ui.detail.article.ArticleActivity
 
 class HomeFragment : Fragment() {
 

@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.books
+package com.bonda.bonda.ui.main.books
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentBooksBinding
-import com.bonda.bonda.ui.article.ArticleActivity
-import com.bonda.bonda.ui.book.BookActivity
+import com.bonda.bonda.ui.detail.article.ArticleActivity
+import com.bonda.bonda.ui.detail.book.BookActivity
 
 class BooksFragment : Fragment() {
 
@@ -31,7 +31,7 @@ class BooksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val booksViewModel =
-            ViewModelProvider(this).get(BooksViewModel::class.java)
+            ViewModelProvider(this)[BooksViewModel::class.java]
 
         val textView: TextView = binding.textBooks
         booksViewModel.text.observe(viewLifecycleOwner) {

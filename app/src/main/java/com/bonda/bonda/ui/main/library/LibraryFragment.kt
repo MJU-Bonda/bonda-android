@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.library
+package com.bonda.bonda.ui.main.library
 
 import android.content.Intent
 import android.os.Bundle
@@ -23,7 +23,7 @@ class LibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val libraryViewModel =
-            ViewModelProvider(this).get(LibraryViewModel::class.java)
+            ViewModelProvider(this)[LibraryViewModel::class.java]
 
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
         val root: View = binding.root

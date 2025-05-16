@@ -1,13 +1,13 @@
-package com.bonda.bonda.ui.profile
+package com.bonda.bonda.ui.main.library
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ProfileViewModel : ViewModel() {
+class LibraryViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "프로필 화면 입니다"
+        value = "서재 화면 입니다"
     }
     val text: LiveData<String> = _text
 }

@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.article
+package com.bonda.bonda.ui.detail.article
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

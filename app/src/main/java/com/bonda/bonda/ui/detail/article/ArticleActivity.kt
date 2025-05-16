@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.article
+package com.bonda.bonda.ui.detail.article
 
 import android.content.Intent
 import android.os.Bundle
@@ -103,9 +103,7 @@ class ArticleActivity : AppCompatActivity() {
 
         }
 
-
-
-
+        // 다른 articles 목록 binding
         articleViewModel.articles.observe(this) { list ->
             binding.articlesContainer.removeAllViews()
 

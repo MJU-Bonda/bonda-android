@@ -1,13 +1,13 @@
-package com.bonda.bonda.ui.library
+package com.bonda.bonda.ui.main.books
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class LibraryViewModel : ViewModel() {
+class BooksViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "서재 화면 입니다"
+        value = "도서 화면 입니다"
     }
     val text: LiveData<String> = _text
 }

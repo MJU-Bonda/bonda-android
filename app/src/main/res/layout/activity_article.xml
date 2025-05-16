@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/article_background"
-    tools:context=".ui.article.ArticleActivity">
+    tools:context=".ui.detail.article.ArticleActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
