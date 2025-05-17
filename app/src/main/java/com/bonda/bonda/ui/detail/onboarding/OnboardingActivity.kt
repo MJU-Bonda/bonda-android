@@ -1,8 +1,6 @@
 package com.bonda.bonda.ui.detail.onboarding
 
 import android.os.Bundle
-import android.os.Debug
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -32,8 +30,31 @@ class OnboardingActivity : AppCompatActivity() {
         }
 
         val pages = listOf(
-            OnboardingFragment.newInstance(R.string.onboarding1_heading1, R.string.onboarding1_heading2),
-            OnboardingFragment.newInstance(R.string.onboarding2_heading1, R.string.onboarding2_heading2)
+            OnboardingFragment.newInstance(
+                R.string.onboarding1_heading1,
+                R.string.onboarding1_heading2,
+                R.drawable.img_splash1
+            ),
+            OnboardingFragment.newInstance(
+                R.string.onboarding2_heading1,
+                R.string.onboarding2_heading2,
+                R.drawable.img_splash2
+            ),
+            OnboardingFragment.newInstance(
+                R.string.onboarding3_heading1,
+                R.string.onboarding3_heading2,
+                R.drawable.img_splash3
+            ),
+            OnboardingFragment.newInstance(
+                R.string.onboarding4_heading1,
+                R.string.onboarding4_heading2,
+                R.drawable.img_splash4
+            ),
+            OnboardingFragment.newInstance(
+                R.string.onboarding5_heading1,
+                R.string.onboarding5_heading2,
+                R.drawable.img_splash5
+            )
         )
 
         binding.viewPager.adapter = object: FragmentStateAdapter(this) {
@@ -41,14 +62,31 @@ class OnboardingActivity : AppCompatActivity() {
             override fun createFragment(pos: Int) = pages[pos]
         }
 
-        TabLayoutMediator(binding.tabIndicator, binding.viewPager) { _, _ -> }.attach()
+        // TODO: Tab Indicator 추가
+//        TabLayoutMediator(binding.tabIndicator, binding.viewPager) { tab, position ->
+//
+//        }.attach()
 
         binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (position == pages.lastIndex) {
-
+                if (position != pages.lastIndex) {
+                    binding.nextButton.text = getText(R.string.onboarding_next_button)
+                } else {
+                    binding.nextButton.text = getText(R.string.onboarding_next_button_finished)
                 }
             }
         })
+
+        binding.nextButton.setOnClickListener {
+            if (binding.viewPager.currentItem != pages.lastIndex) {
+                binding.viewPager.currentItem++
+            } else {
+                finish()
+            }
+        }
+
+        binding.closeButton.setOnClickListener {
+            finish()
+        }
     }
 }

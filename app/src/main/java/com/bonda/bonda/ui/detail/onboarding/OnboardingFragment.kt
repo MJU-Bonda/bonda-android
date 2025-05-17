@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -19,15 +20,16 @@ class OnboardingFragment: Fragment(R.layout.fragment_onboarding) {
         private const val ARG_HEADING1 = "arg_heading1"
         private const val ARG_HEADING2 = "arg_heading2"
         private const val ARG_IMAGE = "arg_image"
+
         fun newInstance(
             @StringRes heading1: Int,
             @StringRes heading2: Int,
-//            image: Int
+            @DrawableRes image: Int
         ) = OnboardingFragment().apply {
             arguments = bundleOf(
                 ARG_HEADING1 to heading1,
                 ARG_HEADING2 to heading2,
-//                ARG_IMAGE to image
+                ARG_IMAGE to image
             )
         }
     }
@@ -36,7 +38,7 @@ class OnboardingFragment: Fragment(R.layout.fragment_onboarding) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentOnboardingBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -44,10 +46,10 @@ class OnboardingFragment: Fragment(R.layout.fragment_onboarding) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val heading1 = requireArguments().getInt(ARG_HEADING1)
         val heading2 = requireArguments().getInt(ARG_HEADING2)
-        // TODO: 이미지 리소스 로드
+        val image = requireArguments().getInt(ARG_IMAGE)
 
         binding.heading1.setText(heading1)
         binding.heading2.setText(heading2)
-        // TODO: 이미지 리소스 바인딩
+        binding.image.setImageResource(image)
     }
 }
