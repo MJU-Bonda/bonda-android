@@ -38,11 +38,6 @@ class LibraryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.button.setOnClickListener {
-            val intent = Intent(requireContext(), OnboardingActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     override fun onDestroyView() {

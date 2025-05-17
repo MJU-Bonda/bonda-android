@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentBooksBinding
 import com.bonda.bonda.ui.detail.article.ArticleActivity
 import com.bonda.bonda.ui.detail.book.BookActivity
+import com.bonda.bonda.ui.detail.onboarding.OnboardingActivity
+import com.bonda.bonda.ui.test.TestActivity
 
 class BooksFragment : Fragment() {
 
@@ -38,11 +40,21 @@ class BooksFragment : Fragment() {
             textView.text = it
         }
 
-        binding.button.setOnClickListener {
+        binding.buttonBookDetail.setOnClickListener {
             val intent = Intent(requireContext(), BookActivity::class.java)
             startActivity(intent)
         }
 
+
+        binding.buttonOnboarding.setOnClickListener {
+            val intent = Intent(requireContext(), OnboardingActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.buttonTest.setOnClickListener {
+            val intent = Intent(requireContext(), TestActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {
