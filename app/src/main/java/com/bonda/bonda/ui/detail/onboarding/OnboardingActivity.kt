@@ -25,16 +25,9 @@ class OnboardingActivity : AppCompatActivity() {
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val rootPaddingBottom = binding.root.paddingBottom
-
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.updatePadding(
-//                left = systemBars.left,
-//                top = systemBars.top,
-//                right = systemBars.right,
-                bottom = systemBars.bottom + rootPaddingBottom
-            )
+            view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
