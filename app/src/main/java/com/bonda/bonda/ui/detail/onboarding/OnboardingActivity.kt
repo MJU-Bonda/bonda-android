@@ -1,6 +1,7 @@
 package com.bonda.bonda.ui.detail.onboarding
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,7 +11,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityOnboardingBinding
-import com.google.android.material.tabs.TabLayoutMediator
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -66,6 +66,14 @@ class OnboardingActivity : AppCompatActivity() {
 //        TabLayoutMediator(binding.tabIndicator, binding.viewPager) { tab, position ->
 //
 //        }.attach()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.viewPager.currentItem > 0) {
+                    binding.viewPager.currentItem--
+                }
+            }
+        })
 
         binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
