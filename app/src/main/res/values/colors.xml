@@ -1,5 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="background_default_primary">#FDFDFD</color>
+    <color name="background_default_secondary">#F5F4F3</color>
+
+    <color name="surface_default_primary">#f5f4f3</color>
+    <color name="surface_default_secondary">#fcfcfb</color>
+    <color name="surface_default_tertiary">#fdfdfd</color>
+    <color name="surface_default_inverse">#ffffff</color>
+    <color name="surface_default_base">#c3c3c3</color>
+
+    <color name="surface_accent_primary">#524545</color>
+    <color name="surface_accent_secondary">#392E2E</color>
+    <color name="surface_accent_tertiary">#695B5B</color>
+
+    <color name="surface_context_writer">#FDF9F9</color>
+    <color name="surface_context_theme">#F9FCFE</color>
+    <color name="surface_context_store">#F8FCF9</color>
+
+    <color name="surface_graph_primary">#DD9797</color>
+    <color name="surface_graph_secondary">#90B7D5</color>
+    <color name="surface_graph_tertiary">#85C88E</color>
+
+    <color name="text_default_primary">#292929</color>
+    <color name="text_default_secondary">#6E6E6E</color>
+    <color name="text_default_tertiary">#A1A1A1</color>
+    <color name="text_default_inverse">#FFFFFF</color>
+
+    <color name="text_accent_primary">#524545</color>
+    <color name="text_accent_secondary">#392E2E</color>
+
+    <color name="text_context_writer">#A46667</color>
+    <color name="text_context_theme">#557B97</color>
+    <color name="text_context_store">#448451</color>
+
+    <color name="icon_default_primary">#524545</color>
+    <color name="icon_default_secondary">#C3C3C3</color>
+    <color name="icon_default_inverse">#FFFFFF</color>
+
+    <color name="border_default_primary">#292929</color>
+    <color name="border_default_secondary">#A1A1A1</color>
+    <color name="border_default_tertiary">#EAEAEA</color>
+
+    <color name="border_accent_primary">#524545</color>
+    <color name="border_accent_secondary">#392E2E</color>
+
+    <color name="border_context_writer">#A46667</color>
+    <color name="border_context_theme">#557B97</color>
+    <color name="border_context_store">#448451</color>
+
+    <color name="system_default_primary">#000000</color>
+    <color name="system_default_inverse">#FFFFFF</color>
+
+    <color name="system_error_primary">#C20022</color>
+    <color name="system_error_secondary">#FFF8F7</color>
+
+    <color name="system_warning_primary">#B66A12</color>
+    <color name="system_warning_secondary">#FFFCEB</color>
+
+    <color name="system_success_primary">#27971C</color>
+    <color name="system_success_secondary">#F5FCED</color>
+
+    <color name="scrim_primary">#A6000000</color>
+
+    <color name="opacity_pink">#4DDD9797</color>
+    <color name="opacity_blue">#4D90B7D5</color>
+    <color name="opacity_sage">#4D85C88E</color>
+
+
+
+
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
