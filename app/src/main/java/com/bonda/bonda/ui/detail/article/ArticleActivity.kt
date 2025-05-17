@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.helper.widget.Grid
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.createBitmap
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleBinding
@@ -24,10 +27,16 @@ class ArticleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
         binding = ActivityArticleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        enableEdgeToEdge()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         supportActionBar?.apply {
             title = "BONDA"
