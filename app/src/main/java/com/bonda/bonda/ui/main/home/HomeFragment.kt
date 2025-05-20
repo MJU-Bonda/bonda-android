@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.R
-import com.bonda.bonda.databinding.FragmentHomeBinding
+import com.bonda.bonda.databinding.FragmentMainHomeBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
 import com.bonda.bonda.databinding.ViewChipPublisherBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
@@ -17,7 +17,7 @@ import com.bonda.bonda.ui.detail.article.ArticleActivity
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentMainHomeBinding? = null
 
     private val binding get() = _binding!!
 
@@ -26,7 +26,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentMainHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 

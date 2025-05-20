@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bonda.bonda.databinding.FragmentProfileBinding
+import com.bonda.bonda.databinding.FragmentMainProfileBinding
 
 class ProfileFragment : Fragment() {
 
-    private var _binding: FragmentProfileBinding? = null
+    private var _binding: FragmentMainProfileBinding? = null
 
     private val binding get() = _binding!!
 
@@ -23,7 +23,7 @@ class ProfileFragment : Fragment() {
         val profileViewModel =
             ViewModelProvider(this)[ProfileViewModel::class.java]
 
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentMainProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textProfile
