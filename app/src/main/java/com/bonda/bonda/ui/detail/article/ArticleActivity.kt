@@ -6,9 +6,7 @@ import android.view.View
 import android.widget.GridLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.helper.widget.Grid
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.createBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -16,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
-import com.bonda.bonda.databinding.ViewBookBinding
+import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
 import com.bonda.bonda.databinding.ViewChipPublisherBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
@@ -85,7 +83,7 @@ class ArticleActivity : AppCompatActivity() {
             binding.booksGridContainer.removeAllViews()
 
             books.forEach { book ->
-                val itemBinding = ViewBookBinding.inflate(
+                val itemBinding = ViewBookVerticalBinding.inflate(
                     layoutInflater,
                     binding.booksGridContainer,
                     false
