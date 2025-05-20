@@ -10,7 +10,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
@@ -18,6 +21,7 @@ import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
 import com.bonda.bonda.databinding.ViewChipPublisherBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
+import com.bonda.bonda.ui.detail.book.BookActivity
 
 class ArticleActivity : AppCompatActivity() {
 
@@ -34,11 +38,6 @@ class ArticleActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-
-        supportActionBar?.apply {
-            title = "BONDA"
-            setDisplayHomeAsUpEnabled(true)
         }
 
         // view-model apply
@@ -75,10 +74,27 @@ class ArticleActivity : AppCompatActivity() {
             }
         }
 
+        // 도서 목록 binding 1
         articleViewModel.books.observe(this) { books ->
+            val fragments = books.mapIndexed { index, book ->
+                BookCardFragment.newInstance(
+                    index,
+                    book.id,
+                    book.coverImage,
+                    book.category,
+                    book.title,
+                    book.author,
+                    book.body
+                )
+            }
 
+            binding.viewPager.adapter = object: FragmentStateAdapter(this@ArticleActivity) {
+                override fun getItemCount(): Int = fragments.size
+                override fun createFragment(position: Int): Fragment = fragments[position]
+            }
         }
 
+        // 도서 목록 binding 2
         articleViewModel.books.observe(this) { books ->
             binding.booksGridContainer.removeAllViews()
 
@@ -89,9 +105,9 @@ class ArticleActivity : AppCompatActivity() {
                     false
                 )
 
-                itemBinding.bookImage.setImageResource(book.coverImage)
-                itemBinding.bookTitle.text = book.title
-                itemBinding.bookAuthor.text = book.author
+                itemBinding.coverImage.setImageResource(book.coverImage)
+                itemBinding.title.text = book.title
+                itemBinding.author.text = book.author
 
                 val chipBinding = ViewChipBookCategoryBinding.inflate(
                     layoutInflater,
@@ -104,6 +120,11 @@ class ArticleActivity : AppCompatActivity() {
                 params.width = 0
                 params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 itemBinding.root.layoutParams = params
+
+                itemBinding.root.setOnClickListener {
+                    val intent = Intent(this, BookActivity::class.java)
+                    startActivity(intent)
+                }
 
                 binding.booksGridContainer.addView(itemBinding.root)
             }

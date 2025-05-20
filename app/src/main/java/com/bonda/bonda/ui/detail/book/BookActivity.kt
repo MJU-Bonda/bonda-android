@@ -44,7 +44,7 @@ class BookActivity : AppCompatActivity() {
         val bookViewModel = ViewModelProvider(this)[BookViewModel::class.java]
 
 //        bookViewModel.isSaved.observe(this) {binding.}
-        bookViewModel.coverImage.observe(this) { binding.bookImage.setImageResource(it) }
+        bookViewModel.coverImage.observe(this) { binding.coverImage.setImageResource(it) }
         bookViewModel.category.observe(this) { category ->
             binding.bookCategoryChipGroup.removeAllViews()
 
@@ -58,8 +58,8 @@ class BookActivity : AppCompatActivity() {
 
             binding.bookCategoryChipGroup.addView(itemBinding.root)
         }
-        bookViewModel.title.observe(this) { binding.bookTitle.text = it }
-        bookViewModel.author.observe(this) { binding.bookAuthor.text = it }
+        bookViewModel.title.observe(this) { binding.title.text = it }
+        bookViewModel.author.observe(this) { binding.author.text = it }
         bookViewModel.publisher.observe(this) { binding.bookPublisher.text = it }
         bookViewModel.size.observe(this) { binding.bookSize.text = it }
         bookViewModel.pageLength.observe(this) { binding.bookPageLength.text = it.toString() }
@@ -76,7 +76,7 @@ class BookActivity : AppCompatActivity() {
 
             binding.bookThemeChipGroup.addView(itemBinding.root)
         }
-        bookViewModel.body.observe(this) { binding.bookBody.text = it }
+        bookViewModel.body.observe(this) { binding.body.text = it }
         bookViewModel.articles.observe(this) { articles ->
             binding.bookArticlesContainer.removeAllViews()
 

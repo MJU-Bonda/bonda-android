@@ -23,7 +23,6 @@ class BooksViewModel : ViewModel() {
     private val _categoryArtButtonIcon = MutableLiveData<Int>()
     private val _categoryIllustrationButtonIcon = MutableLiveData<Int>()
     private val _categoryMagazineButtonIcon = MutableLiveData<Int>()
-
     private val _recentArrivalBooks = MutableLiveData<List<Book>>()
     private val _mostLovedBooks = MutableLiveData<List<Book>>()
 

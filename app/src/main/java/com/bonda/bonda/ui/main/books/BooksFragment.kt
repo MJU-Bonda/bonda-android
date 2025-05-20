@@ -93,9 +93,9 @@ class BooksFragment : Fragment() {
                     false
                 )
 
-                itemBinding.bookImage.setImageResource(book.coverImage)
-                itemBinding.bookTitle.text = book.title
-                itemBinding.bookAuthor.text = book.author
+                itemBinding.coverImage.setImageResource(book.coverImage)
+                itemBinding.title.text = book.title
+                itemBinding.author.text = book.author
 
                 val chipBinding = ViewChipBookCategoryBinding.inflate(
                     layoutInflater,
@@ -131,9 +131,9 @@ class BooksFragment : Fragment() {
                     false
                 )
 
-                itemBinding.bookImage.setImageResource(book.coverImage)
-                itemBinding.bookTitle.text = book.title
-                itemBinding.bookAuthor.text = book.author
+                itemBinding.coverImage.setImageResource(book.coverImage)
+                itemBinding.title.text = book.title
+                itemBinding.author.text = book.author
 
                 val chipBinding = ViewChipBookCategoryBinding.inflate(
                     layoutInflater,
