@@ -111,8 +111,9 @@ class BooksFragment : Fragment() {
 
                 // book 상세 페이지로 이동
                 itemBinding.root.setOnClickListener {
-                    Log.d("DEBUG.START.BOOK.DETAIL.ACTIVITY", book.id.toString())
                     val intent = Intent(requireContext(), BookActivity::class.java)
+                    intent.putExtra("book_detail_id", book.id)
+                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
                     startActivity(intent)
                 }
 
@@ -144,8 +145,9 @@ class BooksFragment : Fragment() {
 
                 // book 상세 페이지로 이동
                 itemBinding.root.setOnClickListener {
-                    Log.d("DEBUG.START.BOOK.DETAIL.ACTIVITY", book.id.toString())
                     val intent = Intent(requireContext(), BookActivity::class.java)
+                    intent.putExtra("book_detail_id", book.id)
+                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
                     startActivity(intent)
                 }
 

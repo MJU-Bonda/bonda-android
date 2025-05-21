@@ -2,6 +2,7 @@ package com.bonda.bonda.ui.detail.book
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,9 @@ class BookActivity : AppCompatActivity() {
         binding = ActivityBookBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val bookId = intent.getIntExtra("book_detail_id", 0)
+        Log.d("DEBUG", "started_book_detail_activity_id : $bookId")
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -43,7 +47,7 @@ class BookActivity : AppCompatActivity() {
 
         val bookViewModel = ViewModelProvider(this)[BookViewModel::class.java]
 
-//        bookViewModel.isSaved.observe(this) {binding.}
+        // TODO: isSaved binding 코드 추가
         bookViewModel.coverImage.observe(this) { binding.coverImage.setImageResource(it) }
         bookViewModel.category.observe(this) { category ->
             binding.bookCategoryChipGroup.removeAllViews()
@@ -119,9 +123,11 @@ class BookActivity : AppCompatActivity() {
 
                 itemBinding.root.layoutParams = params
 
-                // TODO: onclick binding logic
+                // start new article detail activity
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(this, ArticleActivity::class.java)
+                    intent.putExtra("article_detail_id", article.id)
+                    Log.d("DEBUG", "start_article_detail_activity_id : ${article.id}")
                     startActivity(intent)
                 }
 

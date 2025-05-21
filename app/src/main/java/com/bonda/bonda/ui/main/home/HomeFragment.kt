@@ -2,6 +2,7 @@ package com.bonda.bonda.ui.main.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -92,9 +93,11 @@ class HomeFragment : Fragment() {
 
                 itemBinding.root.layoutParams = params
 
-                // TODO: onclick binding logic
+                // start new article detail activity
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(requireContext(), ArticleActivity::class.java)
+                    intent.putExtra("article_detail_id", article.id)
+                    Log.d("DEBUG", "start_activity_article_detail_id : ${article.id}")
                     startActivity(intent)
                 }
 

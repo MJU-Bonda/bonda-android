@@ -15,7 +15,7 @@ class BookViewModel : ViewModel() {
     private val _publisher = MutableLiveData<String>()
     private val _size = MutableLiveData<String>()
     private val _pageLength = MutableLiveData<Int>()
-    private val _theme = MutableLiveData<String>()
+    private val _theme = MutableLiveData<String?>()
     private val _body = MutableLiveData<String>()
     private val _articles = MutableLiveData<List<Article>>()
 
@@ -29,7 +29,7 @@ class BookViewModel : ViewModel() {
     val publisher: LiveData<String> = _publisher
     val size: LiveData<String> = _size
     val pageLength: LiveData<Int> = _pageLength
-    val theme: LiveData<String> = _theme
+    val theme: LiveData<String?> = _theme
     val body: LiveData<String> = _body
     val articles: LiveData<List<Article>> = _articles
 
@@ -52,7 +52,7 @@ class BookViewModel : ViewModel() {
         _publisher.value = "곳"
         _size.value = "105 * 148mm"
         _pageLength.value = 200
-        _theme.value = "미니멀리즘"
+        _theme.value = "미니멀리즘" // 또는 null 값이 올수 있음
         _body.value = "길을 걷다 문득 마주친 하트 모양, 우연히 발견한 작은 순간들을 기록한 사진집이에요.\n" +
                 "\n" +
                 " 다양한 형태의 사랑이 존재하는 것처럼, 하트도 가지각색 분위기로 존재하는데요. 꾸준히 모아온 이 책 속 하트들은 보는 것만으로도 마음을 따뜻하게 만들어줍니다. 책장을 넘기다 보면 어느새 사랑스러운 감정이 스며들고, 작은 하트 하나에도 기분이 밝아지는 신비한 경험을 하게 될 거예요. \n" +

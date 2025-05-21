@@ -63,7 +63,6 @@ class BookCardFragment: Fragment(R.layout.fragment_book_card) {
         val args = requireArguments()
 
         val index = args.getInt(ARG_INDEX)
-        Log.d("DEBUG", index.toString())
         val id = args.getInt(ARG_ID)
         val coverImage = args.getInt(ARG_COVER_IMAGE)
         val category = args.getString(ARG_CATEGORY)!!
@@ -82,9 +81,11 @@ class BookCardFragment: Fragment(R.layout.fragment_book_card) {
         binding.author.text = author
         binding.body.text = body
 
+        // start new book detail activity
         binding.button.setOnClickListener {
-            Log.d("DEBUG.START.BOOK.DETAIL.ACTIVITY", id.toString())
             val intent = Intent(requireContext(), BookActivity::class.java)
+            intent.putExtra("book_detail_id", id)
+            Log.d("DEBUG", "start_book_detail_activity_id : ${id}")
             startActivity(intent)
         }
     }

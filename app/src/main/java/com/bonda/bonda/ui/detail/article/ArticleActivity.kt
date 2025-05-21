@@ -2,6 +2,7 @@ package com.bonda.bonda.ui.detail.article
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.GridLayout
 import androidx.activity.enableEdgeToEdge
@@ -13,7 +14,6 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
@@ -33,6 +33,9 @@ class ArticleActivity : AppCompatActivity() {
 
         binding = ActivityArticleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val articleId = intent.getIntExtra("article_detail_id", 0)
+        Log.d("DEBUG", "started_article_detail_activity_id : $articleId")
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -123,12 +126,13 @@ class ArticleActivity : AppCompatActivity() {
 
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(this, BookActivity::class.java)
+                    intent.putExtra("book_detail_id", book.id)
+                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
                     startActivity(intent)
                 }
 
                 binding.booksGridContainer.addView(itemBinding.root)
             }
-
         }
 
         // 다른 articles 목록 binding
@@ -177,9 +181,11 @@ class ArticleActivity : AppCompatActivity() {
 
                 itemBinding.root.layoutParams = params
 
-                // TODO: onclick binding logic
+                // start article detail activity
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(this, ArticleActivity::class.java)
+                    intent.putExtra("article_detail_id", article.id)
+                    Log.d("DEBUG", "start_article_detail_activity_id : ${article.id}")
                     startActivity(intent)
                 }
 
