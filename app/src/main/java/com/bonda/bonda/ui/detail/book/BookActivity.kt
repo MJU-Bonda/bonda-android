@@ -86,54 +86,59 @@ class BookActivity : AppCompatActivity() {
 
             var lastAddedViewId: Int? = null
 
-            articles.forEach { article ->
-                val itemBinding = ViewArticleMiniBinding.inflate(
-                    layoutInflater,
-                    binding.bookArticlesContainer,
-                    false
-                )
-
-                itemBinding.root.id = View.generateViewId()
-
-                itemBinding.articleImage.setImageResource(article.coverImage)
-                itemBinding.articleTitle.text = article.title
-
-                // TODO: chip 로직 수정
-                if (article.category == "테마") {
-                    ViewChipThemeBinding.inflate(
+            if (articles.isEmpty()) {
+                binding.bookArticlesHeader.visibility = View.INVISIBLE
+                binding.bookArticlesContainer.visibility = View.INVISIBLE
+            } else {
+                articles.forEach { article ->
+                    val itemBinding = ViewArticleMiniBinding.inflate(
                         layoutInflater,
-                        itemBinding.articleCategoryChipGroup,
-                        true
+                        binding.bookArticlesContainer,
+                        false
                     )
-                } else if (article.category == "작가/출판사") {
-                    ViewChipPublisherBinding.inflate(
-                        layoutInflater,
-                        itemBinding.articleCategoryChipGroup,
-                        true
-                    )
+
+                    itemBinding.root.id = View.generateViewId()
+
+                    itemBinding.articleImage.setImageResource(article.coverImage)
+                    itemBinding.articleTitle.text = article.title
+
+                    // TODO: chip 로직 수정
+                    if (article.category == "테마") {
+                        ViewChipThemeBinding.inflate(
+                            layoutInflater,
+                            itemBinding.articleCategoryChipGroup,
+                            true
+                        )
+                    } else if (article.category == "작가/출판사") {
+                        ViewChipPublisherBinding.inflate(
+                            layoutInflater,
+                            itemBinding.articleCategoryChipGroup,
+                            true
+                        )
+                    }
+
+                    val params = itemBinding.root.layoutParams as ConstraintLayout.LayoutParams
+
+                    if (lastAddedViewId != null) {
+                        params.topToBottom = lastAddedViewId!!
+                    } else {
+                        params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    }
+
+                    itemBinding.root.layoutParams = params
+
+                    // start new article detail activity
+                    itemBinding.root.setOnClickListener {
+                        val intent = Intent(this, ArticleActivity::class.java)
+                        intent.putExtra("article_detail_id", article.id)
+                        Log.d("DEBUG", "start_article_detail_activity_id : ${article.id}")
+                        startActivity(intent)
+                    }
+
+                    // apply
+                    binding.bookArticlesContainer.addView(itemBinding.root)
+                    lastAddedViewId = itemBinding.root.id
                 }
-
-                val params = itemBinding.root.layoutParams as ConstraintLayout.LayoutParams
-
-                if (lastAddedViewId != null) {
-                    params.topToBottom = lastAddedViewId!!
-                } else {
-                    params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                }
-
-                itemBinding.root.layoutParams = params
-
-                // start new article detail activity
-                itemBinding.root.setOnClickListener {
-                    val intent = Intent(this, ArticleActivity::class.java)
-                    intent.putExtra("article_detail_id", article.id)
-                    Log.d("DEBUG", "start_article_detail_activity_id : ${article.id}")
-                    startActivity(intent)
-                }
-
-                // apply
-                binding.bookArticlesContainer.addView(itemBinding.root)
-                lastAddedViewId = itemBinding.root.id
             }
         }
     }
