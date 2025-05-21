@@ -3,6 +3,33 @@
 ## Information
 1. Android Studio Meerkat | 2024.3.1 Patch 1 버전으로 작업
 
+## 폴더 구조
+```
+.
+├── .idea    # AndroidStudio 옵션
+├── .kotlin    # Error log
+├── app
+│   └── src
+│       ├── androidTest
+│       ├── main
+│       │   ├── java    # 소스 코드
+│       │   │   └── com
+│       │   │       └── bonda
+│       │   │           └── bonda
+│       │   │               └── ui
+│       │   └── res    # 리소스
+│       │       ├── drawable
+│       │       ├── layout
+│       │       ├── menu
+│       │       ├── mipmap
+│       │       ├── navigation
+│       │       ├── values
+│       │       ├── values-night
+│       │       └── xml
+│       └── test
+└── gradle    # 종속성 관리
+```
+
 ## 깃 전략
 ### 브랜치 분류
 ```
