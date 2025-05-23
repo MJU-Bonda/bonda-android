@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bonda.bonda.R
-import com.bonda.bonda.databinding.ActivityArticleBinding
+import com.bonda.bonda.databinding.ActivityArticleDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
@@ -25,13 +25,13 @@ import com.bonda.bonda.ui.detail.book.BookActivity
 
 class ArticleActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityArticleBinding
+    private lateinit var binding: ActivityArticleDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityArticleBinding.inflate(layoutInflater)
+        binding = ActivityArticleDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val articleId = intent.getIntExtra("article_detail_id", 0)

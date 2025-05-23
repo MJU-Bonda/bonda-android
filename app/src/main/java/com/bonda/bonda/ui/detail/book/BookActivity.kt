@@ -10,25 +10,23 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
-import com.bonda.bonda.databinding.ActivityBookBinding
+import com.bonda.bonda.databinding.ActivityBookDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
 import com.bonda.bonda.databinding.ViewChipPublisherBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
 import com.bonda.bonda.ui.detail.article.ArticleActivity
-import com.bonda.bonda.ui.detail.book.BookViewModel.Article
 
 class BookActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityBookBinding
+    private lateinit var binding: ActivityBookDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityBookBinding.inflate(layoutInflater)
+        binding = ActivityBookDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val bookId = intent.getIntExtra("book_detail_id", 0)
@@ -86,7 +84,7 @@ class BookActivity : AppCompatActivity() {
 
             var lastAddedViewId: Int? = null
 
-            if (articles.isEmpty()) {
+            if (articles.isNullOrEmpty()) {
                 binding.bookArticlesHeader.visibility = View.INVISIBLE
                 binding.bookArticlesContainer.visibility = View.INVISIBLE
             } else {

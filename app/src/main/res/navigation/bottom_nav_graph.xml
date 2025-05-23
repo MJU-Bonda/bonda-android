@@ -15,7 +15,7 @@
         android:id="@+id/navigation_books"
         android:name="com.bonda.bonda.ui.main.books.BooksFragment"
         android:label="도서"
-        tools:layout="@layout/fragment_main_book" />
+        tools:layout="@layout/fragment_main_books" />
 
     <fragment
         android:id="@+id/navigation_library"
