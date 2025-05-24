@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentMainLibraryBinding
 import com.bonda.bonda.ui.detail.book.BookActivity
 import com.bonda.bonda.ui.detail.onboarding.OnboardingActivity
-import com.bonda.bonda.ui.test.TestActivity
+import com.bonda.bonda.ui.main.books.BooksCategoryActivity
 
 class LibraryFragment : Fragment() {
 
@@ -37,19 +37,14 @@ class LibraryFragment : Fragment() {
             binding.textLibrary.text = it
         }
 
-        binding.buttonBookDetail.setOnClickListener {
-            val intent = Intent(requireContext(), BookActivity::class.java)
-            startActivity(intent)
-        }
-
-
         binding.buttonOnboarding.setOnClickListener {
             val intent = Intent(requireContext(), OnboardingActivity::class.java)
             startActivity(intent)
         }
 
-        binding.buttonTest.setOnClickListener {
-            val intent = Intent(requireContext(), TestActivity::class.java)
+        binding.buttonBooks.setOnClickListener {
+            val intent = Intent(requireContext(), BooksCategoryActivity::class.java)
+            intent.putExtra("category_selected", "에세이")
             startActivity(intent)
         }
     }

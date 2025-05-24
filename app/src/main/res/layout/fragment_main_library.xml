@@ -21,16 +21,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_book_detail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="도서 상세보기 페이지"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_library" />
-
-    <Button
         android:id="@+id/button_onboarding"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -38,14 +28,14 @@
         android:text="온보딩 페이지"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_book_detail" />
+        app:layout_constraintTop_toBottomOf="@id/text_library" />
 
     <Button
-        android:id="@+id/button_test"
+        android:id="@+id/button_books"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="테스트 페이지"
+        android:text="도서 탐색페이지"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_onboarding" />

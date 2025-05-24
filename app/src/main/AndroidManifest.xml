@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".ui.detail.article.ArticleActivity" />
         <activity android:name=".ui.detail.book.BookActivity" />
-        <activity android:name=".ui.test.TestActivity" />
+        <activity android:name=".ui.main.books.BooksCategoryActivity" />
         <activity android:name=".ui.detail.onboarding.OnboardingActivity" />
     </application>
 
