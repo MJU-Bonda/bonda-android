@@ -135,13 +135,7 @@ class BooksFragment : Fragment() {
                 itemBinding.coverImage.setImageResource(book.coverImage)
                 itemBinding.title.text = book.title
                 itemBinding.author.text = book.author
-
-                val chipBinding = ViewChipBookCategoryBinding.inflate(
-                    layoutInflater,
-                    itemBinding.bookCategoryChipGroup,
-                    true
-                )
-                chipBinding.root.text = book.category
+                itemBinding.category.root.text = book.category
 
                 // book 상세 페이지로 이동
                 itemBinding.root.setOnClickListener {
