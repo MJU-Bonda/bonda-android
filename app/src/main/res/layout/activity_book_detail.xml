@@ -20,7 +20,7 @@
                 android:padding="24dp">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/book_image_holder"
+                    android:id="@+id/image_holder"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:cardBackgroundColor="#FCFBFB"
@@ -32,7 +32,7 @@
                     app:layout_constraintDimensionRatio="1:1">
 
                     <ImageView
-                        android:id="@+id/book_image"
+                        android:id="@+id/cover_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:src="@drawable/default_image"
@@ -47,10 +47,10 @@
                     android:layout_marginTop="36dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/book_image_holder" />
+                    app:layout_constraintTop_toBottomOf="@id/image_holder" />
 
                 <TextView
-                    android:id="@+id/book_title"
+                    android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -69,10 +69,10 @@
                     android:text="@string/activity_book_author"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/book_title" />
+                    app:layout_constraintTop_toBottomOf="@id/title" />
 
                 <TextView
-                    android:id="@+id/book_author"
+                    android:id="@+id/author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
@@ -96,8 +96,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/status_loading"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@id/book_author"
-                    app:layout_constraintTop_toBottomOf="@id/book_author" />
+                    app:layout_constraintStart_toStartOf="@id/author"
+                    app:layout_constraintTop_toBottomOf="@id/author" />
 
                 <TextView
                     android:id="@+id/book_size_header"
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/status_loading"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@id/book_author"
+                    app:layout_constraintStart_toStartOf="@id/author"
                     app:layout_constraintTop_toBottomOf="@id/book_publisher" />
 
                 <TextView
@@ -132,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/status_loading"
                     android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="@id/book_author"
+                    app:layout_constraintStart_toStartOf="@id/author"
                     app:layout_constraintTop_toBottomOf="@id/book_size" />
 
                 <TextView
@@ -169,7 +169,7 @@
                     app:layout_constraintTop_toBottomOf="@id/book_theme_chip_group" />
 
                 <TextView
-                    android:id="@+id/book_body"
+                    android:id="@+id/body"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -190,7 +190,7 @@
                     android:lineSpacingMultiplier="1.2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/book_body"/>
+                    app:layout_constraintTop_toBottomOf="@id/body"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

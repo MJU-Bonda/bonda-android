@@ -67,14 +67,6 @@ class OnboardingActivity : AppCompatActivity() {
 //
 //        }.attach()
 
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (binding.viewPager.currentItem > 0) {
-                    binding.viewPager.currentItem--
-                }
-            }
-        })
-
         binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (position != pages.lastIndex) {
@@ -96,5 +88,13 @@ class OnboardingActivity : AppCompatActivity() {
         binding.closeButton.setOnClickListener {
             finish()
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.viewPager.currentItem > 0) {
+                    binding.viewPager.currentItem--
+                }
+            }
+        })
     }
 }

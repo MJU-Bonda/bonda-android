@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:text="카테고리입니다"
+    app:chipCornerRadius="32dp"
+    app:chipStrokeWidth="0dp"
+    app:chipBackgroundColor="@color/surface_accent_primary"
+    android:textColor="@color/text_default_inverse"
+    app:checkedIconVisible="false" />

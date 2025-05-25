@@ -13,7 +13,6 @@
     app:chipBackgroundColor="@color/chip_background_book_category"
     app:chipCornerRadius="16dp"
 
-    android:text="@string/status_loading"
     android:textColor="@color/chip_foreground_book_category"
     android:textSize="14sp"
 

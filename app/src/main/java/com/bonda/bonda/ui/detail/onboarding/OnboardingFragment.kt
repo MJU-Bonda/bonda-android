@@ -39,11 +39,13 @@ class OnboardingFragment: Fragment(R.layout.fragment_onboarding) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentOnboardingBinding.inflate(layoutInflater)
+        _binding = FragmentOnboardingBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val heading1 = requireArguments().getInt(ARG_HEADING1)
         val heading2 = requireArguments().getInt(ARG_HEADING2)
         val image = requireArguments().getInt(ARG_IMAGE)
@@ -51,5 +53,10 @@ class OnboardingFragment: Fragment(R.layout.fragment_onboarding) {
         binding.heading1.setText(heading1)
         binding.heading2.setText(heading2)
         binding.image.setImageResource(image)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

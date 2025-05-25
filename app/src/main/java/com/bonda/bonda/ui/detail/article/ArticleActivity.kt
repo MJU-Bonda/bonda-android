@@ -2,45 +2,45 @@ package com.bonda.bonda.ui.detail.article
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.GridLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.helper.widget.Grid
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.createBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bonda.bonda.R
-import com.bonda.bonda.databinding.ActivityArticleBinding
+import com.bonda.bonda.databinding.ActivityArticleDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
-import com.bonda.bonda.databinding.ViewBookBinding
+import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
 import com.bonda.bonda.databinding.ViewChipPublisherBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
+import com.bonda.bonda.ui.detail.book.BookActivity
 
 class ArticleActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityArticleBinding
+    private lateinit var binding: ActivityArticleDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityArticleBinding.inflate(layoutInflater)
+        binding = ActivityArticleDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val articleId = intent.getIntExtra("article_detail_id", 0)
+        Log.d("DEBUG", "started_article_detail_activity_id : $articleId")
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-
-        supportActionBar?.apply {
-            title = "BONDA"
-            setDisplayHomeAsUpEnabled(true)
         }
 
         // view-model apply
@@ -77,39 +77,56 @@ class ArticleActivity : AppCompatActivity() {
             }
         }
 
+        // 도서 목록 binding 1
         articleViewModel.books.observe(this) { books ->
+            val fragments = books.mapIndexed { index, book ->
+                BookCardFragment.newInstance(
+                    index,
+                    book.id,
+                    book.coverImage,
+                    book.category,
+                    book.title,
+                    book.author,
+                    book.body
+                )
+            }
 
+            binding.viewPager.adapter = object: FragmentStateAdapter(this@ArticleActivity) {
+                override fun getItemCount(): Int = fragments.size
+                override fun createFragment(position: Int): Fragment = fragments[position]
+            }
         }
 
+        // 도서 목록 binding 2
         articleViewModel.books.observe(this) { books ->
             binding.booksGridContainer.removeAllViews()
 
             books.forEach { book ->
-                val itemBinding = ViewBookBinding.inflate(
+                val itemBinding = ViewBookVerticalBinding.inflate(
                     layoutInflater,
                     binding.booksGridContainer,
                     false
                 )
 
-                itemBinding.bookImage.setImageResource(book.coverImage)
-                itemBinding.bookTitle.text = book.title
-                itemBinding.bookAuthor.text = book.author
-
-                val chipBinding = ViewChipBookCategoryBinding.inflate(
-                    layoutInflater,
-                    itemBinding.bookCategoryChipGroup,
-                    true
-                )
-                chipBinding.root.text = book.category
+                itemBinding.coverImage.setImageResource(book.coverImage)
+                itemBinding.title.text = book.title
+                itemBinding.author.text = book.author
+                itemBinding.category.root.text = book.category
 
                 val params = itemBinding.root.layoutParams as GridLayout.LayoutParams
                 params.width = 0
                 params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 itemBinding.root.layoutParams = params
 
+                itemBinding.root.setOnClickListener {
+                    val intent = Intent(this, BookActivity::class.java)
+                    intent.putExtra("book_detail_id", book.id)
+                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
+                    startActivity(intent)
+                }
+
                 binding.booksGridContainer.addView(itemBinding.root)
             }
-
         }
 
         // 다른 articles 목록 binding
@@ -158,9 +175,11 @@ class ArticleActivity : AppCompatActivity() {
 
                 itemBinding.root.layoutParams = params
 
-                // TODO: onclick binding logic
+                // start article detail activity
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(this, ArticleActivity::class.java)
+                    intent.putExtra("article_detail_id", article.id)
+                    Log.d("DEBUG", "start_article_detail_activity_id : ${article.id}")
                     startActivity(intent)
                 }
 

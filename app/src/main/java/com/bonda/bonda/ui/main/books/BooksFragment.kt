@@ -2,21 +2,25 @@ package com.bonda.bonda.ui.main.books
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.GridLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
-import com.bonda.bonda.databinding.FragmentBooksBinding
-import com.bonda.bonda.ui.detail.article.ArticleActivity
+import com.bonda.bonda.databinding.FragmentMainBooksBinding
+import com.bonda.bonda.databinding.ViewBookCategoryButtonBinding
+import com.bonda.bonda.databinding.ViewBookHorizontalBinding
+import com.bonda.bonda.databinding.ViewBookVerticalBinding
+import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
 import com.bonda.bonda.ui.detail.book.BookActivity
-import com.bonda.bonda.ui.detail.onboarding.OnboardingActivity
-import com.bonda.bonda.ui.test.TestActivity
 
 class BooksFragment : Fragment() {
 
-    private var _binding: FragmentBooksBinding? = null
+    private var _binding: FragmentMainBooksBinding? = null
 
     private val binding get() = _binding!!
 
@@ -25,35 +29,118 @@ class BooksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBooksBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBooksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val booksViewModel =
-            ViewModelProvider(this)[BooksViewModel::class.java]
+        val booksViewModel = ViewModelProvider(this)[BooksViewModel::class.java]
 
-        val textView: TextView = binding.textBooks
-        booksViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        // 카테고리 버튼 추가
+        data class Category(
+            val text: LiveData<String>,
+            val icon: LiveData<Int>
+        )
+
+        val categories = listOf(
+            Category(booksViewModel.categoryNovelButtonText,       booksViewModel.categoryNovelButtonIcon),
+            Category(booksViewModel.categoryPoemButtonText,        booksViewModel.categoryPoemButtonIcon),
+            Category(booksViewModel.categoryEssayButtonText,       booksViewModel.categoryEssayButtonIcon),
+            Category(booksViewModel.categoryComicButtonText,       booksViewModel.categoryComicButtonIcon),
+            Category(booksViewModel.categoryPhotoButtonText,       booksViewModel.categoryPhotoButtonIcon),
+            Category(booksViewModel.categoryArtButtonText,         booksViewModel.categoryArtButtonIcon),
+            Category(booksViewModel.categoryIllustrationButtonText,booksViewModel.categoryIllustrationButtonIcon),
+            Category(booksViewModel.categoryMagazineButtonText,    booksViewModel.categoryMagazineButtonIcon)
+        )
+
+        categories.forEach { category ->
+            val itemBinding = ViewBookCategoryButtonBinding.inflate(
+                layoutInflater,
+                binding.categoriesGridContainer,
+                false
+            )
+
+            category.text.observe(viewLifecycleOwner) {
+                itemBinding.icText.text = it
+                itemBinding.icImage.contentDescription = it
+            }
+            category.icon.observe(viewLifecycleOwner) {
+                itemBinding.icImage.setImageResource(it)
+            }
+
+            itemBinding.root.setOnClickListener {
+                Toast.makeText(requireContext(), category.text.toString(), Toast.LENGTH_SHORT).show()
+            }
+
+            val params = itemBinding.root.layoutParams as GridLayout.LayoutParams
+            params.width = 0
+            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+            itemBinding.root.layoutParams = params
+
+            binding.categoriesGridContainer.addView(itemBinding.root)
         }
 
-        binding.buttonBookDetail.setOnClickListener {
-            val intent = Intent(requireContext(), BookActivity::class.java)
-            startActivity(intent)
+        // 방금 도착한 새로운 책 binding
+        booksViewModel.recentArrivalBooks.observe(viewLifecycleOwner) { list ->
+            binding.recentArrivalBooksContainer.removeAllViews()
+
+            list.forEach { book ->
+                val itemBinding = ViewBookVerticalBinding.inflate(
+                    layoutInflater,
+                    binding.recentArrivalBooksContainer,
+                    false
+                )
+
+                itemBinding.coverImage.setImageResource(book.coverImage)
+                itemBinding.title.text = book.title
+                itemBinding.author.text = book.author
+                itemBinding.category.root.text = book.category
+
+                val params = itemBinding.root.layoutParams as GridLayout.LayoutParams
+                params.width = 0
+                params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                itemBinding.root.layoutParams = params
+
+                // book 상세 페이지로 이동
+                itemBinding.root.setOnClickListener {
+                    val intent = Intent(requireContext(), BookActivity::class.java)
+                    intent.putExtra("book_detail_id", book.id)
+                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
+                    startActivity(intent)
+                }
+
+                binding.recentArrivalBooksContainer.addView(itemBinding.root)
+            }
         }
 
+        // 요즘 가장 사랑 받은 책 binding
+        booksViewModel.mostLovedBooks.observe(viewLifecycleOwner) { list ->
+            binding.mostLovedBooksContainer.removeAllViews()
 
-        binding.buttonOnboarding.setOnClickListener {
-            val intent = Intent(requireContext(), OnboardingActivity::class.java)
-            startActivity(intent)
-        }
+            list.forEach { book ->
+                val itemBinding = ViewBookHorizontalBinding.inflate(
+                    layoutInflater,
+                    binding.mostLovedBooksContainer,
+                    false
+                )
 
-        binding.buttonTest.setOnClickListener {
-            val intent = Intent(requireContext(), TestActivity::class.java)
-            startActivity(intent)
+                itemBinding.coverImage.setImageResource(book.coverImage)
+                itemBinding.title.text = book.title
+                itemBinding.author.text = book.author
+                itemBinding.category.root.text = book.category
+
+                // book 상세 페이지로 이동
+                itemBinding.root.setOnClickListener {
+                    val intent = Intent(requireContext(), BookActivity::class.java)
+                    intent.putExtra("book_detail_id", book.id)
+                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
+                    startActivity(intent)
+                }
+
+                binding.mostLovedBooksContainer.addView(itemBinding.root)
+            }
         }
     }
 

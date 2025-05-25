@@ -5,16 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bonda.bonda.databinding.FragmentLibraryBinding
+import com.bonda.bonda.databinding.FragmentMainLibraryBinding
+import com.bonda.bonda.ui.detail.book.BookActivity
 import com.bonda.bonda.ui.detail.onboarding.OnboardingActivity
-import com.bonda.bonda.ui.test.TestActivity
+import com.bonda.bonda.ui.main.books.BooksCategoryActivity
 
 class LibraryFragment : Fragment() {
 
-    private var _binding: FragmentLibraryBinding? = null
+    private var _binding: FragmentMainLibraryBinding? = null
 
     private val binding get() = _binding!!
 
@@ -23,21 +23,30 @@ class LibraryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val libraryViewModel =
-            ViewModelProvider(this)[LibraryViewModel::class.java]
-
-        _binding = FragmentLibraryBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textLibrary
-        libraryViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        _binding = FragmentMainLibraryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val libraryViewModel =
+            ViewModelProvider(this)[LibraryViewModel::class.java]
+
+        libraryViewModel.text.observe(viewLifecycleOwner) {
+            binding.textLibrary.text = it
+        }
+
+        binding.buttonOnboarding.setOnClickListener {
+            val intent = Intent(requireContext(), OnboardingActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.buttonBooks.setOnClickListener {
+            val intent = Intent(requireContext(), BooksCategoryActivity::class.java)
+            intent.putExtra("category_selected", "에세이")
+            startActivity(intent)
+        }
     }
 
     override fun onDestroyView() {

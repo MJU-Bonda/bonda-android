@@ -9,23 +9,23 @@
         android:id="@+id/navigation_home"
         android:name="com.bonda.bonda.ui.main.home.HomeFragment"
         android:label="BONDA"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_main_home" />
 
     <fragment
         android:id="@+id/navigation_books"
         android:name="com.bonda.bonda.ui.main.books.BooksFragment"
         android:label="도서"
-        tools:layout="@layout/fragment_books" />
+        tools:layout="@layout/fragment_main_books" />
 
     <fragment
         android:id="@+id/navigation_library"
         android:name="com.bonda.bonda.ui.main.library.LibraryFragment"
         android:label="서재"
-        tools:layout="@layout/fragment_library" />
+        tools:layout="@layout/fragment_main_library" />
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.bonda.bonda.ui.main.profile.ProfileFragment"
         android:label="마이"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_main_profile" />
 </navigation>

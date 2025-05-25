@@ -7,7 +7,7 @@
     android:padding="8dp">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/book_image_holder"
+        android:id="@+id/image_holder"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -16,43 +16,41 @@
         app:layout_constraintDimensionRatio="1:1">
 
         <ImageView
-            android:id="@+id/book_image"
+            android:id="@+id/cover_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/book_image_description"
             android:src="@drawable/default_image" />
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/book_category_chip_group"
-        android:layout_width="0dp"
+    <include
+        layout="@layout/view_chip_book_category"
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/book_image_holder" />
+        app:layout_constraintTop_toBottomOf="@id/image_holder" />
 
     <TextView
-        android:id="@+id/book_title"
+        android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/status_loading"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/book_category_chip_group" />
+        app:layout_constraintTop_toBottomOf="@id/category" />
 
     <TextView
-        android:id="@+id/book_author"
+        android:id="@+id/author"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/status_loading"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/book_title" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
