@@ -11,6 +11,7 @@ import com.bonda.bonda.databinding.FragmentMainLibraryBinding
 import com.bonda.bonda.ui.detail.book.BookActivity
 import com.bonda.bonda.ui.detail.onboarding.OnboardingActivity
 import com.bonda.bonda.ui.main.books.BooksCategoryActivity
+import com.bonda.bonda.ui.signup.SignupActivity
 
 class LibraryFragment : Fragment() {
 
@@ -43,9 +44,13 @@ class LibraryFragment : Fragment() {
         }
 
         binding.buttonBooks.setOnClickListener {
-            val intent = Intent(requireContext(), BooksCategoryActivity::class.java)
-            intent.putExtra("category_selected", "에세이")
-            startActivity(intent)
+//            val intent = Intent(requireContext(), BooksCategoryActivity::class.java)
+//            intent.putExtra("category_selected", "에세이")
+//            startActivity(intent)
+
+            Intent(requireContext(), SignupActivity::class.java).also {
+                startActivity(it)
+            }
         }
     }
 

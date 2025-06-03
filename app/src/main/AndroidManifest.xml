@@ -21,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.signup.SignupActivity" />
         <activity android:name=".ui.detail.article.ArticleActivity" />
         <activity android:name=".ui.detail.book.BookActivity" />
         <activity android:name=".ui.main.books.BooksCategoryActivity" />
