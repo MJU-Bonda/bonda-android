@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentMainLibraryBinding
-import com.bonda.bonda.ui.detail.book.BookActivity
-import com.bonda.bonda.ui.detail.onboarding.OnboardingActivity
-import com.bonda.bonda.ui.main.books.BooksCategoryActivity
+import com.bonda.bonda.ui.onboarding.OnboardingActivity
 import com.bonda.bonda.ui.signup.SignupActivity
 
 class LibraryFragment : Fragment() {

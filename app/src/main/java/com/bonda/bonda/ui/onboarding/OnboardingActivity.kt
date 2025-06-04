@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.detail.onboarding
+package com.bonda.bonda.ui.onboarding
 
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback

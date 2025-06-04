@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Bonda"
         tools:targetApi="31">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,10 +22,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.signup.SignupActivity" />
-        <activity android:name=".ui.detail.article.ArticleActivity" />
-        <activity android:name=".ui.detail.book.BookActivity" />
+        <activity android:name=".ui.article.detail.ArticleActivity" />
+        <activity android:name=".ui.book.detail.BookActivity" />
         <activity android:name=".ui.main.books.BooksCategoryActivity" />
-        <activity android:name=".ui.detail.onboarding.OnboardingActivity" />
+        <activity android:name=".ui.onboarding.OnboardingActivity" />
     </application>
 
 </manifest>

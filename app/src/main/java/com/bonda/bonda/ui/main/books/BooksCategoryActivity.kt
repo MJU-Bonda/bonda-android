@@ -2,9 +2,7 @@ package com.bonda.bonda.ui.main.books
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
-import android.view.MenuItem
 import android.widget.GridLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,13 +10,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProvider
-import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityBooksCategoryBinding
-import com.bonda.bonda.databinding.ViewBookCategoryButtonBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
-import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
-import com.bonda.bonda.databinding.ViewSelectableChipBinding
-import com.bonda.bonda.ui.detail.book.BookActivity
+import com.bonda.bonda.ui.book.detail.BookActivity
 
 class BooksCategoryActivity : AppCompatActivity() {
 
