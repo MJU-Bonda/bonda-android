@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.signup
+package com.bonda.bonda.ui.main.profile.edit
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

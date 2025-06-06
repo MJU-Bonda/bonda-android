@@ -15,7 +15,7 @@ import com.bonda.bonda.databinding.FragmentMainBooksBinding
 import com.bonda.bonda.databinding.ViewBookCategoryButtonBinding
 import com.bonda.bonda.databinding.ViewBookHorizontalBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
-import com.bonda.bonda.ui.book.detail.BookActivity
+import com.bonda.bonda.ui.book.BookActivity
 
 class BooksFragment : Fragment() {
 

@@ -12,7 +12,7 @@ import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.ActivityBooksCategoryBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
-import com.bonda.bonda.ui.book.detail.BookActivity
+import com.bonda.bonda.ui.book.BookActivity
 
 class BooksCategoryActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.article.detail
+package com.bonda.bonda.ui.article
 
 import android.content.Intent
 import android.os.Bundle
@@ -20,7 +20,7 @@ import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.databinding.ViewChipPublisherBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
-import com.bonda.bonda.ui.book.detail.BookActivity
+import com.bonda.bonda.ui.book.BookActivity
 
 class ArticleActivity : AppCompatActivity() {
 

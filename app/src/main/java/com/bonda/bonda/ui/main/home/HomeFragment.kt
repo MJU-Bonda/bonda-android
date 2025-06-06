@@ -14,7 +14,7 @@ import com.bonda.bonda.databinding.FragmentMainHomeBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
 import com.bonda.bonda.databinding.ViewChipPublisherBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
-import com.bonda.bonda.ui.article.detail.ArticleActivity
+import com.bonda.bonda.ui.article.ArticleActivity
 
 class HomeFragment : Fragment() {
 

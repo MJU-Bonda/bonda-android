@@ -21,9 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.signup.SignupActivity" />
-        <activity android:name=".ui.article.detail.ArticleActivity" />
-        <activity android:name=".ui.book.detail.BookActivity" />
+        <activity android:name=".ui.main.profile.edit.SignupActivity" />
+        <activity android:name=".ui.article.ArticleActivity" />
+        <activity android:name=".ui.book.BookActivity" />
         <activity android:name=".ui.main.books.BooksCategoryActivity" />
         <activity android:name=".ui.onboarding.OnboardingActivity" />
     </application>

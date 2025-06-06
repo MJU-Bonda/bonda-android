@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.article.detail
+package com.bonda.bonda.ui.article
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentBookCardBinding
-import com.bonda.bonda.ui.book.detail.BookActivity
+import com.bonda.bonda.ui.book.BookActivity
 
 class BookCardFragment: Fragment(R.layout.fragment_book_card) {
 

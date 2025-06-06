@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentMainLibraryBinding
 import com.bonda.bonda.ui.onboarding.OnboardingActivity
-import com.bonda.bonda.ui.signup.SignupActivity
+import com.bonda.bonda.ui.main.profile.edit.SignupActivity
 
 class LibraryFragment : Fragment() {
 
