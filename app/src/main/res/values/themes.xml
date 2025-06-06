@@ -1,5 +1,56 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.Bonda" parent="Theme.Material3.Light">
+<resources>
 
+    <style name="Theme.Bonda" parent="Theme.Material3.Light.NoActionBar" />
+
+    
+    <!-- Buttons -->
+    <style name="Widget.Bonda.Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">@color/surface_accent_primary</item>
+        <item name="android:textColor">@color/text_default_inverse</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <style name="Widget.Bonda.Button.Disabled" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">@color/surface_default_base</item>
+        <item name="android:enabled">false</item>
+        <item name="android:textColor">@color/text_default_inverse</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <style name="Widget.Bonda.Button.Outlined" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">#0000</item>
+        <item name="android:textColor">@color/border_accent_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="strokeColor">@color/border_accent_primary</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <!-- Cards -->
+    <style name="Widget.Bonda.Card.Enabled" parent="Theme.Bonda">
+        <item name="cardBackgroundColor">@color/surface_default_secondary</item>
+        <item name="cardCornerRadius">@dimen/space_radius_8</item>
+        <item name="strokeColor">@color/border_default_tertiary</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+    
+    <!-- Badge -->
+    <style name="Widget.Bonda.Badge.Category" parent="Theme.Bonda">
+        <item name="android:checkable">false</item>
+        <item name="android:clickable">false</item>
+        <item name="android:enabled">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:textColor">@color/text_accent_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="chipBackgroundColor">@color/surface_default_primary</item>
+        <item name="chipCornerRadius">@dimen/space_radius_20</item>
+        <item name="chipEndPadding">@dimen/space_padding_4</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="chipStartPadding">@dimen/space_padding_4</item>
+        <item name="chipStrokeWidth">0dp</item>
     </style>
 </resources>

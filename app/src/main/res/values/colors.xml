@@ -11,9 +11,6 @@
     <color name="surface_accent_primary">#524545</color>
     <color name="surface_accent_secondary">#392E2E</color>
     <color name="surface_accent_tertiary">#695B5B</color>
-    <color name="surface_context_writer">#FDF9F9</color>
-    <color name="surface_context_theme">#F9FCFE</color>
-    <color name="surface_context_store">#F8FCF9</color>
     <color name="surface_graph_primary">#DD9797</color>
     <color name="surface_graph_secondary">#90B7D5</color>
     <color name="surface_graph_tertiary">#85C88E</color>
@@ -24,9 +21,6 @@
     <color name="text_default_inverse">#FFFFFF</color>
     <color name="text_accent_primary">#524545</color>
     <color name="text_accent_secondary">#392E2E</color>
-    <color name="text_context_writer">#A46667</color>
-    <color name="text_context_theme">#557B97</color>
-    <color name="text_context_store">#448451</color>
 
     <color name="icon_default_primary">#524545</color>
     <color name="icon_default_secondary">#C3C3C3</color>
@@ -37,6 +31,13 @@
     <color name="border_default_tertiary">#EAEAEA</color>
     <color name="border_accent_primary">#524545</color>
     <color name="border_accent_secondary">#392E2E</color>
+
+    <color name="surface_context_writer">#FDF9F9</color>
+    <color name="surface_context_theme">#F9FCFE</color>
+    <color name="surface_context_store">#F8FCF9</color>
+    <color name="text_context_writer">#A46667</color>
+    <color name="text_context_theme">#557B97</color>
+    <color name="text_context_store">#448451</color>
     <color name="border_context_writer">#A46667</color>
     <color name="border_context_theme">#557B97</color>
     <color name="border_context_store">#448451</color>
