@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/article_background">
+    android:background="@color/background_default_primary">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
@@ -35,7 +35,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@drawable/gradient_overlay"
+                    android:background="@drawable/overlay_gradient"
                     app:layout_constraintBottom_toBottomOf="@id/article_image"
                     app:layout_constraintEnd_toEndOf="@id/article_image"
                     app:layout_constraintStart_toStartOf="@id/article_image"
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginVertical="32dp"
-                    android:textColor="@color/gray03"
+                    android:textColor="@color/text_default_tertiaryw"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/article_image"
                     app:layout_constraintEnd_toEndOf="parent"

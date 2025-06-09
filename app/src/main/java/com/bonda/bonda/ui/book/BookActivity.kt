@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.ActivityBookDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
-import com.bonda.bonda.databinding.ViewChipPublisherBinding
+import com.bonda.bonda.databinding.ViewChipWriterBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
 import com.bonda.bonda.ui.article.ArticleActivity
 
@@ -108,7 +108,7 @@ class BookActivity : AppCompatActivity() {
                             true
                         )
                     } else if (article.category == "작가/출판사") {
-                        ViewChipPublisherBinding.inflate(
+                        ViewChipWriterBinding.inflate(
                             layoutInflater,
                             itemBinding.articleCategoryChipGroup,
                             true

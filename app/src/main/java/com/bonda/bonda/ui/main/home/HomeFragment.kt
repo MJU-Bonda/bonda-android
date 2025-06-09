@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentMainHomeBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
-import com.bonda.bonda.databinding.ViewChipPublisherBinding
+import com.bonda.bonda.databinding.ViewChipWriterBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
 import com.bonda.bonda.ui.article.ArticleActivity
 
@@ -62,7 +62,7 @@ class HomeFragment : Fragment() {
                         true
                     )
                 } else if (article.category == "작가/출판사") {
-                    ViewChipPublisherBinding.inflate(
+                    ViewChipWriterBinding.inflate(
                         layoutInflater,
                         itemBinding.articleChipGroup,
                         true

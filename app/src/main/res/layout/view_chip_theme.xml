@@ -10,11 +10,11 @@
     app:chipMinTouchTargetSize="0dp"
 
     app:chipStrokeWidth="0dp"
-    app:chipBackgroundColor="@color/chip_background_theme"
+    app:chipBackgroundColor="@color/surface_context_theme"
     app:chipCornerRadius="16dp"
 
     android:text="@string/article_chip_theme"
-    android:textColor="@color/chip_foreground_theme"
+    android:textColor="@color/text_context_theme"
     android:textSize="14sp"
 
     android:clickable="false"

@@ -8,6 +8,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/image_holder"
+        style="@style/Widget.Bonda.Card.Enabled"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,8 +20,7 @@
             android:id="@+id/cover_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/book_image_description"
-            android:src="@drawable/default_image" />
+            android:contentDescription="@string/book_image_description" />
     </com.google.android.material.card.MaterialCardView>
 
     <include

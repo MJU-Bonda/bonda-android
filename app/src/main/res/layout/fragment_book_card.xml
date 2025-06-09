@@ -4,7 +4,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/article_book_card_background"
+    android:background="@color/surface_context_theme"
     android:paddingHorizontal="20dp"
     android:paddingVertical="28dp">
 
