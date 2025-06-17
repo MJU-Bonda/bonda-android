@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.okhttp)
+    implementation(libs.v2.user)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
