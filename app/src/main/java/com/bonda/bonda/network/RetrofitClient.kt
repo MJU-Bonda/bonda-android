@@ -15,9 +15,25 @@ private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .build()
 
+/**
+ * ??what
+ */
+@Serializable
+data class ApiResponse<T>(
+    val success: Boolean,
+    val data: T
+)
+fun <T> ApiResponse<T>.unwrap(): T {
+    if (!success) {
+        throw ApiException("API 호출 실패: success=false")
+    }
+    return data
+}
+class ApiException(message: String): RuntimeException(message)
+
 interface ApiService {
     @POST("auth/login")
-    suspend fun login(@Body request: LoginRequest): LoginResponse
+    suspend fun login(@Body request: LoginRequest): ApiResponse<LoginResponse>
 
 }
 
@@ -26,6 +42,9 @@ object RetrofitClient {
         retrofit.create(ApiService::class.java)
     }
 }
+
+
+
 
 @Serializable
 data class LoginRequest(

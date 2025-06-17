@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentMainLibraryBinding
 import com.bonda.bonda.ui.onboarding.OnboardingActivity
-import com.bonda.bonda.ui.main.profile.edit.SignupActivity
+import com.bonda.bonda.ui.signup.SignInActivity
+import com.bonda.bonda.ui.signup.SignUpActivity
+import com.bonda.bonda.ui.signup.SplashActivity
 
 class LibraryFragment : Fragment() {
 
@@ -46,7 +48,13 @@ class LibraryFragment : Fragment() {
 //            intent.putExtra("category_selected", "에세이")
 //            startActivity(intent)
 
-            Intent(requireContext(), SignupActivity::class.java).also {
+            Intent(requireContext(), SignUpActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+
+        binding.buttonSignIn.setOnClickListener {
+            Intent(requireContext(), SplashActivity::class.java).also {
                 startActivity(it)
             }
         }
