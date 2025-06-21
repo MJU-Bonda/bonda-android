@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.network.RetrofitClient
 import com.bonda.bonda.network.unwrap
 import com.bonda.bonda.ui.home.HomeActivity
-import com.bonda.bonda.ui.signup.SignInActivity
+import com.bonda.bonda.ui.SignInActivity
 import com.bonda.bonda.util.AccessTokenProvider
 import com.bonda.bonda.util.PREFS_NAME
 import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
@@ -17,7 +17,7 @@ import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
 import com.bonda.bonda.network.ReissueRequest
-import com.bonda.bonda.ui.signup.PermissionRequestActivity
+import com.bonda.bonda.ui.PermissionRequestActivity
 import com.bonda.bonda.ui.signup.SignUpActivity
 import com.bonda.bonda.util.PREF_KEY_PERMISSION_REQUIRED
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED

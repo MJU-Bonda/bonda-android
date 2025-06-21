@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bonda.bonda.databinding.FragmentMainProfileBinding
+import com.bonda.bonda.databinding.FragmentHomeProfileBinding
 
 class ProfileFragment : Fragment() {
-    private var _binding: FragmentMainProfileBinding? = null
+    private var _binding: FragmentHomeProfileBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -17,7 +17,7 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.signup
+package com.bonda.bonda.ui
 
 import android.content.Context
 import android.content.Intent

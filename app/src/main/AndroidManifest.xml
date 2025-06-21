@@ -17,7 +17,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,14 +25,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.home.HomeActivity" />
+<!--        <activity android:name=".ui.home.HomeActivity" />-->
         <activity android:name=".ui.signup.SignUpActivity" />
         <activity android:name=".ui.article.ArticleActivity" />
         <activity android:name=".ui.book.BookActivity" />
         <activity android:name=".ui.home.books.BooksCategoryActivity" />
         <activity android:name=".ui.onboarding.OnboardingActivity" />
-        <activity android:name=".ui.signup.PermissionRequestActivity" />
-        <activity android:name=".ui.signup.SignInActivity" />
+        <activity android:name=".ui.PermissionRequestActivity" />
+        <activity android:name=".ui.SignInActivity" />
 
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

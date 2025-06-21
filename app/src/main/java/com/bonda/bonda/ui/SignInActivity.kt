@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.signup
+package com.bonda.bonda.ui
 
 import android.content.Context
 import android.content.Intent
@@ -24,6 +24,7 @@ import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
 import com.bonda.bonda.databinding.ActivitySignInBinding
+import com.bonda.bonda.ui.signup.SignUpActivity
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
 
 class SignInActivity : AppCompatActivity() {

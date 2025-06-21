@@ -10,15 +10,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.R
-import com.bonda.bonda.databinding.FragmentMainHomeBinding
+import com.bonda.bonda.databinding.FragmentHomeArticlesBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
 import com.bonda.bonda.databinding.ViewChipWriterBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
 import com.bonda.bonda.ui.article.ArticleActivity
 
-class HomeFragment : Fragment() {
+class ArticlesFragment : Fragment() {
 
-    private var _binding: FragmentMainHomeBinding? = null
+    private var _binding: FragmentHomeArticlesBinding? = null
 
     private val binding get() = _binding!!
 
@@ -27,14 +27,14 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeArticlesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        val homeViewModel = ViewModelProvider(this)[ArticlesViewModel::class.java]
 
         homeViewModel.articles.observe(viewLifecycleOwner) { list ->
             binding.articlesContainer.removeAllViews()

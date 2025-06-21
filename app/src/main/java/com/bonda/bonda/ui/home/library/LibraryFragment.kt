@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.bonda.bonda.databinding.FragmentMainLibraryBinding
+import com.bonda.bonda.databinding.FragmentHomeLibraryBinding
 import com.bonda.bonda.ui.onboarding.OnboardingActivity
 import com.bonda.bonda.ui.signup.SignUpActivity
-import com.bonda.bonda.ui.signup.SignInActivity
+import com.bonda.bonda.ui.SignInActivity
 
 class LibraryFragment : Fragment() {
 
-    private var _binding: FragmentMainLibraryBinding? = null
+    private var _binding: FragmentHomeLibraryBinding? = null
 
     private val binding get() = _binding!!
 
@@ -23,7 +23,7 @@ class LibraryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainLibraryBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeLibraryBinding.inflate(inflater, container, false)
         return binding.root
     }
 

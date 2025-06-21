@@ -7,25 +7,25 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.bonda.bonda.ui.home.articles.HomeFragment"
+        android:name="com.bonda.bonda.ui.home.articles.ArticlesFragment"
         android:label="BONDA"
-        tools:layout="@layout/fragment_main_home" />
+        tools:layout="@layout/fragment_home_articles" />
 
     <fragment
         android:id="@+id/navigation_books"
         android:name="com.bonda.bonda.ui.home.books.BooksFragment"
         android:label="도서"
-        tools:layout="@layout/fragment_main_books" />
+        tools:layout="@layout/fragment_home_books" />
 
     <fragment
         android:id="@+id/navigation_library"
         android:name="com.bonda.bonda.ui.home.library.LibraryFragment"
         android:label="서재"
-        tools:layout="@layout/fragment_main_library" />
+        tools:layout="@layout/fragment_home_library" />
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.bonda.bonda.ui.home.profile.ProfileFragment"
         android:label="마이"
-        tools:layout="@layout/fragment_main_profile" />
+        tools:layout="@layout/fragment_home_profile" />
 </navigation>

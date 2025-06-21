@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bonda.bonda.R
 
-class HomeViewModel : ViewModel() {
+class ArticlesViewModel : ViewModel() {
     private val _articles = MutableLiveData<List<Article>>()
 
     // read-only properties

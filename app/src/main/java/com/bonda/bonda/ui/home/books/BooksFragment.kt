@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
-import com.bonda.bonda.databinding.FragmentMainBooksBinding
+import com.bonda.bonda.databinding.FragmentHomeBooksBinding
 import com.bonda.bonda.databinding.ViewBookCategoryButtonBinding
 import com.bonda.bonda.databinding.ViewBookHorizontalBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
@@ -19,7 +19,7 @@ import com.bonda.bonda.ui.book.BookActivity
 
 class BooksFragment : Fragment() {
 
-    private var _binding: FragmentMainBooksBinding? = null
+    private var _binding: FragmentHomeBooksBinding? = null
 
     private val binding get() = _binding!!
 
@@ -28,7 +28,7 @@ class BooksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBooksBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBooksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
