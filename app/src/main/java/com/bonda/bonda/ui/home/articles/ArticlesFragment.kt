@@ -70,9 +70,9 @@ class ArticlesFragment : Fragment() {
                 }
 
                 if (article.isSaved) {
-                    itemBinding.articleButtonBookmark.setImageResource(R.drawable.ic_bookmark_saved_36dp)
+                    itemBinding.articleButtonBookmark.setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
                 } else {
-                    itemBinding.articleButtonBookmark.setImageResource((R.drawable.ic_bookmark_36dp))
+                    itemBinding.articleButtonBookmark.setImageResource((R.drawable.ic_action_bookmark_empty_24dp))
                 }
 
                 // setup layout constraint

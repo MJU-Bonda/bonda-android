@@ -153,4 +153,9 @@
         <item name="android:lineHeight">16.8sp</item>
     </style>
 
+    <style name="ShapeAppearance.MaterialComponents.CircleImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>
