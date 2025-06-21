@@ -23,37 +23,46 @@ data class ApiResponse<T>(
     val success: Boolean,
     val data: T
 )
+
 fun <T> ApiResponse<T>.unwrap(): T {
     if (!success) {
         throw ApiException("API 호출 실패: success=false")
     }
     return data
 }
-class ApiException(message: String): RuntimeException(message)
+
+class ApiException(message: String) : RuntimeException(message)
 
 interface ApiService {
     @POST("auth/login")
     suspend fun login(@Body request: LoginRequest): ApiResponse<LoginResponse>
 
+    @POST("auth/reissue")
+    suspend fun reissueAccessToken(@Body request: ReissueRequest): ApiResponse<ReissueResponse>
 }
 
 object RetrofitClient {
-    val retrofitService: ApiService by lazy{
+    val retrofitService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }
 }
-
-
-
 
 @Serializable
 data class LoginRequest(
     val idToken: String
 )
-
 @Serializable
 data class LoginResponse(
     val accessToken: String,
     val refreshToken: String,
     val isNewUser: Boolean
+)
+
+@Serializable
+data class ReissueRequest(
+    val refreshToken: String
+)
+@Serializable
+data class ReissueResponse(
+    val accessToken: String
 )

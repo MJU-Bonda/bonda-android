@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.main.books
+package com.bonda.bonda.ui.home.books
 
 import android.content.Intent
 import android.os.Bundle

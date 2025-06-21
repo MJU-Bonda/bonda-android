@@ -21,17 +21,18 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.signup.SignUpActivity" />
         <activity android:name=".ui.article.ArticleActivity" />
         <activity android:name=".ui.book.BookActivity" />
-        <activity android:name=".ui.main.books.BooksCategoryActivity" />
+        <activity android:name=".ui.home.books.BooksCategoryActivity" />
         <activity android:name=".ui.onboarding.OnboardingActivity" />
+        <activity android:name=".ui.signup.PermissionRequestActivity" />
         <activity android:name=".ui.signup.SignInActivity" />
-        <activity android:name=".ui.signup.SplashActivity" />
 
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

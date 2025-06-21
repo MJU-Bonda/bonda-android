@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.main.library
+package com.bonda.bonda.ui.home.library
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,9 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentMainLibraryBinding
 import com.bonda.bonda.ui.onboarding.OnboardingActivity
-import com.bonda.bonda.ui.signup.SignInActivity
 import com.bonda.bonda.ui.signup.SignUpActivity
-import com.bonda.bonda.ui.signup.SplashActivity
+import com.bonda.bonda.ui.signup.SignInActivity
 
 class LibraryFragment : Fragment() {
 
@@ -54,7 +53,7 @@ class LibraryFragment : Fragment() {
         }
 
         binding.buttonSignIn.setOnClickListener {
-            Intent(requireContext(), SplashActivity::class.java).also {
+            Intent(requireContext(), SignInActivity::class.java).also {
                 startActivity(it)
             }
         }

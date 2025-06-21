@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.main.home
+package com.bonda.bonda.ui.home.articles
 
 import android.content.Intent
 import android.os.Bundle
