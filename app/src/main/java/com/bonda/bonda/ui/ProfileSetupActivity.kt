@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.signup
+package com.bonda.bonda.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -9,17 +9,17 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import com.bonda.bonda.R
-import com.bonda.bonda.databinding.ActivitySignUpBinding
+import com.bonda.bonda.databinding.ActivityProfileSetupBinding
 
-class SignUpActivity : AppCompatActivity() {
+class ProfileSetupActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySignUpBinding
+    private lateinit var binding: ActivityProfileSetupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        binding = ActivityProfileSetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->

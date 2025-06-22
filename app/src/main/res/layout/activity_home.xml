@@ -4,8 +4,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_default_secondary"
-    android:paddingTop="?attr/actionBarSize">
+    android:background="@color/surface_default_tertiary">
 
     <fragment
         android:id="@+id/nav_host_fragment_activity_main"
@@ -19,13 +18,29 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/bottom_nav_graph" />
 
+    <View
+        android:id="@+id/bottom_nav_top_border"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/border_default_tertiary"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
+        android:background="@color/surface_default_tertiary"
+        app:itemIconSize="28dp"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemRippleColor="#08000000"
+        app:itemTextAppearanceActive="@style/Caption3"
+        app:itemTextAppearanceInactive="@style/Caption3"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

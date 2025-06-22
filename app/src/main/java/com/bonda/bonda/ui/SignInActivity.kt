@@ -4,17 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
-import com.bonda.bonda.R
-import com.bonda.bonda.network.LoginRequest
-import com.bonda.bonda.network.RetrofitClient
-import com.bonda.bonda.network.unwrap
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.util.AccessTokenProvider
 import com.bonda.bonda.util.PREFS_NAME
@@ -24,11 +19,13 @@ import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
 import com.bonda.bonda.databinding.ActivitySignInBinding
-import com.bonda.bonda.ui.signup.SignUpActivity
+import com.bonda.bonda.network.ApiClient
+import com.bonda.bonda.network.model.auth.LoginRequest
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
 
 class SignInActivity : AppCompatActivity() {
 
+    private val authService = ApiClient.authService
     private lateinit var binding: ActivitySignInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,27 +44,22 @@ class SignInActivity : AppCompatActivity() {
         binding.signInButton.setOnClickListener {
             var accessToken: String
             var refreshToken: String
-            var isNewUser: Boolean = false
+            var isNewUser: Boolean
 
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
                 UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                     if (error != null) {
-                        Log.e("DEBUG", "로그인 실패", error)
-
-                        Toast.makeText(
-                            this,
-                            getString(R.string.error_kakao_login), Toast.LENGTH_SHORT
-                        ).show()
-
+                        /**
+                         * 일반적으로 카카오톡을 이용해서 로그인 하다가 유저가 취소 버튼을 누른 경우
+                         */
+                        Log.e("DEBUG", "kakao talk 로그인 실패", error)
                     } else if (token != null) {
-                        Log.i("DEBUG", "로그인 성공 ${token.idToken}")
+                        Log.i("DEBUG", "kakao talk 로그인 성공 ${token.idToken}")
 
                         lifecycleScope.launch {
                             try {
-                                val response = RetrofitClient
-                                    .retrofitService
-                                    .login(LoginRequest(token.idToken!!))
-                                    .unwrap()
+                                val response = authService.login(LoginRequest(token.idToken!!))
+                                    .unwrapOrThrow()
 
                                 Log.d("DEBUG", response.accessToken)
                                 Log.d("DEBUG", response.refreshToken)
@@ -85,25 +77,26 @@ class SignInActivity : AppCompatActivity() {
 
                                 if (isNewUser) {
                                     startActivity(
-                                        Intent(this@SignInActivity, SignUpActivity::class.java)
+                                        Intent(
+                                            this@SignInActivity,
+                                            ProfileSetupActivity::class.java
+                                        )
                                     )
-                                    Log.d(TAG, "회원 가입이 필요합니다")
+
+                                    Log.d(TAG, "bonda 회원 가입이 필요합니다")
 
                                     finish()
-
                                 } else {
                                     startActivity(
                                         Intent(this@SignInActivity, HomeActivity::class.java)
                                     )
-                                    Log.d(TAG, "로그인 완료")
+
+                                    Log.d(TAG, "bonda 로그인 완료")
 
                                     finish()
-
                                 }
-
                             } catch (e: Exception) {
                                 Log.e("DEBUG", e.toString())
-
                             }
                         }
                     }
@@ -112,22 +105,17 @@ class SignInActivity : AppCompatActivity() {
             } else {
                 UserApiClient.instance.loginWithKakaoAccount(this) { token, error ->
                     if (error != null) {
-                        Log.e("DEBUG", "로그인 실패", error)
-
-                        Toast.makeText(
-                            this,
-                            getString(R.string.error_kakao_login), Toast.LENGTH_SHORT
-                        ).show()
-
+                        /**
+                         * 일반적으로 카카오 계정을 이용해서 로그인 하다가 유저가 취소 버튼을 누른 경우
+                         */
+                        Log.e("DEBUG", "kakao account 로그인 실패", error)
                     } else if (token != null) {
-                        Log.i("DEBUG", "로그인 성공 ${token.idToken}")
+                        Log.i("DEBUG", "kakao account 로그인 성공 ${token.idToken}")
 
                         lifecycleScope.launch {
                             try {
-                                val response = RetrofitClient
-                                    .retrofitService
-                                    .login(LoginRequest(token.idToken!!))
-                                    .unwrap()
+                                val response = authService.login(LoginRequest(token.idToken!!))
+                                    .unwrapOrThrow()
 
                                 Log.d("DEBUG", response.accessToken)
                                 Log.d("DEBUG", response.refreshToken)
@@ -145,30 +133,30 @@ class SignInActivity : AppCompatActivity() {
 
                                 if (isNewUser) {
                                     startActivity(
-                                        Intent(this@SignInActivity, SignUpActivity::class.java)
+                                        Intent(
+                                            this@SignInActivity,
+                                            ProfileSetupActivity::class.java
+                                        )
                                     )
-                                    Log.d(TAG, "회원 가입이 필요합니다")
+
+                                    Log.d(TAG, "bonda 회원 가입이 필요합니다")
 
                                     finish()
-
                                 } else {
                                     startActivity(
                                         Intent(this@SignInActivity, HomeActivity::class.java)
                                     )
-                                    Log.d(TAG, "로그인 완료")
+
+                                    Log.d(TAG, "bonda 로그인 완료")
 
                                     finish()
-
                                 }
-
                             } catch (e: Exception) {
                                 Log.e("DEBUG", e.toString())
-
                             }
                         }
                     }
                 }
-
             }
         }
     }

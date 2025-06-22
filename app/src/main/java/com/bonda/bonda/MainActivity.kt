@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.bonda.bonda.network.RetrofitClient
-import com.bonda.bonda.network.unwrap
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.SignInActivity
 import com.bonda.bonda.util.AccessTokenProvider
@@ -16,13 +14,17 @@ import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
-import com.bonda.bonda.network.ReissueRequest
+import com.bonda.bonda.network.ApiClient
+import com.bonda.bonda.network.model.auth.ReissueRequest
 import com.bonda.bonda.ui.PermissionRequestActivity
-import com.bonda.bonda.ui.signup.SignUpActivity
+import com.bonda.bonda.ui.ProfileSetupActivity
 import com.bonda.bonda.util.PREF_KEY_PERMISSION_REQUIRED
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
 
 class MainActivity : AppCompatActivity() {
+
+    private val authService = ApiClient.authService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,22 +51,23 @@ class MainActivity : AppCompatActivity() {
             } else {
                 lifecycleScope.launch {
                     try {
-                        val response = RetrofitClient
-                            .retrofitService
-                            .reissueAccessToken(ReissueRequest(refreshToken))
-                            .unwrap()
+                        val response = authService.reissueAccessToken(ReissueRequest(refreshToken))
+                            .unwrapOrThrow()
+
                         Log.d(TAG, "access token reissue 완료")
 
                         val accessToken = response.accessToken
                         AccessTokenProvider.setAccessToken(accessToken)
+
                         Log.d(TAG, "new token: $accessToken")
 
                         val signupRequired = prefs.getBoolean(PREF_KEY_SIGNUP_REQUIRED, false)
 
                         if (signupRequired) {
                             startActivity(
-                                Intent(this@MainActivity, SignUpActivity::class.java)
+                                Intent(this@MainActivity, ProfileSetupActivity::class.java)
                             )
+
                             Log.d(TAG, "회원가입이 필요한 서비스입니다")
 
                             finish()
@@ -72,6 +75,7 @@ class MainActivity : AppCompatActivity() {
                             startActivity(
                                 Intent(this@MainActivity, HomeActivity::class.java)
                             )
+
                             Log.d(TAG, "로그인 완료")
 
                             finish()
@@ -87,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(
                             Intent(this@MainActivity, SignInActivity::class.java)
                         )
+
                         Log.d(TAG, "로그아웃 됨")
 
                         finish()

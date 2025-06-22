@@ -4,16 +4,14 @@
     <!-- ─────────── Headline ─────────── -->
 
     <style name="Headline1">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">400</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">30sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">40.5sp</item>
     </style>
 
     <style name="Headline2">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">600</item>
+        <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">24sp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:lineHeight">33.6sp</item>
@@ -22,32 +20,28 @@
     <!-- ─────────── Title ─────────── -->
 
     <style name="Title1">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">600</item>
+        <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">20sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">26sp</item>
     </style>
 
     <style name="Title2">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">600</item>
+        <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:lineHeight">21.6sp</item>
     </style>
 
     <style name="Title3">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">400</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">24.3sp</item>
     </style>
 
     <style name="Title4">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">500</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:lineHeight">21.6sp</item>
@@ -56,72 +50,63 @@
     <!-- ─────────── Body ─────────── -->
 
     <style name="Body1">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">600</item>
+        <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">22.4sp</item>
     </style>
 
     <style name="Body2">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">500</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">22.4sp</item>
     </style>
 
     <style name="Body3">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">400</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">22.4sp</item>
     </style>
 
     <style name="Body4">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">600</item>
+        <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">15sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">27sp</item>
     </style>
 
     <style name="Body5">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">400</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">15sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">27sp</item>
     </style>
 
     <style name="Body6">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">600</item>
+        <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">-0.01</item>
         <item name="android:lineHeight">19.6sp</item>
     </style>
 
     <style name="Body7">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">500</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">19.6sp</item>
     </style>
 
     <style name="Body8">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">400</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">25.2sp</item>
     </style>
 
     <style name="Body9">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">400</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:lineHeight">19.6sp</item>
@@ -130,24 +115,21 @@
     <!-- ─────────── Caption ─────────── -->
 
     <style name="Caption1">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">600</item>
+        <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:lineHeight">16.8sp</item>
     </style>
 
     <style name="Caption2">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">600</item>
+        <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">10sp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:lineHeight">14sp</item>
     </style>
 
     <style name="Caption3">
-        <item name="fontFamily">@font/pretendard</item>
-        <item name="android:fontWeight">400</item>
+        <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:lineHeight">16.8sp</item>
