@@ -67,14 +67,14 @@ class BooksViewModel : ViewModel() {
         _categoryArtButtonText.value = "아트북"
         _categoryIllustrationButtonText.value = "일러스트집"
         _categoryMagazineButtonText.value = "매거진"
-        _categoryNovelButtonIcon.value = R.drawable.ic_category_novel
-        _categoryPoemButtonIcon.value = R.drawable.ic_category_poem
-        _categoryEssayButtonIcon.value = R.drawable.ic_category_essay
-        _categoryComicButtonIcon.value = R.drawable.ic_category_comic
-        _categoryPhotoButtonIcon.value = R.drawable.ic_category_photobook
-        _categoryArtButtonIcon.value = R.drawable.ic_category_artbook
-        _categoryIllustrationButtonIcon.value = R.drawable.ic_category_illustrationbook
-        _categoryMagazineButtonIcon.value = R.drawable.ic_category_magazine
+        _categoryNovelButtonIcon.value = R.drawable.ic_category_novel_24dp
+        _categoryPoemButtonIcon.value = R.drawable.ic_category_poem_24dp
+        _categoryEssayButtonIcon.value = R.drawable.ic_category_essay_24dp
+        _categoryComicButtonIcon.value = R.drawable.ic_category_comic_24dp
+        _categoryPhotoButtonIcon.value = R.drawable.ic_category_photobook_24dp
+        _categoryArtButtonIcon.value = R.drawable.ic_category_artbook_24dp
+        _categoryIllustrationButtonIcon.value = R.drawable.ic_category_illustrationbook_24dp
+        _categoryMagazineButtonIcon.value = R.drawable.ic_category_magazine_24dp
 
         _recentArrivalBooks.value = listOf(
             Book(

@@ -70,9 +70,9 @@ class ArticleActivity : AppCompatActivity() {
 
         articleViewModel.isSaved.observe(this) { isSaved ->
             if (isSaved) {
-                binding.articleButtonBookmark.setImageResource(R.drawable.ic_bookmark_saved_36dp)
+                binding.articleButtonBookmark.setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
             } else {
-                binding.articleButtonBookmark.setImageResource((R.drawable.ic_bookmark_36dp))
+                binding.articleButtonBookmark.setImageResource((R.drawable.ic_action_bookmark_empty_24dp))
             }
         }
 
