@@ -26,7 +26,7 @@
         </activity>
 
 <!--        <activity android:name=".ui.home.HomeActivity" />-->
-        <activity android:name=".ui.signup.SignUpActivity" />
+        <activity android:name=".ui.ProfileSetupActivity" />
         <activity android:name=".ui.article.ArticleActivity" />
         <activity android:name=".ui.book.BookActivity" />
         <activity android:name=".ui.home.books.BooksCategoryActivity" />
@@ -39,11 +39,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
                 <data
                     android:host="oauth"
                     android:scheme="kakao52c614c7066242cd93789ae602f2c4f7" />
