@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_default_primary">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/signup_title"
+        android:textAppearance="@style/Headline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profile_image"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/surface_default_primary"
+        android:scaleType="centerCrop"
+        android:foreground="@drawable/ic_avatar_foreground"
+        android:foregroundTint="#D9D8D7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.CircleImage" />
+
+<!--    <ImageButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:backgroundTint="@color/white"-->
+<!--        android:contentDescription="카메라 버튼"-->
+<!--        android:background="@drawable/ic_avatar_button_background"-->
+<!--        android:foreground="@drawable/ic_description_camera_24dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/profile_image"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/profile_image" />-->
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/text_editor_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/surface_default_primary"
+        android:hint="@string/signup_username_text_editor_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:padding="12dp"
+        android:textAppearance="@style/Body2"
+        android:textColor="@color/text_default_primary"
+        android:textColorHint="@color/text_default_tertiary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_image" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/username_length_checker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/signup_username_length_checker"
+        android:textAppearance="@style/Caption2"
+        android:textColor="@color/text_default_tertiary"
+        app:layout_constraintStart_toStartOf="@id/text_editor_username"
+        app:layout_constraintTop_toBottomOf="@id/text_editor_username" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next_button"
+        style="@style/Widget.Bonda.Button.Disabled"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="10dp"
+        android:text="다음"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

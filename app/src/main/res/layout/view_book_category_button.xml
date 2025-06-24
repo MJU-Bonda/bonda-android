@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_category_essay" />
+        android:src="@drawable/ic_category_essay_24dp" />
 
     <TextView
         android:id="@+id/ic_text"

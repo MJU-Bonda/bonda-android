@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".BondaApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -11,20 +14,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bonda"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.home.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.detail.article.ArticleActivity" />
-        <activity android:name=".ui.detail.book.BookActivity" />
-        <activity android:name=".ui.main.books.BooksCategoryActivity" />
-        <activity android:name=".ui.detail.onboarding.OnboardingActivity" />
-    </application>
 
+<!--        <activity android:name=".ui.home.HomeActivity" />-->
+        <activity android:name=".ui.ProfileSetupActivity" />
+        <activity android:name=".ui.article.ArticleActivity" />
+        <activity android:name=".ui.book.BookActivity" />
+        <activity android:name=".ui.home.books.BooksCategoryActivity" />
+        <activity android:name=".ui.onboarding.OnboardingActivity" />
+        <activity android:name=".ui.PermissionRequestActivity" />
+        <activity android:name=".ui.SignInActivity" />
+        <activity android:name=".ui.SettingsActivity" />
+
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao52c614c7066242cd93789ae602f2c4f7" />
+            </intent-filter>
+        </activity>
+    </application>
 </manifest>

@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- deprecated -->
     <dimen name="spacing_small">4dp</dimen>
     <dimen name="spacing_medium">8dp</dimen>
     <dimen name="spacing_large">12dp</dimen>
     <dimen name="chip_padding_horizontal">4dp</dimen>
+    <!---->
 
+    <dimen name="space_radius_8">8dp</dimen>
+    <dimen name="space_radius_20">20dp</dimen>
+
+    <dimen name="space_padding_4">4dp</dimen>
+    <dimen name="space_padding_10">10dp</dimen>
+    <dimen name="space_padding_32">32dp</dimen>
 </resources>

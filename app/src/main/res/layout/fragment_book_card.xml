@@ -1,60 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/surface_context_theme"
     android:paddingHorizontal="20dp"
-    android:paddingVertical="28dp"
-    android:background="@color/article_book_card_background">
-    
+    android:paddingVertical="28dp">
+
     <TextView
         android:id="@+id/index"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/image_holder"
+        style="@style/Widget.Bonda.Card.Enabled"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginVertical="20dp"
-        app:cardBackgroundColor="@color/article_background"
-        app:layout_constraintWidth_percent="0.4"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/index">
+        app:layout_constraintTop_toBottomOf="@id/index"
+        app:layout_constraintWidth_percent="0.4">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/cover_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/dummy_book10"/>
+            android:contentDescription="@string/book_image_description" />
     </com.google.android.material.card.MaterialCardView>
+
 
     <com.google.android.material.chip.Chip
         android:id="@+id/category"
+        style="@style/Widget.Bonda.Badge.Category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        app:chipStartPadding="@dimen/chip_padding_horizontal"
-        app:chipEndPadding="@dimen/chip_padding_horizontal"
-        app:chipMinTouchTargetSize="0dp"
-        app:chipStrokeWidth="0dp"
-        app:chipBackgroundColor="@color/chip_background_book_category"
-        app:chipCornerRadius="16dp"
-        android:textColor="@color/chip_foreground_book_category"
-        android:textSize="14sp"
-        android:clickable="false"
-        android:focusable="false"
-        android:checkable="false"
-        android:enabled="false"
+        app:layout_constraintBottom_toTopOf="@id/title"
         app:layout_constraintStart_toEndOf="@id/image_holder"
-        app:layout_constraintTop_toTopOf="@id/image_holder"
-        app:layout_constraintBottom_toTopOf="@id/title"/>
+        app:layout_constraintTop_toTopOf="@id/image_holder" />
 
     <TextView
         android:id="@+id/title"
@@ -63,9 +53,9 @@
         android:layout_marginStart="20dp"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/author"
         app:layout_constraintStart_toEndOf="@id/image_holder"
-        app:layout_constraintTop_toBottomOf="@id/category"
-        app:layout_constraintBottom_toTopOf="@id/author"/>
+        app:layout_constraintTop_toBottomOf="@id/category" />
 
     <TextView
         android:id="@+id/author"
@@ -73,18 +63,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/image_holder"
         app:layout_constraintStart_toEndOf="@id/image_holder"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintBottom_toBottomOf="@id/image_holder"/>
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="28dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_holder"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_holder" />
 
     <TextView
         android:id="@+id/body"
@@ -92,18 +82,19 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button"
+        style="@style/Widget.Bonda.Button.Outlined"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
         android:text="@string/get_book_detail"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
