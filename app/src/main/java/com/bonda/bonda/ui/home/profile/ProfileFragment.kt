@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentHomeProfileBinding
 import com.bonda.bonda.ui.ProfileSetupActivity
+import com.bonda.bonda.ui.SettingsActivity
 import com.bonda.bonda.ui.SignInActivity
 import com.bonda.bonda.ui.onboarding.OnboardingActivity
 
@@ -44,6 +45,10 @@ class ProfileFragment : Fragment() {
         }
         binding.buttonSignIn.setOnClickListener {
             startActivity(Intent(requireContext(), SignInActivity::class.java))
+        }
+
+        binding.buttonProfile.setOnClickListener {
+            startActivity(Intent(requireContext(), SettingsActivity::class.java))
         }
     }
 
