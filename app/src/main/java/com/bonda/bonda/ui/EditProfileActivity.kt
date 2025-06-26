@@ -9,17 +9,17 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import com.bonda.bonda.R
-import com.bonda.bonda.databinding.ActivityProfileSetupBinding
+import com.bonda.bonda.databinding.ActivityEditProfileBinding
 
-class ProfileSetupActivity : AppCompatActivity() {
+class EditProfileActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityProfileSetupBinding
+    lateinit var binding: ActivityEditProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
 
-        binding = ActivityProfileSetupBinding.inflate(layoutInflater)
+        binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
@@ -28,13 +28,30 @@ class ProfileSetupActivity : AppCompatActivity() {
             insets
         }
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.nextButton.setOnClickListener {
+            finish()
+        }
+
+        binding.profileImage.setOnClickListener {
+            ProfileImageSelectorView().show(supportFragmentManager, "SelectImage")
+        }
+
+
         val primaryButtonTextColor = ContextCompat.getColor(this, R.color.text_default_inverse)
-        val primaryButtonBackgroundColor = ContextCompat.getColor(this, R.color.surface_accent_primary)
+        val primaryButtonBackgroundColor =
+            ContextCompat.getColor(this, R.color.surface_accent_primary)
         val disabledButtonTextColor = ContextCompat.getColor(this, R.color.text_default_inverse)
-        val disabledButtonBackgroundColor = ContextCompat.getColor(this, R.color.surface_default_base)
+        val disabledButtonBackgroundColor =
+            ContextCompat.getColor(this, R.color.surface_default_base)
 
         binding.textEditorUsername.doOnTextChanged { _, _, _, count ->
-            if(count == 0){
+            if (count == 0) {
                 binding.nextButton.isEnabled = false
                 binding.nextButton.setTextColor(disabledButtonTextColor)
                 binding.nextButton.setBackgroundColor(disabledButtonBackgroundColor)
@@ -61,10 +78,6 @@ class ProfileSetupActivity : AppCompatActivity() {
                     binding.nextButton.setBackgroundColor(primaryButtonBackgroundColor)
                 }
             }
-        }
-
-        binding.nextButton.setOnClickListener {
-            finish()
         }
     }
 }
