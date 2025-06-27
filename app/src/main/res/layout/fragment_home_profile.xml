@@ -18,8 +18,21 @@
             android:background="@color/surface_default_tertiary"
             app:title="마이"
             app:titleTextAppearance="@style/Title2"
-            app:titleTextColor="@color/text_accent_primary" />
+            app:titleTextColor="@color/text_accent_primary">
 
+            <ImageButton
+                android:id="@+id/settings_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="설정"
+                android:focusable="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_action_setting_bold_24dp" />
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -78,7 +91,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/text_default_primary" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -111,7 +123,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/text_default_primary" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -237,7 +248,6 @@
                         app:layout_constraintTop_toBottomOf="@id/button_my_badges_header" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -271,8 +281,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/text_default_primary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -395,40 +403,5 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/text_default_primary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_onboarding"
-        style="@style/Widget.Bonda.Button.Primary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="DEBUG"
-        app:layout_constraintEnd_toStartOf="@id/button_books"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_books"
-        style="@style/Widget.Bonda.Button.Primary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="DEBUG"
-        app:layout_constraintEnd_toStartOf="@id/button_sign_in"
-        app:layout_constraintStart_toEndOf="@+id/button_onboarding"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_sign_in"
-        style="@style/Widget.Bonda.Button.Primary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="DEBUG"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_books"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,7 @@ import com.bonda.bonda.databinding.ViewBookCategoryButtonBinding
 import com.bonda.bonda.databinding.ViewBookHorizontalBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.ui.book.BookActivity
+import com.bonda.bonda.ui.search.SearchActivity
 
 class BooksFragment : Fragment() {
 
@@ -34,6 +35,10 @@ class BooksFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.searchButton.setOnClickListener {
+            startActivity(Intent(requireContext(), SearchActivity::class.java))
+        }
 
         val booksViewModel = ViewModelProvider(this)[BooksViewModel::class.java]
 

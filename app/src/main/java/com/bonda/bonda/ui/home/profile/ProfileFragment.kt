@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentHomeProfileBinding
+import com.bonda.bonda.ui.EditProfileActivity
 import com.bonda.bonda.ui.SignUpActivity
 import com.bonda.bonda.ui.SettingsActivity
 import com.bonda.bonda.ui.SignInActivity
@@ -31,23 +32,11 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
-
-//        profileViewModel.text.observe(viewLifecycleOwner) {
-//            binding.textProfile.text = it
-//        }
-
-        binding.buttonOnboarding.setOnClickListener {
-            startActivity(Intent(requireContext(), OnboardingActivity::class.java))
-        }
-        binding.buttonBooks.setOnClickListener {
-            startActivity(Intent(requireContext(), SignUpActivity::class.java))
-        }
-        binding.buttonSignIn.setOnClickListener {
-            startActivity(Intent(requireContext(), SignInActivity::class.java))
-        }
-
         binding.buttonProfile.setOnClickListener {
+            startActivity(Intent(requireContext(), EditProfileActivity::class.java))
+        }
+
+        binding.settingsButton.setOnClickListener{
             startActivity(Intent(requireContext(), SettingsActivity::class.java))
         }
     }
