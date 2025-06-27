@@ -1,5 +1,6 @@
 package com.bonda.bonda.ui.onboarding
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +12,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityOnboardingBinding
+import com.bonda.bonda.ui.home.HomeActivity
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -81,6 +83,9 @@ class OnboardingActivity : AppCompatActivity() {
             if (binding.viewPager.currentItem != pages.lastIndex) {
                 binding.viewPager.currentItem++
             } else {
+                startActivity(
+                    Intent(this, HomeActivity::class.java)
+                )
                 finish()
             }
         }

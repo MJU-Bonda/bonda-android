@@ -403,29 +403,32 @@
         style="@style/Widget.Bonda.Button.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="온보딩 페이지"
+        android:layout_margin="4dp"
+        android:text="DEBUG"
+        app:layout_constraintEnd_toStartOf="@id/button_books"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_books"
         style="@style/Widget.Bonda.Button.Primary"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="회원 가입 페이지"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_onboarding" />
+        android:layout_margin="4dp"
+        android:text="DEBUG"
+        app:layout_constraintEnd_toStartOf="@id/button_sign_in"
+        app:layout_constraintStart_toEndOf="@+id/button_onboarding"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_sign_in"
         style="@style/Widget.Bonda.Button.Primary"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="로그아웃"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_books" />
+        android:layout_margin="4dp"
+        android:text="DEBUG"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_books"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

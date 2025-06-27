@@ -70,7 +70,7 @@ class SignInActivity : AppCompatActivity() {
                                 isNewUser = response.isNewUser
 
                                 AccessTokenProvider.setAccessToken(accessToken)
-                                getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit() {
+                                getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit() {
                                     putString(PREF_KEY_REFRESH_TOKEN, refreshToken)
                                     putBoolean(PREF_KEY_SIGNUP_REQUIRED, isNewUser)
                                 }
@@ -79,7 +79,7 @@ class SignInActivity : AppCompatActivity() {
                                     startActivity(
                                         Intent(
                                             this@SignInActivity,
-                                            ProfileSetupActivity::class.java
+                                            SignUpActivity::class.java
                                         )
                                     )
 
@@ -88,7 +88,10 @@ class SignInActivity : AppCompatActivity() {
                                     finish()
                                 } else {
                                     startActivity(
-                                        Intent(this@SignInActivity, HomeActivity::class.java)
+                                        Intent(
+                                            this@SignInActivity,
+                                            HomeActivity::class.java
+                                        )
                                     )
 
                                     Log.d(TAG, "bonda 로그인 완료")
@@ -126,7 +129,7 @@ class SignInActivity : AppCompatActivity() {
                                 isNewUser = response.isNewUser
 
                                 AccessTokenProvider.setAccessToken(accessToken)
-                                getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit() {
+                                getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit() {
                                     putString(PREF_KEY_REFRESH_TOKEN, refreshToken)
                                     putBoolean(PREF_KEY_SIGNUP_REQUIRED, isNewUser)
                                 }
@@ -135,7 +138,7 @@ class SignInActivity : AppCompatActivity() {
                                     startActivity(
                                         Intent(
                                             this@SignInActivity,
-                                            ProfileSetupActivity::class.java
+                                            SignUpActivity::class.java
                                         )
                                     )
 
@@ -144,7 +147,10 @@ class SignInActivity : AppCompatActivity() {
                                     finish()
                                 } else {
                                     startActivity(
-                                        Intent(this@SignInActivity, HomeActivity::class.java)
+                                        Intent(
+                                            this@SignInActivity,
+                                            HomeActivity::class.java
+                                        )
                                     )
 
                                     Log.d(TAG, "bonda 로그인 완료")

@@ -14,21 +14,26 @@ import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.auth.ReissueRequest
 import com.bonda.bonda.ui.PermissionRequestActivity
-import com.bonda.bonda.ui.ProfileSetupActivity
+import com.bonda.bonda.ui.SignUpActivity
 import com.bonda.bonda.util.PREF_KEY_PERMISSION_REQUIRED
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
 
 class MainActivity : AppCompatActivity() {
 
+    var initFinished = false
     private val authService = ApiClient.authService
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { !initFinished }
+
         super.onCreate(savedInstanceState)
 
-        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
         // 앱 권한 검사
         if (prefs.getBoolean(PREF_KEY_PERMISSION_REQUIRED, true)) {
@@ -36,6 +41,7 @@ class MainActivity : AppCompatActivity() {
                 Intent(this, PermissionRequestActivity::class.java)
             )
 
+            initFinished = true
             finish()
         } else {
             val refreshToken = prefs.getString(PREF_KEY_REFRESH_TOKEN, null)
@@ -47,6 +53,7 @@ class MainActivity : AppCompatActivity() {
                     Intent(this, SignInActivity::class.java)
                 )
 
+                initFinished = true
                 finish()
             } else {
                 lifecycleScope.launch {
@@ -65,11 +72,12 @@ class MainActivity : AppCompatActivity() {
 
                         if (signupRequired) {
                             startActivity(
-                                Intent(this@MainActivity, ProfileSetupActivity::class.java)
+                                Intent(this@MainActivity, SignUpActivity::class.java)
                             )
 
                             Log.d(TAG, "회원가입이 필요한 서비스입니다")
 
+                            initFinished = true
                             finish()
                         } else {
                             startActivity(
@@ -78,6 +86,7 @@ class MainActivity : AppCompatActivity() {
 
                             Log.d(TAG, "로그인 완료")
 
+                            initFinished = true
                             finish()
                         }
                     } catch (e: Exception) {
@@ -94,6 +103,7 @@ class MainActivity : AppCompatActivity() {
 
                         Log.d(TAG, "로그아웃 됨")
 
+                        initFinished = true
                         finish()
                     }
                 }

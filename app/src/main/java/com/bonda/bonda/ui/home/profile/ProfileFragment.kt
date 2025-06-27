@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentHomeProfileBinding
-import com.bonda.bonda.ui.ProfileSetupActivity
+import com.bonda.bonda.ui.SignUpActivity
 import com.bonda.bonda.ui.SettingsActivity
 import com.bonda.bonda.ui.SignInActivity
 import com.bonda.bonda.ui.onboarding.OnboardingActivity
@@ -41,7 +41,7 @@ class ProfileFragment : Fragment() {
             startActivity(Intent(requireContext(), OnboardingActivity::class.java))
         }
         binding.buttonBooks.setOnClickListener {
-            startActivity(Intent(requireContext(), ProfileSetupActivity::class.java))
+            startActivity(Intent(requireContext(), SignUpActivity::class.java))
         }
         binding.buttonSignIn.setOnClickListener {
             startActivity(Intent(requireContext(), SignInActivity::class.java))

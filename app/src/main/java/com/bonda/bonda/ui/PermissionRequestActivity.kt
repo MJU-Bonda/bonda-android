@@ -38,7 +38,7 @@ class PermissionRequestActivity : AppCompatActivity() {
             insets
         }
 
-        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
         binding.nextButton.setOnClickListener {
             // TODO 권한 설정 로직 추가
