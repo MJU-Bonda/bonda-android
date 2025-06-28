@@ -33,6 +33,17 @@ class ArticleActivity : AppCompatActivity() {
         binding = ActivityArticleDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
+        binding.bookmarkButton.setOnClickListener {
+            // TODO 북마크 추가 기능 연결
+        }
+
         val articleId = intent.getIntExtra("article_detail_id", 0)
         Log.d("DEBUG", "started_article_detail_activity_id : $articleId")
 
@@ -70,9 +81,9 @@ class ArticleActivity : AppCompatActivity() {
 
         articleViewModel.isSaved.observe(this) { isSaved ->
             if (isSaved) {
-                binding.articleButtonBookmark.setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
+                binding.bookmarkButton.setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
             } else {
-                binding.articleButtonBookmark.setImageResource((R.drawable.ic_action_bookmark_empty_24dp))
+                binding.bookmarkButton.setImageResource((R.drawable.ic_action_bookmark_empty_24dp))
             }
         }
 
