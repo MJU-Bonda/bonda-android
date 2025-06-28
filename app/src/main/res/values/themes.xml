@@ -22,6 +22,17 @@
     </style>
 
 
+    <style name="Widget.Bonda.SearchBar" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/surface_default_primary</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Bonda.SearchBar</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+    </style>
+    <style name="ShapeAppearance.Bonda.SearchBar" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
 
     <!-- splash screen layout -->
     <style name="Theme.Bonda" parent="Theme.Material3.Light.NoActionBar">

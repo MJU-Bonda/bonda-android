@@ -1,9 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/surface_default_tertiary">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_bar_container"
+            style="@style/Widget.Bonda.SearchBar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/button_close"
+            app:layout_constraintEnd_toStartOf="@id/button_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/button_close">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/ic_action_search_24dp"
+                android:drawablePadding="8dp"
+                android:hint="검색어를 입력해 주세요"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textAppearance="@style/Body3" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/button_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="12dp"
+            android:text="취소"
+            android:textAppearance="@style/Body1"
+            android:textColor="@color/text_default_secondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/search_bar_container"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:paddingHorizontal="24dp"
+        app:layout_constraintTop_toBottomOf="@id/search_bar_layout">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/header1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="최근 검색어"
+            android:textAppearance="@style/Title2"
+            android:textColor="@color/text_default_primary"
+            app:layout_constraintEnd_toStartOf="@id/container1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/header1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/header1">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/button_clear_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전체삭제"
+                android:textAppearance="@style/Caption1"
+                android:textColor="@color/text_default_tertiary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/divider1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:text="|"
+                android:textAppearance="@style/Caption1"
+                android:textColor="@color/text_default_tertiary"
+                app:layout_constraintStart_toEndOf="@id/button_clear_history"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/button_toggle_save_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="자동저장 끄기"
+                android:textAppearance="@style/Caption1"
+                android:textColor="@color/text_default_tertiary"
+                app:layout_constraintStart_toEndOf="@id/divider1"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_is_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="최근 검색 기록이 없습니다"
+        android:textAppearance="@style/Caption1"
+        android:textColor="@color/text_default_tertiary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container2" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/search_history_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/text_is_empty" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/header2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="오늘의 추천 키워드"
+        android:textAppearance="@style/Title2"
+        android:textColor="@color/text_default_primary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_history_chip_group" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/today_keywords_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/header2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
