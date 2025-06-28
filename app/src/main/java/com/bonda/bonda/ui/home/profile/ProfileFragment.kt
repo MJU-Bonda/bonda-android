@@ -6,13 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentHomeProfileBinding
 import com.bonda.bonda.ui.EditProfileActivity
-import com.bonda.bonda.ui.SignUpActivity
 import com.bonda.bonda.ui.SettingsActivity
-import com.bonda.bonda.ui.SignInActivity
-import com.bonda.bonda.ui.onboarding.OnboardingActivity
+import com.bonda.bonda.ui.history.RecentActivityActivity
 
 class ProfileFragment : Fragment() {
 
@@ -38,6 +35,10 @@ class ProfileFragment : Fragment() {
 
         binding.settingsButton.setOnClickListener{
             startActivity(Intent(requireContext(), SettingsActivity::class.java))
+        }
+
+        binding.buttonRecentActivity.setOnClickListener {
+            startActivity(Intent(requireContext(), RecentActivityActivity::class.java))
         }
     }
 
