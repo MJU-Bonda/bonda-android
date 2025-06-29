@@ -56,4 +56,44 @@
     <string name="signup_username_text_editor_hint">사용할 닉네임을 입력해 주세요</string>
     <string name="signup_username_length_checker">닉네임은 최대 10자까지 사용할 수 있습니다.</string>
     <string name="error_kakao_login">카카오톡 계정 정보를 가져올 수 없습니다</string>
+
+    <!-- 내 활동 페이지 -->
+    <string name="discover_badge1_title">느긋한 발걸음</string>
+    <string name="discover_badge2_title">길찾기 초보자</string>
+    <string name="discover_badge3_title">발견의 마법사</string>
+    <string name="discover_badge4_title">첫 장의 설렘</string>
+    <string name="discover_badge5_title">페이지 여행자</string>
+    <string name="discover_badge6_title">서가 산책</string>
+    <string name="collect_badge1_title">나의 첫 번째</string>
+    <string name="collect_badge2_title">책갈피 수집가</string>
+    <string name="collect_badge3_title">서재 채집가</string>
+    <string name="collect_badge4_title">첫 번째 서랍</string>
+    <string name="collect_badge5_title">기억의 조각</string>
+    <string name="collect_badge6_title">취향 기록가</string>
+
+    <string name="discover_badge1_hint">도서 상세페이지 1개를 조회하면\n획득할 수 있어요.</string>
+    <string name="discover_badge2_hint">도서 상세페이지 5개를 조회하면\n획득할 수 있어요.</string>
+    <string name="discover_badge3_hint">도서 상세페이지 10개를 조회하면\n획득할 수 있어요.</string>
+    <string name="discover_badge4_hint">첫 장의 설렘</string>
+    <string name="discover_badge5_hint">페이지 여행자</string>
+    <string name="discover_badge6_hint">서가 산책</string>
+    <string name="collect_badge1_hint">나의 첫 번째</string>
+    <string name="collect_badge2_hint">책갈피 수집가</string>
+    <string name="collect_badge3_hint">서재 채집가</string>
+    <string name="collect_badge4_hint">첫 번째 서랍</string>
+    <string name="collect_badge5_hint">기억의 조각</string>
+    <string name="collect_badge6_hint">취향 기록가</string>
+
+    <string name="discover_badge1_description">1개의 도서를 조회하여\n‘발견의 마법사’ 뱃지를 획득했어요.</string>
+    <string name="discover_badge2_description">5개의 도서를 조회하여\n‘발견의 마법사’ 뱃지를 획득했어요.</string>
+    <string name="discover_badge3_description">10개의 도서를 조회하여\n‘발견의 마법사’ 뱃지를 획득했어요.</string>
+    <string name="discover_badge4_description">첫 장의 설렘</string>
+    <string name="discover_badge5_description">페이지 여행자</string>
+    <string name="discover_badge6_description">서가 산책</string>
+    <string name="collect_badge1_description">나의 첫 번째</string>
+    <string name="collect_badge2_description">책갈피 수집가</string>
+    <string name="collect_badge3_description">서재 채집가</string>
+    <string name="collect_badge4_description">첫 번째 서랍</string>
+    <string name="collect_badge5_description">기억의 조각</string>
+    <string name="collect_badge6_description">취향 기록가</string>
 </resources>

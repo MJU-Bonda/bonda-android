@@ -1,13 +1,12 @@
 package com.bonda.bonda
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.ui.home.HomeActivity
-import com.bonda.bonda.ui.SignInActivity
+import com.bonda.bonda.ui.auth.SignInActivity
 import com.bonda.bonda.util.AccessTokenProvider
 import com.bonda.bonda.util.PREFS_NAME
 import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
@@ -17,8 +16,8 @@ import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.auth.ReissueRequest
-import com.bonda.bonda.ui.PermissionRequestActivity
-import com.bonda.bonda.ui.SignUpActivity
+import com.bonda.bonda.ui.auth.PermissionRequestActivity
+import com.bonda.bonda.ui.auth.SignUpActivity
 import com.bonda.bonda.util.PREF_KEY_PERMISSION_REQUIRED
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
 

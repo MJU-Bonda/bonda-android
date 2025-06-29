@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bonda.bonda.databinding.FragmentHomeProfileBinding
-import com.bonda.bonda.ui.EditProfileActivity
-import com.bonda.bonda.ui.SettingsActivity
-import com.bonda.bonda.ui.history.RecentActivityActivity
+import com.bonda.bonda.ui.profile.EditProfileActivity
+import com.bonda.bonda.ui.profile.SettingsActivity
+import com.bonda.bonda.ui.profile.activity.MyActivityActivity
+import com.bonda.bonda.ui.profile.history.RecentActivityActivity
 
 class ProfileFragment : Fragment() {
 
@@ -39,6 +40,10 @@ class ProfileFragment : Fragment() {
 
         binding.buttonRecentActivity.setOnClickListener {
             startActivity(Intent(requireContext(), RecentActivityActivity::class.java))
+        }
+
+        binding.buttonActivity.setOnClickListener {
+            startActivity(Intent(requireContext(), MyActivityActivity::class.java))
         }
     }
 

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,7 +15,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/dummy_book4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="2:3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,6 @@
             android:clickable="false"
             android:enabled="false"
             android:focusable="false"
-            android:text="@string/article_chip_theme"
             android:textAppearance="@style/Caption1"
             android:textColor="@color/text_context_theme"
             app:chipBackgroundColor="@color/surface_context_theme"
@@ -59,7 +58,6 @@
             android:layout_marginHorizontal="12dp"
             android:layout_marginVertical="16dp"
             android:layout_marginTop="4dp"
-            android:text="골라골라 나 같은 집"
             android:textAppearance="@style/Title4"
             android:textColor="@color/text_default_inverse"
             app:layout_constraintBottom_toBottomOf="parent"
