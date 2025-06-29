@@ -5,6 +5,18 @@
     android:layout_height="match_parent"
     android:background="@color/background_default_primary">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="프로필 수정"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/Title2"
+        app:titleTextColor="@color/text_accent_primary" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -14,7 +26,7 @@
         android:text="@string/signup_title"
         android:textAppearance="@style/Headline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile_image"
@@ -22,23 +34,13 @@
         android:layout_height="88dp"
         android:layout_marginTop="64dp"
         android:background="@color/surface_default_primary"
-        android:scaleType="centerCrop"
         android:foreground="@drawable/ic_avatar_foreground"
         android:foregroundTint="#D9D8D7"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.CircleImage" />
-
-<!--    <ImageButton-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:backgroundTint="@color/white"-->
-<!--        android:contentDescription="카메라 버튼"-->
-<!--        android:background="@drawable/ic_avatar_button_background"-->
-<!--        android:foreground="@drawable/ic_description_camera_24dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/profile_image"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/profile_image" />-->
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/text_editor_username"

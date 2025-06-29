@@ -5,18 +5,29 @@ import com.bonda.bonda.network.model.member.GetProfileRequest
 import com.bonda.bonda.network.model.member.GetProfileResponse
 import com.bonda.bonda.network.model.member.UpdateProfileRequest
 import com.bonda.bonda.network.model.member.UpdateProfileResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PUT
+import retrofit2.http.Part
 
 interface MemberService {
     /**
      * 회원의 닉네임 또는 프로필 이미지 변경
      */
+    @Multipart
     @PUT("members/update/nickname-image")
     suspend fun updateProfile(
-        @Body request: UpdateProfileRequest
+        @Part("member") member: RequestBody,
+        @Part("nickname") nickname: RequestBody,
+        @Part profileImage: MultipartBody.Part?
     ): ApiResponse<UpdateProfileResponse>
+//    @PUT("members/update/nickname-image")
+//    suspend fun updateProfile(
+//        @Body request: UpdateProfileRequest
+//    ): ApiResponse<UpdateProfileResponse>
 
     /**
      * 마이페이지 내 회원 정보 조회
@@ -25,5 +36,6 @@ interface MemberService {
     suspend fun getProfile(
         @Body request: GetProfileRequest
     ): ApiResponse<GetProfileResponse>
+
 
 }

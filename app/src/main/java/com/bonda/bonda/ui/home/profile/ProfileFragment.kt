@@ -6,12 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.FragmentHomeProfileBinding
-import com.bonda.bonda.ui.ProfileSetupActivity
-import com.bonda.bonda.ui.SettingsActivity
-import com.bonda.bonda.ui.SignInActivity
-import com.bonda.bonda.ui.onboarding.OnboardingActivity
+import com.bonda.bonda.ui.profile.EditProfileActivity
+import com.bonda.bonda.ui.profile.SettingsActivity
+import com.bonda.bonda.ui.profile.activity.MyActivityActivity
+import com.bonda.bonda.ui.profile.history.RecentActivityActivity
 
 class ProfileFragment : Fragment() {
 
@@ -31,24 +30,20 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
-
-//        profileViewModel.text.observe(viewLifecycleOwner) {
-//            binding.textProfile.text = it
-//        }
-
-        binding.buttonOnboarding.setOnClickListener {
-            startActivity(Intent(requireContext(), OnboardingActivity::class.java))
-        }
-        binding.buttonBooks.setOnClickListener {
-            startActivity(Intent(requireContext(), ProfileSetupActivity::class.java))
-        }
-        binding.buttonSignIn.setOnClickListener {
-            startActivity(Intent(requireContext(), SignInActivity::class.java))
-        }
-
         binding.buttonProfile.setOnClickListener {
+            startActivity(Intent(requireContext(), EditProfileActivity::class.java))
+        }
+
+        binding.settingsButton.setOnClickListener{
             startActivity(Intent(requireContext(), SettingsActivity::class.java))
+        }
+
+        binding.buttonRecentActivity.setOnClickListener {
+            startActivity(Intent(requireContext(), RecentActivityActivity::class.java))
+        }
+
+        binding.buttonActivity.setOnClickListener {
+            startActivity(Intent(requireContext(), MyActivityActivity::class.java))
         }
     }
 

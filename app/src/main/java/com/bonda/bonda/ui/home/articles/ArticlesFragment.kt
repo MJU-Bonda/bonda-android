@@ -4,10 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeArticlesBinding
@@ -15,6 +24,7 @@ import com.bonda.bonda.databinding.ViewArticleBinding
 import com.bonda.bonda.databinding.ViewChipWriterBinding
 import com.bonda.bonda.databinding.ViewChipThemeBinding
 import com.bonda.bonda.ui.article.ArticleActivity
+import com.bonda.bonda.ui.search.SearchActivity
 
 class ArticlesFragment : Fragment() {
 
@@ -33,6 +43,10 @@ class ArticlesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.searchButton.setOnClickListener {
+            startActivity(Intent(requireContext(), SearchActivity::class.java))
+        }
 
         val homeViewModel = ViewModelProvider(this)[ArticlesViewModel::class.java]
 
