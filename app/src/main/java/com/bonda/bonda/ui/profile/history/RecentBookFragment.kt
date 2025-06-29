@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.history
+package com.bonda.bonda.ui.profile.history
 
 import android.content.Intent
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.onboarding
+package com.bonda.bonda.ui.auth.onboarding
 
 import android.content.Intent
 import android.os.Bundle

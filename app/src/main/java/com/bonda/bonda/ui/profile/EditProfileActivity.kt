@@ -1,25 +1,21 @@
-package com.bonda.bonda.ui
+package com.bonda.bonda.ui.profile
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.R
-import com.bonda.bonda.databinding.ActivitySignUpBinding
+import com.bonda.bonda.databinding.ActivityEditProfileBinding
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.ui.onboarding.OnboardingActivity
 import com.bonda.bonda.util.AccessTokenProvider
-import com.bonda.bonda.util.PREFS_NAME
-import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -27,20 +23,18 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
-class SignUpActivity : AppCompatActivity() {
+class EditProfileActivity : AppCompatActivity() {
 
     private val memberService = ApiClient.memberService
 
-    private lateinit var binding: ActivitySignUpBinding
+    lateinit var binding: ActivityEditProfileBinding
     private var profileImage: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
 
-        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-
-        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
@@ -51,9 +45,7 @@ class SignUpActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = ""
         binding.toolbar.setNavigationOnClickListener {
-            // TODO 회원 가입을 취소하시겠습니까? 모달표시
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -62,7 +54,7 @@ class SignUpActivity : AppCompatActivity() {
                 try {
                     val binaryImage = profileImage?.let { uri ->
                         val bytes =
-                            this@SignUpActivity.contentResolver.openInputStream(uri)!!
+                            this@EditProfileActivity.contentResolver.openInputStream(uri)!!
                                 .use { it.readBytes() }
                         val rb = RequestBody.create("image/*".toMediaType(), bytes)
                         MultipartBody.Part.createFormData(
@@ -86,14 +78,6 @@ class SignUpActivity : AppCompatActivity() {
                     Log.d(TAG, "문제가 발생했습니다: ${e.message}")
                 }
             }
-
-            prefs.edit() {
-                putBoolean(PREF_KEY_SIGNUP_REQUIRED, false)
-            }
-
-            val intent = Intent(this, OnboardingActivity::class.java)
-            startActivity(intent)
-            finish()
         }
 
         binding.profileImage.setOnClickListener {
@@ -140,5 +124,10 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun uriToBase64(uri: Uri): String {
+        val bytes = contentResolver.openInputStream(uri)!!.use { it.readBytes() }
+        return Base64.encodeToString(bytes, Base64.NO_WRAP)
     }
 }

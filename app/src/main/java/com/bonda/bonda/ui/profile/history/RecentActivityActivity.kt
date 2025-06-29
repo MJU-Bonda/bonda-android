@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.history
+package com.bonda.bonda.ui.profile.history
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

@@ -1,6 +1,5 @@
-package com.bonda.bonda.ui
+package com.bonda.bonda.ui.auth
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log

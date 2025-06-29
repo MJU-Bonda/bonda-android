@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.onboarding
+package com.bonda.bonda.ui.auth.onboarding
 
 import android.os.Bundle
 import android.view.LayoutInflater
