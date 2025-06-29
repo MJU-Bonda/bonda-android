@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui
+package com.bonda.bonda.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
