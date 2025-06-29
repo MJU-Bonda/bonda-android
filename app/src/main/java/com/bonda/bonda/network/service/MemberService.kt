@@ -37,4 +37,5 @@ interface MemberService {
         @Body request: GetProfileRequest
     ): ApiResponse<GetProfileResponse>
 
+
 }
