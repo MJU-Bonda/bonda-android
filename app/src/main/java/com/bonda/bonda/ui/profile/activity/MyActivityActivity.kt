@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityMyActivityBinding
+import com.bonda.bonda.ui.modal.BadgeDetailViewModal
 
 class MyActivityActivity : AppCompatActivity() {
 
@@ -29,6 +30,16 @@ class MyActivityActivity : AppCompatActivity() {
         badgeViewBinds.forEachIndexed { index, badgeView ->
             badgeView.badgeImage.setImageResource(badgeImages[index])
             badgeView.badgeTitle.setText(badgeTitles[index])
+            badgeView.root.setOnClickListener {
+                BadgeDetailViewModal
+                    .newInstance(
+                        "발견의 마법사",
+                        "조회한 도서 ( 01 / 10 )",
+                        "10개의 도서를 조하여 '발견의 마법사'뱃지를 획득했어요",
+                        badgeImages[index]
+                    )
+                    .show(supportFragmentManager, "TAG")
+            }
         }
     }
 
