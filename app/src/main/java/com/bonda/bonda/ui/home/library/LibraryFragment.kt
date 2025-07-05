@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bonda.bonda.databinding.FragmentHomeLibraryBinding
+import com.google.android.material.tabs.TabLayoutMediator
 
 class LibraryFragment : Fragment() {
 
@@ -26,12 +28,21 @@ class LibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val libraryViewModel =
-            ViewModelProvider(this)[LibraryViewModel::class.java]
+        binding.viewPager.adapter = object : FragmentStateAdapter(this){
+            private val tabs = listOf("도서", "아티클")
+            override fun getItemCount() = tabs.size
+            override fun createFragment(position: Int): Fragment {
+                return LibraryScrollerFragment.newInstance(position)
+            }
+        }
 
-//        libraryViewModel.text.observe(viewLifecycleOwner) {
-//            binding.textLibrary.text = it
-//        }
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, pos ->
+            tab.text = when (pos) {
+                0 -> "도서"
+                1 -> "아티클"
+                else -> ""
+            }
+        }.attach()
     }
 
     override fun onDestroyView() {

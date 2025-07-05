@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingHorizontal="24dp"
-            android:paddingVertical="48dp">
+            android:paddingVertical="24dp">
 
             <TextView
                 android:id="@+id/books_header"
