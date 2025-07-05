@@ -27,6 +27,12 @@ class MyActivityActivity : AppCompatActivity() {
             insets
         }
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         badgeViewBinds.forEachIndexed { index, badgeView ->
             badgeView.badgeImage.setImageResource(badgeImages[index])
             badgeView.badgeTitle.setText(badgeTitles[index])

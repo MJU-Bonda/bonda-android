@@ -41,7 +41,6 @@ class LibraryScrollerFragment : Fragment() {
                     )
                 }
 
-
                 for (i in 1..16) {
                     val imageView = ImageView(parent.context).apply {
                         val resId = resources.getIdentifier("dummy_book$i", "drawable", parent.context.packageName)
@@ -66,11 +65,9 @@ class LibraryScrollerFragment : Fragment() {
                 }
 
                 parent.addView(gridLayout)
-
-
             }
-            1 -> { // 아티클 추가
 
+            1 -> { // 아티클 추가
 
                 val parent = binding.container
 
@@ -83,7 +80,6 @@ class LibraryScrollerFragment : Fragment() {
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
                 }
-
 
                 for (i in 1..16) {
                     val itemBinding = ViewRecentArticleBinding.inflate(layoutInflater, gridLayout, false)
@@ -115,9 +111,7 @@ class LibraryScrollerFragment : Fragment() {
                 parent.addView(gridLayout)
             }
         }
-
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
