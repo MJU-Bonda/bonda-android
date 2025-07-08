@@ -1,5 +1,6 @@
 package com.bonda.bonda.network
 
+import com.bonda.bonda.network.service.ArticleService
 import com.bonda.bonda.network.service.AuthService
 import com.bonda.bonda.network.service.MemberService
 import com.bonda.bonda.network.service.SearchService
@@ -16,6 +17,8 @@ object ApiClient {
 
     private lateinit var retrofit: Retrofit
 
+    lateinit var articleService: ArticleService
+        private set
     lateinit var authService: AuthService
         private set
     lateinit var memberService: MemberService
@@ -50,6 +53,7 @@ object ApiClient {
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
 
+        articleService = retrofit.create(ArticleService::class.java)
         authService = retrofit.create(AuthService::class.java)
         memberService = retrofit.create(MemberService::class.java)
         searchService = retrofit.create(SearchService::class.java)
