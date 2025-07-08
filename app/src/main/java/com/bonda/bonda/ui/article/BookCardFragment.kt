@@ -6,14 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.DrawableRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import coil3.load
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentBookCardBinding
 import com.bonda.bonda.ui.book.BookActivity
 
-class BookCardFragment: Fragment(R.layout.fragment_book_card) {
+class BookCardFragment : Fragment(R.layout.fragment_book_card) {
 
     private var _binding: FragmentBookCardBinding? = null
     private val binding get() = _binding!!
@@ -29,8 +29,8 @@ class BookCardFragment: Fragment(R.layout.fragment_book_card) {
 
         fun newInstance(
             index: Int,
-            id: Int,
-            @DrawableRes coverImage: Int,
+            id: Long,
+            coverImage: String,
             category: String,
             title: String,
             author: String,
@@ -63,8 +63,8 @@ class BookCardFragment: Fragment(R.layout.fragment_book_card) {
         val args = requireArguments()
 
         val index = args.getInt(ARG_INDEX)
-        val id = args.getInt(ARG_ID)
-        val coverImage = args.getInt(ARG_COVER_IMAGE)
+        val id = args.getLong(ARG_ID)
+        val coverImage = args.getString(ARG_COVER_IMAGE)
         val category = args.getString(ARG_CATEGORY)!!
         val title = args.getString(ARG_TITLE)!!
         val author = args.getString(ARG_AUTHOR)!!
@@ -75,7 +75,8 @@ class BookCardFragment: Fragment(R.layout.fragment_book_card) {
             append((index + 1))
             append(" / 04")
         }
-        binding.coverImage.setImageResource(coverImage)
+        // TODO 추가 코드 작성할 것이 있을까
+        binding.coverImage.load(coverImage) {}
         binding.category.text = category
         binding.title.text = title
         binding.author.text = author
@@ -85,7 +86,7 @@ class BookCardFragment: Fragment(R.layout.fragment_book_card) {
         binding.button.setOnClickListener {
             val intent = Intent(requireContext(), BookActivity::class.java)
             intent.putExtra("book_detail_id", id)
-            Log.d("DEBUG", "start_book_detail_activity_id : ${id}")
+            Log.d("DEBUG", "start_book_detail_activity_id : $id")
             startActivity(intent)
         }
     }
