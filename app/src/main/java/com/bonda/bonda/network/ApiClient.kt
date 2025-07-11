@@ -2,6 +2,7 @@ package com.bonda.bonda.network
 
 import com.bonda.bonda.network.service.ArticleService
 import com.bonda.bonda.network.service.AuthService
+import com.bonda.bonda.network.service.BookService
 import com.bonda.bonda.network.service.MemberService
 import com.bonda.bonda.network.service.SearchService
 import com.bonda.bonda.util.AccessTokenProvider
@@ -20,6 +21,8 @@ object ApiClient {
     lateinit var articleService: ArticleService
         private set
     lateinit var authService: AuthService
+        private set
+    lateinit var bookService: BookService
         private set
     lateinit var memberService: MemberService
         private set
@@ -55,6 +58,7 @@ object ApiClient {
 
         articleService = retrofit.create(ArticleService::class.java)
         authService = retrofit.create(AuthService::class.java)
+        bookService = retrofit.create(BookService::class.java)
         memberService = retrofit.create(MemberService::class.java)
         searchService = retrofit.create(SearchService::class.java)
     }

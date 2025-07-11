@@ -1,0 +1,21 @@
+package com.bonda.bonda.network.model.book
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class SavedBooksResponse(
+    val page: Int,
+    val total: Int,
+    val orderBy: String,
+    val hasNextPage: Boolean,
+    val bookList: List<Book>
+) {
+    @Serializable
+    data class Book(
+        val id: Int,
+        val title: String,
+        val author: String,
+        val imageUrl: String,
+        val category: String
+    )
+}

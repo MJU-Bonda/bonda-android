@@ -8,10 +8,10 @@ data class GetSavedArticlesResponse(
     val total: Int,
     val orderBy: String,
     val hasNextPage: Boolean,
-    val articleList: List<SearchArticleItem>
+    val articleList: List<Article>
 ) {
     @Serializable
-    data class SearchArticleItem(
+    data class Article(
         val articleId: Long,
         val title: String,
         val articleCategory: String,

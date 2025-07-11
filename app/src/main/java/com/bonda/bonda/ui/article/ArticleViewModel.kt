@@ -71,9 +71,7 @@ class ArticleViewModel : ViewModel() {
                 _books.value = response.relatedBookList.map { item ->
                     Book(
                         id = item.bookId,
-                        coverImage = "1",
-                        // TODO 수정해야함
-//                        coverImage = item.imageUrl,
+                        coverImage = item.imageUrl,
                         category = item.category,
                         title = item.title,
                         author = item.author,

@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 data class GetRecentViewedArticlesResponse(
     val page: Int,
     val hasNextPage: Boolean,
-    val articleList: List<RecentViewItem>
+    val articleList: List<Article>
 ) {
     @Serializable
-    data class RecentViewItem(
+    data class Article(
         val articleId: Long,
         val title: String,
         val articleCategory: String,

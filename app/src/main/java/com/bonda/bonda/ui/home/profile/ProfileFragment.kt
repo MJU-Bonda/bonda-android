@@ -6,17 +6,52 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import coil3.load
 import com.bonda.bonda.databinding.FragmentHomeProfileBinding
 import com.bonda.bonda.ui.profile.EditProfileActivity
 import com.bonda.bonda.ui.profile.SettingsActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
-import com.bonda.bonda.ui.profile.history.RecentActivityActivity
+import com.bonda.bonda.ui.profile.recent.RecentActivity
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentHomeProfileBinding? = null
-
     private val binding get() = _binding!!
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val vm = ViewModelProvider(this)[ProfileViewModel::class.java]
+
+        vm.username.observe(viewLifecycleOwner) { binding.textUsername.text = it }
+        vm.profileImage.observe(viewLifecycleOwner) {
+            if (!it.isNullOrBlank()) {
+                binding.profileImage.foreground = null
+                binding.profileImage.load(it)
+            }
+        }
+        vm.savedBookCount.observe(viewLifecycleOwner) { binding.buttonMyBooksCount.text = "${it}권" }
+        vm.collectedBadgeCount.observe(viewLifecycleOwner) {
+            binding.buttonMyBadgesCount.text = "${it}개"
+        }
+
+        binding.buttonProfile.setOnClickListener {
+            startActivity(Intent(requireContext(), EditProfileActivity::class.java))
+        }
+
+        binding.settingsButton.setOnClickListener {
+            startActivity(Intent(requireContext(), SettingsActivity::class.java))
+        }
+
+        binding.buttonRecentActivity.setOnClickListener {
+            startActivity(Intent(requireContext(), RecentActivity::class.java))
+        }
+
+        binding.buttonActivity.setOnClickListener {
+            startActivity(Intent(requireContext(), MyActivityActivity::class.java))
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,26 +60,6 @@ class ProfileFragment : Fragment() {
     ): View {
         _binding = FragmentHomeProfileBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonProfile.setOnClickListener {
-            startActivity(Intent(requireContext(), EditProfileActivity::class.java))
-        }
-
-        binding.settingsButton.setOnClickListener{
-            startActivity(Intent(requireContext(), SettingsActivity::class.java))
-        }
-
-        binding.buttonRecentActivity.setOnClickListener {
-            startActivity(Intent(requireContext(), RecentActivityActivity::class.java))
-        }
-
-        binding.buttonActivity.setOnClickListener {
-            startActivity(Intent(requireContext(), MyActivityActivity::class.java))
-        }
     }
 
     override fun onDestroyView() {

@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.profile.history
+package com.bonda.bonda.ui.profile.recent
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -9,9 +9,11 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bonda.bonda.databinding.ActivityRecentActivityBinding
+import com.bonda.bonda.ui.profile.recent.articles.ArticlesFragment
+import com.bonda.bonda.ui.profile.recent.books.BooksFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
-class RecentActivityActivity :AppCompatActivity() {
+class RecentActivity :AppCompatActivity() {
 
     lateinit var binding: ActivityRecentActivityBinding
 
@@ -37,10 +39,12 @@ class RecentActivityActivity :AppCompatActivity() {
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             private val tabs = listOf("도서", "아티클")
             override fun getItemCount() = tabs.size
-            override fun createFragment(position: Int): Fragment {
-                // fragment_recent.xml을 사용하는 공통 Fragment 클래스
-                return RecentBookFragment.newInstance(position)
-            }
+            override fun createFragment(position: Int): Fragment =
+                when (position) {
+                    0 -> BooksFragment()
+                    1 -> ArticlesFragment()
+                    else -> throw IndexOutOfBoundsException()
+                }
         }
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, pos ->

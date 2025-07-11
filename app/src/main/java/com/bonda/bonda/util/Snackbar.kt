@@ -14,12 +14,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isEmpty
-import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ViewSnackbarBinding
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
-import com.bonda.bonda.ui.profile.history.RecentActivityActivity
+import com.bonda.bonda.ui.profile.recent.RecentActivity
 
 enum class SnackbarType { SAVE, BADGE, ERROR }
 
@@ -62,7 +61,7 @@ fun AppCompatActivity.showSnackbar(type: SnackbarType) {
                 paintFlags = binding.button.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
                 setOnClickListener {
-                    startActivity(Intent(context, RecentActivityActivity::class.java))
+                    startActivity(Intent(context, RecentActivity::class.java))
                 }
             }
         }

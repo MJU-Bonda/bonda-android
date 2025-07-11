@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProvider
+import coil3.load
 import com.bonda.bonda.databinding.ActivityBookDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
@@ -29,7 +30,7 @@ class BookActivity : AppCompatActivity() {
         binding = ActivityBookDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val bookId = intent.getIntExtra("book_detail_id", 0)
+        val bookId = intent.getLongExtra("book_detail_id", 0)
         Log.d("DEBUG", "started_book_detail_activity_id : $bookId")
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
@@ -45,8 +46,10 @@ class BookActivity : AppCompatActivity() {
 
         val bookViewModel = ViewModelProvider(this)[BookViewModel::class.java]
 
+        bookViewModel.getBookDetail(bookId)
+
         // TODO: isSaved binding 코드 추가
-        bookViewModel.coverImage.observe(this) { binding.coverImage.setImageResource(it) }
+        bookViewModel.coverImage.observe(this) { binding.coverImage.load(it) }
         bookViewModel.category.observe(this) { category ->
             binding.bookCategoryChipGroup.removeAllViews()
 
@@ -78,7 +81,12 @@ class BookActivity : AppCompatActivity() {
 
             binding.bookThemeChipGroup.addView(itemBinding.root)
         }
+
         bookViewModel.body.observe(this) { binding.body.text = it }
+
+        /**
+         * 연관된 article 목록 표시
+         */
         bookViewModel.articles.observe(this) { articles ->
             binding.bookArticlesContainer.removeAllViews()
 
@@ -97,7 +105,7 @@ class BookActivity : AppCompatActivity() {
 
                     itemBinding.root.id = View.generateViewId()
 
-                    itemBinding.articleImage.setImageResource(article.coverImage)
+                    itemBinding.articleImage.load(article.coverImage)
                     itemBinding.articleTitle.text = article.title
 
                     // TODO: chip 로직 수정

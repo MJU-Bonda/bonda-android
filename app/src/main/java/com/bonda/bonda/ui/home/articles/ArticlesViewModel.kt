@@ -1,12 +1,10 @@
 package com.bonda.bonda.ui.home.articles
 
-import android.os.Debug
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonda.bonda.R
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch

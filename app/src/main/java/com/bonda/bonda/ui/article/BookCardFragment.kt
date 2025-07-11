@@ -75,8 +75,7 @@ class BookCardFragment : Fragment(R.layout.fragment_book_card) {
             append((index + 1))
             append(" / 04")
         }
-        // TODO 추가 코드 작성할 것이 있을까
-        binding.coverImage.load(coverImage) {}
+        binding.coverImage.load(coverImage)
         binding.category.text = category
         binding.title.text = title
         binding.author.text = author

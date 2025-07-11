@@ -22,7 +22,8 @@ data class GetArticleDetailResponse(
         val author: String,
         val category: String,
         val introduction: String,
-        val content: String
+        val content: String,
+        val imageUrl: String
     )
 
     @Serializable
