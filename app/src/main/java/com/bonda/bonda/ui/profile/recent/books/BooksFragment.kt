@@ -5,31 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bonda.bonda.databinding.FragmentRecentBooksBinding
+import com.bonda.bonda.databinding.FragmentRecentActivityBinding
 import com.bonda.bonda.ui.book.BookActivity
 
 class BooksFragment : Fragment() {
 
-    private var _binding: FragmentRecentBooksBinding? = null
+    private var _binding: FragmentRecentActivityBinding? = null
     private val binding get() = _binding!!
 
-    val books = listOf(
-        Book(1, "https://…/book1.jpg", "에세이", "골라골라 나 같은 집", "스펙타클 편집부"),
-        Book(2, "https://…/book2.jpg", "소설", "어쩌구 저쩌구", "작가 이름"),
-        Book(3, "https://…/book2.jpg", "소설", "어쩌구 저쩌구", "작가 이름"),
-        Book(4, "https://…/book2.jpg", "소설", "어쩌구 저쩌구", "작가 이름"),
-    )
-
     private val adapter by lazy {
-        BookAdapter(books) { book ->
-
+        BookAdapter { book ->
             val intent = Intent(requireContext(), BookActivity::class.java).apply {
-                putExtra("BOOK_ID", book.id)
+                putExtra("book_detail_id", book.id)
             }
-
             startActivity(intent)
         }
     }
@@ -39,17 +31,28 @@ class BooksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRecentBooksBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentRecentActivityBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.root.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.root.adapter = adapter
+        binding.container.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.container.adapter = adapter
 
         val vm = ViewModelProvider(this) [BooksViewModel::class.java]
         vm.getBooks()
+
+        vm.isLoading.observe(viewLifecycleOwner) { binding.progressIndicator.isVisible = it }
+        vm.isError.observe(viewLifecycleOwner) { binding.errorCommon.root.isVisible = it }
+        vm.isEmpty.observe(viewLifecycleOwner) { binding.emptyBookListText.isVisible = it}
+        vm.books.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+            binding.container.isVisible = it.isNotEmpty()
+        }
+
+        binding.errorCommon.buttonRetry.setOnClickListener { vm.getBooks() }
+        binding.errorNetwork.buttonRetry.setOnClickListener { vm.getBooks() }
     }
 
     override fun onDestroyView() {

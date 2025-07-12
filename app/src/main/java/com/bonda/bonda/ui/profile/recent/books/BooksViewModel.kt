@@ -19,24 +19,45 @@ class BooksViewModel : ViewModel() {
     private var page = 0
 
     private val _isLoading = MutableLiveData(false)
-    private val _error = MutableLiveData(false)
+    private val _isError = MutableLiveData(false)
+    private val _isEmpty = MutableLiveData(false)
     private val _books = MutableLiveData<List<Book>>()
     private val _hasNextPage = MutableLiveData(false)
 
     val isLoading: LiveData<Boolean> = _isLoading
-    val error: LiveData<Boolean> = _error
-    val books:LiveData<List<Book>> = _books
-    val hasNextPage:LiveData<Boolean> = _hasNextPage
+    val isError: LiveData<Boolean> = _isError
+    val isEmpty: LiveData<Boolean> = _isEmpty
+    val books: LiveData<List<Book>> = _books
+    val hasNextPage: LiveData<Boolean> = _hasNextPage
 
     fun getBooks() {
         viewModelScope.launch {
             _isLoading.value = true
 
             try {
-                val res = bookService.getRecentViewedBooks().unwrapOrThrow()
-                Log.d(TAG, res)
-            } catch (e:Exception) {
+                val res = bookService
+                    .getRecentViewedBooks(page, PAGE_SIZE)
+                    .unwrapOrThrow()
+
+                val current = _books.value.orEmpty()
+                val newBooks = res.bookList.map { book ->
+                    Book(
+                        id = book.id,
+                        imageUrl = book.imageUrl,
+                        category = book.category,
+                        title = book.title,
+                        subtitle = book.author
+                    )
+                }
+                val updated = current + newBooks
+
+                _books.value = updated
+                _isEmpty.value = updated.isEmpty()
+                _hasNextPage.value = res.hasNextPage
+                _isError.value = false
+            } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
+                _isError.value = true
             } finally {
                 _isLoading.value = false
             }
@@ -44,10 +65,9 @@ class BooksViewModel : ViewModel() {
     }
 
     fun getNextPage() {
-        if(_hasNextPage.value != true) return
+        if (_hasNextPage.value != true) return
 
         page++
         getBooks()
     }
-
 }

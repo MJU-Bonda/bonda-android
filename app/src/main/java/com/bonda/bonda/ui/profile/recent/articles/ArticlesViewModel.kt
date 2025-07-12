@@ -19,12 +19,14 @@ class ArticlesViewModel : ViewModel() {
     private var page = 0
 
     private val _isLoading = MutableLiveData(false)
-    private val _error    = MutableLiveData(false)
+    private val _isError = MutableLiveData(false)
+    private val _isEmpty = MutableLiveData(false)
     private val _articles = MutableLiveData<List<Article>>(emptyList())
     private val _hasNextPage = MutableLiveData(false)
 
     val isLoading: LiveData<Boolean> = _isLoading
-    val error: LiveData<Boolean> = _error
+    val isError: LiveData<Boolean> = _isError
+    val isEmpty: LiveData<Boolean> = _isEmpty
     val articles: LiveData<List<Article>> = _articles
     val hasNextPage: LiveData<Boolean> = _hasNextPage
 
@@ -33,13 +35,11 @@ class ArticlesViewModel : ViewModel() {
             _isLoading.value = true
 
             try {
-                val res = articleService.getRecentViewedArticles(
-                    page,
-                    PAGE_SIZE,
-                ).unwrapOrThrow()
+                val res = articleService
+                    .getRecentViewedArticles(page, PAGE_SIZE)
+                    .unwrapOrThrow()
 
-                Log.d(TAG, res.toString())
-
+                val current = _articles.value.orEmpty()
                 val newArticles = res.articleList.map { article ->
                     Article(
                         id = article.articleId,
@@ -48,12 +48,15 @@ class ArticlesViewModel : ViewModel() {
                         title = article.title
                     )
                 }
-                _hasNextPage.value = res.hasNextPage
+                val updated = current + newArticles
 
-                val current = _articles.value.orEmpty()
-                _articles.value = current + newArticles
+                _articles.value = updated
+                _isEmpty.value = updated.isEmpty()
+                _hasNextPage.value = res.hasNextPage
+                _isError.value = false
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
+                _isError.value = true
             } finally {
                 _isLoading.value = false
             }
@@ -66,5 +69,4 @@ class ArticlesViewModel : ViewModel() {
         page++
         getArticles()
     }
-
 }

@@ -5,6 +5,7 @@ import com.bonda.bonda.network.model.book.BookDetailResponse
 import com.bonda.bonda.network.model.book.BooksByCategoryResponse
 import com.bonda.bonda.network.model.book.CreateBookResponse
 import com.bonda.bonda.network.model.book.NewBookRequest
+import com.bonda.bonda.network.model.book.RecentViewedBooksResponse
 import com.bonda.bonda.network.model.book.SaveBookResponse
 import com.bonda.bonda.network.model.book.SavedBooksResponse
 import retrofit2.http.Body
@@ -48,5 +49,5 @@ interface BookService {
     suspend fun getRecentViewedBooks (
         @Query("page") page:Int = 0,
         @Query("size") size: Int = 24
-    ):ApiResponse<String>
+    ):ApiResponse<RecentViewedBooksResponse>
 }
