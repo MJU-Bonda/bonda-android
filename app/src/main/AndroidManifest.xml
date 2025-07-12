@@ -43,7 +43,7 @@
         <activity android:name=".ui.profile.SettingsActivity" />
         <activity android:name=".ui.profile.EditProfileActivity" />
         <activity android:name=".ui.search.SearchActivity" />
-        <activity android:name=".ui.profile.history.RecentActivityActivity" />
+        <activity android:name=".ui.profile.recent.RecentActivity" />
         <activity android:name=".ui.profile.activity.MyActivityActivity" />
 
         <activity

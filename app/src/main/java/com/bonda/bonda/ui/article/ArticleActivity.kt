@@ -14,6 +14,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import coil3.load
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
@@ -33,6 +34,11 @@ class ArticleActivity : AppCompatActivity() {
         binding = ActivityArticleDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val articleId = intent.getLongExtra("article_detail_id", 0)
+
+        val articleViewModel = ViewModelProvider(this)[ArticleViewModel::class.java]
+        articleViewModel.getArticleData(articleId)
+
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
@@ -41,11 +47,9 @@ class ArticleActivity : AppCompatActivity() {
         }
 
         binding.bookmarkButton.setOnClickListener {
-            // TODO 북마크 추가 기능 연결
+           articleViewModel.toggleSaved()
         }
 
-        val articleId = intent.getIntExtra("article_detail_id", 0)
-        Log.d("DEBUG", "started_article_detail_activity_id : $articleId")
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -53,13 +57,11 @@ class ArticleActivity : AppCompatActivity() {
             insets
         }
 
-        // view-model apply
-        val articleViewModel = ViewModelProvider(this)[ArticleViewModel::class.java]
 
         articleViewModel.title.observe(this) { binding.articleTitle.text = it }
         articleViewModel.subTitle.observe(this) { binding.articleSubtitle.text = it }
         articleViewModel.body.observe(this) { binding.articleBody.text = it }
-        articleViewModel.coverImage.observe(this) {binding.articleImage.setImageResource(it) }
+        articleViewModel.coverImage.observe(this) { binding.articleImage.load(it) }
 
         articleViewModel.category.observe(this) { category ->
             binding.articleCategoryChipGroup.removeAllViews()
@@ -71,6 +73,7 @@ class ArticleActivity : AppCompatActivity() {
                     binding.articleCategoryChipGroup,
                     true
                 )
+
                 "작가/출판사" -> ViewChipThemeBinding.inflate(
                     layoutInflater,
                     binding.articleCategoryChipGroup,
@@ -101,7 +104,7 @@ class ArticleActivity : AppCompatActivity() {
                 )
             }
 
-            binding.viewPager.adapter = object: FragmentStateAdapter(this@ArticleActivity) {
+            binding.viewPager.adapter = object : FragmentStateAdapter(this@ArticleActivity) {
                 override fun getItemCount(): Int = fragments.size
                 override fun createFragment(position: Int): Fragment = fragments[position]
             }
@@ -118,7 +121,7 @@ class ArticleActivity : AppCompatActivity() {
                     false
                 )
 
-                itemBinding.coverImage.setImageResource(book.coverImage)
+                itemBinding.coverImage.load(book.coverImage)
                 itemBinding.title.text = book.title
                 itemBinding.author.text = book.author
                 itemBinding.category.root.text = book.category
@@ -155,7 +158,7 @@ class ArticleActivity : AppCompatActivity() {
                 itemBinding.root.id = View.generateViewId()
 
                 // view-model binding
-                itemBinding.articleImage.setImageResource(article.coverImage)
+                itemBinding.articleImage.load(article.coverImage)
                 itemBinding.articleTitle.text = article.title
 
 

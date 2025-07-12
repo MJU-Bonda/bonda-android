@@ -11,7 +11,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import coil3.load
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityEditProfileBinding
 import com.bonda.bonda.network.ApiClient
@@ -41,6 +44,18 @@ class EditProfileActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        /**
+         * 기본 이미지로 설정해야되나
+         * 일단 서버에서 현재 프로필 이미지를 불러오도록 해놨는데
+         */
+        val vm = ViewModelProvider(this)[EditProfileViewModel::class.java]
+        vm.profileImage.observe(this) {
+            if (!it.isNullOrBlank()) {
+                binding.profileImage.load(it)
+                binding.profileImage.foreground = null
+            }
         }
 
         setSupportActionBar(binding.toolbar)

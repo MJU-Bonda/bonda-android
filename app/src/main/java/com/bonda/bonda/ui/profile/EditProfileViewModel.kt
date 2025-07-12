@@ -1,4 +1,4 @@
-package com.bonda.bonda.ui.home.profile
+package com.bonda.bonda.ui.profile
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,29 +9,20 @@ import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 
-class ProfileViewModel : ViewModel() {
+class EditProfileViewModel : ViewModel() {
 
     private val memberService = ApiClient.memberService
 
-    private val _username = MutableLiveData<String>()
     private val _profileImage = MutableLiveData<String>()
-    private val _savedBookCount = MutableLiveData<Int>()
-    private val _collectedBadgeCount = MutableLiveData<Int>()
 
-    val username: LiveData<String> = _username
     val profileImage: LiveData<String> = _profileImage
-    val savedBookCount: LiveData<Int> = _savedBookCount
-    val collectedBadgeCount: LiveData<Int> = _collectedBadgeCount
 
     init {
         viewModelScope.launch {
             try {
                 val res = memberService.getProfile().unwrapOrThrow()
 
-                _username.value = res.nickname
                 _profileImage.value = res.profileImage
-                _savedBookCount.value = res.savedBookCount
-                _collectedBadgeCount.value = res.badgeCount
 
                 Log.d(TAG, res.toString())
             } catch (e: Exception) {

@@ -1,5 +1,6 @@
 package com.bonda.bonda.network.model.book
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,11 +18,12 @@ data class BookDetailResponse(
     val introduction: String,
     val content: String,
     val isNewBadge: Boolean,
+    @SerialName("related_article_list")
     val relatedArticleList: List<RelatedArticle>
 ) {
     @Serializable
     data class RelatedArticle(
-        val articleId: Int,
+        val articleId: Long,
         val title: String,
         val articleCategory: String,
         val imageUrl: String

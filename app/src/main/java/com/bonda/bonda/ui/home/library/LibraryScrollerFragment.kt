@@ -28,6 +28,9 @@ class LibraryScrollerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         when(arguments?.getInt("position")) {
+            /**
+             * position이 0인 경우 도서를 표시하는 로직 작성
+             */
             0 -> { // 도서 추가
                 val parent = binding.container
 
@@ -67,6 +70,9 @@ class LibraryScrollerFragment : Fragment() {
                 parent.addView(gridLayout)
             }
 
+            /**
+             * position이 1인 경우 아티클을 표시하는 로직 작성
+             */
             1 -> { // 아티클 추가
 
                 val parent = binding.container

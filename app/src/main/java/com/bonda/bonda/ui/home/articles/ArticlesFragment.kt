@@ -4,20 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import coil3.load
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeArticlesBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
@@ -29,7 +21,6 @@ import com.bonda.bonda.ui.search.SearchActivity
 class ArticlesFragment : Fragment() {
 
     private var _binding: FragmentHomeArticlesBinding? = null
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -48,9 +39,9 @@ class ArticlesFragment : Fragment() {
             startActivity(Intent(requireContext(), SearchActivity::class.java))
         }
 
-        val homeViewModel = ViewModelProvider(this)[ArticlesViewModel::class.java]
+        val viewModel = ViewModelProvider(this)[ArticlesViewModel::class.java]
 
-        homeViewModel.articles.observe(viewLifecycleOwner) { list ->
+        viewModel.articles.observe(viewLifecycleOwner) { list ->
             binding.articlesContainer.removeAllViews()
 
             var lastAddedViewId: Int? = null
@@ -65,7 +56,15 @@ class ArticlesFragment : Fragment() {
                 itemBinding.root.id = View.generateViewId()
 
                 // view-model binding
-                itemBinding.articleImage.setImageResource(article.coverImage)
+                itemBinding.articleImage.load(article.coverImage) {
+                    // TODO 커버 이미지 오류 처리 필요
+
+                    listener(
+                        onError = { _, throwable ->
+                            Log.e("Coil", "load failed$throwable")
+                        }
+                    )
+                }
                 itemBinding.articleTitle.text = article.title
                 itemBinding.articleSubtitle.text = article.subTitle
 
@@ -84,9 +83,15 @@ class ArticlesFragment : Fragment() {
                 }
 
                 if (article.isSaved) {
-                    itemBinding.articleButtonBookmark.setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
+                    itemBinding.articleButtonBookmark.apply {
+                        setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
+                        setOnClickListener { viewModel.toggleSaved(article.id) }
+                    }
                 } else {
-                    itemBinding.articleButtonBookmark.setImageResource((R.drawable.ic_action_bookmark_empty_24dp))
+                    itemBinding.articleButtonBookmark.apply {
+                        setImageResource((R.drawable.ic_action_bookmark_empty_24dp))
+                        setOnClickListener { viewModel.toggleSaved(article.id) }
+                    }
                 }
 
                 // setup layout constraint
