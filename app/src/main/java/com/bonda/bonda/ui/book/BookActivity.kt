@@ -1,22 +1,25 @@
 package com.bonda.bonda.ui.book
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProvider
 import coil3.load
+import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityBookDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
-import com.bonda.bonda.databinding.ViewChipWriterBinding
-import com.bonda.bonda.databinding.ViewChipThemeBinding
+import com.bonda.bonda.model.ArticleCategory
+import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.ui.article.ArticleActivity
 
 class BookActivity : AppCompatActivity() {
@@ -108,18 +111,31 @@ class BookActivity : AppCompatActivity() {
                     itemBinding.articleImage.load(article.coverImage)
                     itemBinding.articleTitle.text = article.title
 
-                    // TODO: chip 로직 수정
-                    if (article.category == "테마") {
-                        ViewChipThemeBinding.inflate(
-                            layoutInflater,
-                            itemBinding.articleCategoryChipGroup,
-                            true
-                        )
-                    } else if (article.category == "작가/출판사") {
-                        ViewChipWriterBinding.inflate(
-                            layoutInflater,
-                            itemBinding.articleCategoryChipGroup,
-                            true
+                    article.category.also {
+                        val category = it.toArticleCategory()
+
+                        itemBinding.articleCategory.root.text = category.label
+
+                        val bgColorRes = when (category) {
+                            ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.surface_context_writer
+                            ArticleCategory.BOOKSTORE -> R.color.surface_context_store
+                            ArticleCategory.THEME -> R.color.surface_context_theme
+                            else -> R.color.surface_default_primary
+                        }
+                        val textColorRes = when (category) {
+                            ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.text_context_writer
+                            ArticleCategory.BOOKSTORE -> R.color.text_context_store
+                            ArticleCategory.THEME -> R.color.text_context_theme
+                            else -> R.color.text_accent_primary
+                        }
+
+                        // Chip 에 적용
+                        itemBinding.articleCategory.root.chipBackgroundColor =
+                            ColorStateList.valueOf(
+                                ContextCompat.getColor(this, bgColorRes)
+                            )
+                        itemBinding.articleCategory.root.setTextColor(
+                            ContextCompat.getColor(this, textColorRes)
                         )
                     }
 

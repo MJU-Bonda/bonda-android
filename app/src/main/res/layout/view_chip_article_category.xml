@@ -8,11 +8,11 @@
     android:enabled="false"
     android:focusable="false"
     android:textAppearance="@style/Caption1"
-    android:textColor="@color/text_accent_primary"
-    app:chipBackgroundColor="@color/surface_default_primary"
+    android:textColor="@color/text_context_theme"
+    app:chipBackgroundColor="@color/surface_context_theme"
     app:chipCornerRadius="16dp"
     app:chipEndPadding="0dp"
     app:chipMinHeight="24dp"
     app:chipMinTouchTargetSize="0dp"
     app:chipStartPadding="0dp"
-    app:chipStrokeWidth="0dp"/>
+    app:chipStrokeWidth="0dp" />

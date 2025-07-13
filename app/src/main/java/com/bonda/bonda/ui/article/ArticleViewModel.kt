@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bonda.bonda.model.ArticleCategory
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
@@ -13,8 +14,8 @@ class ArticleViewModel : ViewModel() {
 
     private val articleService = ApiClient.articleService
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    private val _isError = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData(false)
+    private val _isError = MutableLiveData(false)
     private val _id = MutableLiveData<Long>()
     private val _isSaved = MutableLiveData<Boolean>()
     private val _coverImage = MutableLiveData<String>()
@@ -104,20 +105,12 @@ class ArticleViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                if (!currentlySaved)
-                    articleService.saveArticle(currentArticleId)
-                else
-                    articleService.deleteSavedArticle(currentArticleId)
+                articleService.saveArticle(currentArticleId)
 
                 _isSaved.value = !currentlySaved
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             }
         }
-    }
-
-    init {
-        _isLoading.value = true
-        _isError.value = false
     }
 }

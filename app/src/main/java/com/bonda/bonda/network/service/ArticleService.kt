@@ -1,7 +1,6 @@
 package com.bonda.bonda.network.service
 
 import com.bonda.bonda.network.ApiResponse
-import com.bonda.bonda.network.model.article.DeleteSavedArticleResponse
 import com.bonda.bonda.network.model.article.GetArticleDetailResponse
 import com.bonda.bonda.network.model.article.GetArticlesResponse
 import com.bonda.bonda.network.model.article.GetRecentViewedArticlesResponse
@@ -22,14 +21,6 @@ interface ArticleService {
     suspend fun saveArticle(
         @Path("articleId") articleId: Long
     ): ApiResponse<SaveArticleResponse>
-
-    /**
-     * 아티클 저장 삭제
-     */
-    @DELETE("articles/save/{articleId}")
-    suspend fun deleteSavedArticle(
-        @Path("articleId") articleId: Long
-    ): ApiResponse<DeleteSavedArticleResponse>
 
     /**
      * 아티클 홈 화면 (카테고리별 조회)

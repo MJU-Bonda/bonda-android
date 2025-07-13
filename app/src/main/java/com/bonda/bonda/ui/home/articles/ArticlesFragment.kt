@@ -1,20 +1,22 @@
 package com.bonda.bonda.ui.home.articles
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil3.load
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeArticlesBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
-import com.bonda.bonda.databinding.ViewChipWriterBinding
-import com.bonda.bonda.databinding.ViewChipThemeBinding
+import com.bonda.bonda.model.ArticleCategory
+import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.search.SearchActivity
 
@@ -39,9 +41,9 @@ class ArticlesFragment : Fragment() {
             startActivity(Intent(requireContext(), SearchActivity::class.java))
         }
 
-        val viewModel = ViewModelProvider(this)[ArticlesViewModel::class.java]
+        val vm = ViewModelProvider(this)[ArticlesViewModel::class.java]
 
-        viewModel.articles.observe(viewLifecycleOwner) { list ->
+        vm.articles.observe(viewLifecycleOwner) { list ->
             binding.articlesContainer.removeAllViews()
 
             var lastAddedViewId: Int? = null
@@ -56,42 +58,48 @@ class ArticlesFragment : Fragment() {
                 itemBinding.root.id = View.generateViewId()
 
                 // view-model binding
-                itemBinding.articleImage.load(article.coverImage) {
-                    // TODO 커버 이미지 오류 처리 필요
-
-                    listener(
-                        onError = { _, throwable ->
-                            Log.e("Coil", "load failed$throwable")
-                        }
-                    )
-                }
+                // TODO 이미지 로드 오류 처리 필요
+                itemBinding.articleImage.load(article.coverImage)
                 itemBinding.articleTitle.text = article.title
                 itemBinding.articleSubtitle.text = article.subTitle
 
-                if (article.category == "테마") {
-                    ViewChipThemeBinding.inflate(
-                        layoutInflater,
-                        itemBinding.articleChipGroup,
-                        true
-                    )
-                } else if (article.category == "작가/출판사") {
-                    ViewChipWriterBinding.inflate(
-                        layoutInflater,
-                        itemBinding.articleChipGroup,
-                        true
+                article.category.also {
+                    val category = it.toArticleCategory()
+
+                    itemBinding.articleCategoryChip.root.text = category.label
+
+                    val bgColorRes = when (category) {
+                        ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.surface_context_writer
+                        ArticleCategory.BOOKSTORE -> R.color.surface_context_store
+                        ArticleCategory.THEME -> R.color.surface_context_theme
+                        else -> R.color.surface_default_primary
+                    }
+                    val textColorRes = when (category) {
+                        ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.text_context_writer
+                        ArticleCategory.BOOKSTORE -> R.color.text_context_store
+                        ArticleCategory.THEME -> R.color.text_context_theme
+                        else -> R.color.text_accent_primary
+                    }
+
+                    // Chip 에 적용
+                    itemBinding.articleCategoryChip.root.chipBackgroundColor =
+                        ColorStateList.valueOf(
+                            ContextCompat.getColor(requireContext(), bgColorRes)
+                        )
+                    itemBinding.articleCategoryChip.root.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            textColorRes
+                        )
                     )
                 }
 
-                if (article.isSaved) {
-                    itemBinding.articleButtonBookmark.apply {
+                itemBinding.articleButtonBookmark.apply {
+                    if (article.isSaved)
                         setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
-                        setOnClickListener { viewModel.toggleSaved(article.id) }
-                    }
-                } else {
-                    itemBinding.articleButtonBookmark.apply {
+                    else
                         setImageResource((R.drawable.ic_action_bookmark_empty_24dp))
-                        setOnClickListener { viewModel.toggleSaved(article.id) }
-                    }
+                    setOnClickListener { vm.toggleSaved(article.id) }
                 }
 
                 // setup layout constraint

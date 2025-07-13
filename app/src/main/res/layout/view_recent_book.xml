@@ -27,25 +27,12 @@
             android:src="@drawable/dummy_book4" />
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.chip.Chip
+    <include
         android:id="@+id/category"
+        layout="@layout/view_chip_book_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:checkable="false"
-        android:clickable="false"
-        android:enabled="false"
-        android:focusable="false"
-        android:text="에세이"
-        android:textAppearance="@style/Caption3"
-        android:textColor="@color/text_accent_primary"
-        app:chipBackgroundColor="@color/surface_default_primary"
-        app:chipCornerRadius="16dp"
-        app:chipEndPadding="2dp"
-        app:chipMinHeight="24dp"
-        app:chipMinTouchTargetSize="0dp"
-        app:chipStartPadding="2dp"
-        app:chipStrokeWidth="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image_holder" />
 
@@ -54,7 +41,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="골라골라 나 같은 집"
         android:textAppearance="@style/Body6"
         android:textColor="@color/text_default_primary"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +52,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:text="스펙타클 편집부"
         android:textAppearance="@style/Body9"
         android:textColor="@color/text_default_secondary"
         app:layout_constraintEnd_toEndOf="parent"

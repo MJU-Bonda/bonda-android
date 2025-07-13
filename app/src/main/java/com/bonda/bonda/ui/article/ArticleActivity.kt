@@ -1,6 +1,7 @@
 package com.bonda.bonda.ui.article
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,8 +9,11 @@ import android.widget.GridLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,8 +23,8 @@ import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
-import com.bonda.bonda.databinding.ViewChipWriterBinding
-import com.bonda.bonda.databinding.ViewChipThemeBinding
+import com.bonda.bonda.model.ArticleCategory
+import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.ui.book.BookActivity
 
 class ArticleActivity : AppCompatActivity() {
@@ -30,26 +34,18 @@ class ArticleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityArticleDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val articleId = intent.getLongExtra("article_detail_id", 0)
-
-        val articleViewModel = ViewModelProvider(this)[ArticleViewModel::class.java]
-        articleViewModel.getArticleData(articleId)
+        val vm = ViewModelProvider(this)[ArticleViewModel::class.java]
+        vm.getArticleData(articleId)
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        binding.toolbar.setNavigationOnClickListener {
-            finish()
-        }
-
-        binding.bookmarkButton.setOnClickListener {
-           articleViewModel.toggleSaved()
-        }
-
+        binding.toolbar.setNavigationOnClickListener { finish() }
+        binding.bookmarkButton.setOnClickListener { vm.toggleSaved() }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -57,32 +53,54 @@ class ArticleActivity : AppCompatActivity() {
             insets
         }
 
-
-        articleViewModel.title.observe(this) { binding.articleTitle.text = it }
-        articleViewModel.subTitle.observe(this) { binding.articleSubtitle.text = it }
-        articleViewModel.body.observe(this) { binding.articleBody.text = it }
-        articleViewModel.coverImage.observe(this) { binding.articleImage.load(it) }
-
-        articleViewModel.category.observe(this) { category ->
-            binding.articleCategoryChipGroup.removeAllViews()
-
-            // TODO: binding 로직 수정
-            when (category) {
-                "테마" -> ViewChipThemeBinding.inflate(
-                    layoutInflater,
-                    binding.articleCategoryChipGroup,
-                    true
-                )
-
-                "작가/출판사" -> ViewChipThemeBinding.inflate(
-                    layoutInflater,
-                    binding.articleCategoryChipGroup,
-                    true
-                )
-            }
+        /**
+         * 오류 페이지 처리
+         */
+        vm.isLoading.observe(this) {
+            binding.progressIndicator.isVisible = it
+            binding.scrollView.isGone = it
+        }
+        vm.isError.observe(this) {
+            binding.errorCommon.root.isVisible = it
+            binding.scrollView.isGone = it
         }
 
-        articleViewModel.isSaved.observe(this) { isSaved ->
+        binding.errorCommon.buttonRetry.setOnClickListener { vm.getArticleData(articleId) }
+        binding.errorNetwork.buttonRetry.setOnClickListener { vm.getArticleData(articleId) }
+
+        /**
+         * 데이터 바인딩
+         */
+        vm.title.observe(this) { binding.titleTv.text = it }
+        vm.subTitle.observe(this) { binding.subtitleTv.text = it }
+        vm.body.observe(this) { binding.articleBody.text = it }
+        vm.coverImage.observe(this) { binding.articleImage.load(it) }
+
+        vm.category.observe(this) {
+            val category = it.toArticleCategory()
+
+            binding.categoryChip.root.text = category.label
+
+            val bgColorRes = when (category) {
+                ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.surface_context_writer
+                ArticleCategory.BOOKSTORE -> R.color.surface_context_store
+                ArticleCategory.THEME -> R.color.surface_context_theme
+                else -> R.color.surface_default_primary
+            }
+            val textColorRes = when (category) {
+                ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.text_context_writer
+                ArticleCategory.BOOKSTORE -> R.color.text_context_store
+                ArticleCategory.THEME -> R.color.text_context_theme
+                else -> R.color.text_accent_primary
+            }
+
+            // Chip 에 적용
+            binding.categoryChip.root.chipBackgroundColor =
+                ColorStateList.valueOf(ContextCompat.getColor(this, bgColorRes))
+            binding.categoryChip.root.setTextColor(ContextCompat.getColor(this, textColorRes))
+        }
+
+        vm.isSaved.observe(this) { isSaved ->
             if (isSaved) {
                 binding.bookmarkButton.setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
             } else {
@@ -91,7 +109,7 @@ class ArticleActivity : AppCompatActivity() {
         }
 
         // 도서 목록 binding 1
-        articleViewModel.books.observe(this) { books ->
+        vm.books.observe(this) { books ->
             val fragments = books.mapIndexed { index, book ->
                 BookCardFragment.newInstance(
                     index,
@@ -111,7 +129,7 @@ class ArticleActivity : AppCompatActivity() {
         }
 
         // 도서 목록 binding 2
-        articleViewModel.books.observe(this) { books ->
+        vm.books.observe(this) { books ->
             binding.booksGridContainer.removeAllViews()
 
             books.forEach { book ->
@@ -143,7 +161,7 @@ class ArticleActivity : AppCompatActivity() {
         }
 
         // 다른 articles 목록 binding
-        articleViewModel.articles.observe(this) { list ->
+        vm.articles.observe(this) { list ->
             binding.articlesContainer.removeAllViews()
 
             var lastAddedViewId: Int? = null
@@ -161,19 +179,31 @@ class ArticleActivity : AppCompatActivity() {
                 itemBinding.articleImage.load(article.coverImage)
                 itemBinding.articleTitle.text = article.title
 
+                article.category.also {
+                    val category = it.toArticleCategory()
 
-                // TODO: chip 로직 수정
-                if (article.category == "테마") {
-                    ViewChipThemeBinding.inflate(
-                        layoutInflater,
-                        itemBinding.articleCategoryChipGroup,
-                        true
-                    )
-                } else if (article.category == "작가/출판사") {
-                    ViewChipWriterBinding.inflate(
-                        layoutInflater,
-                        itemBinding.articleCategoryChipGroup,
-                        true
+                    itemBinding.articleCategory.root.text = category.label
+
+                    val bgColorRes = when (category) {
+                        ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.surface_context_writer
+                        ArticleCategory.BOOKSTORE -> R.color.surface_context_store
+                        ArticleCategory.THEME -> R.color.surface_context_theme
+                        else -> R.color.surface_default_primary
+                    }
+                    val textColorRes = when (category) {
+                        ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.text_context_writer
+                        ArticleCategory.BOOKSTORE -> R.color.text_context_store
+                        ArticleCategory.THEME -> R.color.text_context_theme
+                        else -> R.color.text_accent_primary
+                    }
+
+                    // Chip 에 적용
+                    itemBinding.articleCategory.root.chipBackgroundColor =
+                        ColorStateList.valueOf(
+                            ContextCompat.getColor(this, bgColorRes)
+                        )
+                    itemBinding.articleCategory.root.setTextColor(
+                        ContextCompat.getColor(this, textColorRes)
                     )
                 }
 
