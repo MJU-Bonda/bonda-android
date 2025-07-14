@@ -3,9 +3,12 @@ package com.bonda.bonda.network.service
 import com.bonda.bonda.network.ApiResponse
 import com.bonda.bonda.network.model.auth.LoginRequest
 import com.bonda.bonda.network.model.auth.LoginResponse
+import com.bonda.bonda.network.model.auth.LogoutResponse
 import com.bonda.bonda.network.model.auth.ReissueRequest
 import com.bonda.bonda.network.model.auth.ReissueResponse
+import com.bonda.bonda.network.model.auth.WithdrawalResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 
 interface AuthService {
@@ -25,4 +28,15 @@ interface AuthService {
         @Body request: ReissueRequest
     ): ApiResponse<ReissueResponse>
 
+    /**
+     * 로그아웃
+     */
+    @DELETE("auth/logout")
+    suspend fun logout(): ApiResponse<LogoutResponse>
+
+    /**
+     * 회원탈퇴
+     */
+    @DELETE("auth/exit")
+    suspend fun withdrawal(): ApiResponse<WithdrawalResponse>
 }

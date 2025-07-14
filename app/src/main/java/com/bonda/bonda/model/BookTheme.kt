@@ -19,3 +19,6 @@ enum class BookTheme(val code: String, val label: String) {
         val BUSINESS_THEMES: List<BookTheme> = entries.filter { it != ALL }
     }
 }
+
+fun String.toBookTheme(): BookTheme =
+    BookTheme.entries.find { it.code == this } ?: BookTheme.ALL

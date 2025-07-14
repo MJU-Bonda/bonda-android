@@ -1,6 +1,6 @@
 <resources>
     <!--  modal layout  -->
-    <style name="Theme.Bonda.WithdrawalDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+    <style name="Theme.Bonda.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:dialogCornerRadius">8dp</item>
     </style>
     <style name="Theme.Bonda.ProfileImageSelectorDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">

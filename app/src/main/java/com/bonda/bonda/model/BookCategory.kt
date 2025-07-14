@@ -15,3 +15,6 @@ enum class BookCategory(val code: String, val label: String) {
         val BUSINESS_CATEGORIES: List<BookCategory> = entries.filter { it != ALL }
     }
 }
+
+fun String.toBookCategory(): BookCategory =
+    BookCategory.entries.find { it.code == this } ?: BookCategory.ALL
