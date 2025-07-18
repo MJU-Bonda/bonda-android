@@ -1,18 +1,24 @@
 package com.bonda.bonda.ui.search
 
+import android.app.Application
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.AccessTokenProvider
+import com.bonda.bonda.util.PREFS_NAME
+import com.bonda.bonda.util.PREF_KEY_SEARCH_HISTORY_ACTIVATED
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
+import androidx.core.content.edit
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
     private val searchService = ApiClient.searchService
+
+    private val prefs = application.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
     private val _isLoading = MutableLiveData<Boolean>()
     private val _isEmpty = MutableLiveData<Boolean>()
@@ -48,72 +54,29 @@ class SearchViewModel : ViewModel() {
     )
 
     init {
-        _recommendedKeyword.value = listOf(
-            "여름",
-            "에세이",
-            "제주"
-        )
-
 //        _bookSearchResult.value = emptyList()
 //        _articleSearchResult.value = emptyList()
+        _isHistoryActivated.value = prefs.getBoolean(PREF_KEY_SEARCH_HISTORY_ACTIVATED, false)
 
-        getIsHistoryActivated()
         loadSearchHistory()
         loadRecommendedKeyword()
     }
+
+
+
+    fun searchBooks(keyword: String) {
+
+    }
+    fun searchArticles(keyword: String) {
+
+    }
+
 
     fun setSearchText(text: String) {
         _searchText.value = text
     }
 
-    private fun getIsHistoryActivated() {
-        viewModelScope.launch {
-            try{
-                _isLoading.value = true
 
-                // TODO history 저장 여부 api 연결
-
-                _isHistoryActivated.value = true
-            } catch (e: Exception){
-                Log.e(TAG, e.toString())
-            } finally {
-                _isLoading.value = false
-            }
-        }
-    }
-
-    fun setIsHistoryActivated() {
-        if (_isLoading.value == true) return
-
-        viewModelScope.launch {
-            try {
-                // TODO history 저장 설정 api 연결
-
-                _isHistoryActivated.value = !(_isHistoryActivated.value ?: false)
-            } catch (e: Exception) {
-                Log.e(TAG, e.toString())
-            }
-        }
-    }
-
-    private fun loadSearchHistory() {
-        viewModelScope.launch {
-            try {
-                _isLoading.value = true
-
-                val response = searchService.getSearchHistory(
-                    AccessTokenProvider.getAccessToken().toString()
-                ).unwrapOrThrow()
-
-                _isEmpty.value = response.recentSearchTermList.isEmpty()
-                _searchHistory.value = response.recentSearchTermList
-            } catch (e: Exception) {
-                Log.e(TAG, e.toString())
-            } finally {
-                _isLoading.value = false
-            }
-        }
-    }
 
     fun removeSearchHistory(keyword: String) {
         if (_isLoading.value == true) return
@@ -126,32 +89,81 @@ class SearchViewModel : ViewModel() {
             _isEmpty.value = _searchHistory.value!!.isEmpty()
 
         } catch (e: Exception) {
-            Log.e(TAG, e.toString())
+            Log.e(TAG, e.message.toString())
         }
     }
 
+    /**
+     * 검색 기록 불러오기
+     */
+    private fun loadSearchHistory() {
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+
+                val response = searchService.getSearchHistory().unwrapOrThrow()
+
+                _isEmpty.value = response.recentSearchTermList.isEmpty()
+                _searchHistory.value = response.recentSearchTermList
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    /**
+     * 검색 기록 저장 설정
+     */
+    fun setIsHistoryActivated() {
+        if (_isLoading.value == true) return
+
+        viewModelScope.launch {
+            try {
+                val response = searchService.toggleAutoSave().unwrapOrThrow()
+
+                prefs.edit() { putBoolean(PREF_KEY_SEARCH_HISTORY_ACTIVATED, response.isAutoSaved) }
+                _isHistoryActivated.value = response.isAutoSaved
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
+            }
+        }
+    }
+
+    /**
+     * 모든 검색 기록 삭제
+     */
     fun removeAllSearchHistory() {
         if (_isLoading.value == true) return
 
-        try {
-            // TODO 전체 삭제 api 연결
+        viewModelScope.launch {
+            _isLoading.value = true
 
-            _searchHistory.value = emptyList()
-            _isEmpty.value = true
-        } catch (e: Exception) {
-            Log.e(TAG, e.toString())
+            try {
+                searchService.deleteAllSearchHistory().unwrapOrThrow()
+                _isEmpty.value = true
+                _searchHistory.value = emptyList()
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
+    /**
+     * 추천 검색어 로드
+     */
     private fun loadRecommendedKeyword() {
         viewModelScope.launch {
             _isLoading.value = true
 
-            // TODO 추천검색어 로드 api 연결
             try {
-
+                val response = searchService.getRecommendedKeyword().unwrapOrThrow()
+                _recommendedKeyword.value = response.recommendKeywords
             } catch (e: Exception) {
-
+                Log.e(TAG, e.message.toString())
             } finally {
                 _isLoading.value = false
             }

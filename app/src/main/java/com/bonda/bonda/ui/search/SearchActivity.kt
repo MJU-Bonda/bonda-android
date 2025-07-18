@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bonda.bonda.databinding.ActivitySearchBinding
 import com.bonda.bonda.databinding.ViewChipSearchHistoryBinding
 import com.bonda.bonda.databinding.ViewChipSearchRecommendBinding
+import com.bonda.bonda.ui.profile.DialogView
 import com.bonda.bonda.util.TAG
 
 class SearchActivity : AppCompatActivity() {
@@ -37,9 +38,23 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
+        /**
+         * 검색 기록 삭제
+         */
         binding.buttonClearHistory.setOnClickListener {
-            viewModel.removeAllSearchHistory()
-            binding.searchHistoryChipGroup.removeAllViews()
+            DialogView.newInstance(
+                requestKey = "clear_history",
+                message = "검색 기록을 모두 삭제하시겠습니까?",
+                confirmText = "삭제",
+                cancelText = "취소"
+            ).show(supportFragmentManager, "clear_history_dialog")
+        }
+        supportFragmentManager.setFragmentResultListener(
+            "clear_history", this
+        ) { _, bundle ->
+            if (bundle.getBoolean("isConfirmed", false)) {
+                viewModel.removeAllSearchHistory()
+            }
         }
 
         binding.buttonToggleSaveHistory.setOnClickListener {
