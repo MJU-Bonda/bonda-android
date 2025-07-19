@@ -63,10 +63,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-
     fun searchBooks(keyword: String) {
 
     }
+
     fun searchArticles(keyword: String) {
 
     }
@@ -77,19 +77,22 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-
+    /**
+     * 특정 검색어 삭제
+     */
     fun removeSearchHistory(keyword: String) {
         if (_isLoading.value == true) return
 
-        try {
-            // TODO 삭제 api 연결
+        viewModelScope.launch {
+            try {
+                searchService.deleteSearchHistory(keyword)
 
-            _searchHistory.value = _searchHistory.value
-                ?.filterNot { it == keyword }
-            _isEmpty.value = _searchHistory.value!!.isEmpty()
-
-        } catch (e: Exception) {
-            Log.e(TAG, e.message.toString())
+                _searchHistory.value = _searchHistory.value
+                    ?.filterNot { it == keyword }
+                _isEmpty.value = _searchHistory.value!!.isEmpty()
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
+            }
         }
     }
 

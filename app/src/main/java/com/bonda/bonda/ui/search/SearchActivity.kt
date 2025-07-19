@@ -1,8 +1,10 @@
 package com.bonda.bonda.ui.search
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -34,9 +36,8 @@ class SearchActivity : AppCompatActivity() {
 
         val viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
 
-        binding.buttonClose.setOnClickListener {
-            finish()
-        }
+        binding.buttonClose.setOnClickListener { finish() }
+        binding.buttonToggleSaveHistory.setOnClickListener { viewModel.setIsHistoryActivated() }
 
         /**
          * 검색 기록 삭제
@@ -57,22 +58,15 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        binding.buttonToggleSaveHistory.setOnClickListener {
-            viewModel.setIsHistoryActivated()
-        }
 
         viewModel.isHistoryActivated.observe(this) { activated ->
-            if (activated)
-                binding.buttonToggleSaveHistory.text = "자동저장 끄기"
-            else
-                binding.buttonToggleSaveHistory.text = "자동저장 켜기"
+            if (activated) binding.buttonToggleSaveHistory.text = "자동저장 끄기"
+            else binding.buttonToggleSaveHistory.text = "자동저장 켜기"
         }
 
         viewModel.isEmpty.observe(this) { isEmpty ->
-            if (isEmpty)
-                binding.textIsEmpty.visibility = View.VISIBLE
-            else
-                binding.textIsEmpty.visibility = View.GONE
+            if (isEmpty) binding.textIsEmpty.visibility = View.VISIBLE
+            else binding.textIsEmpty.visibility = View.GONE
         }
 
         viewModel.searchHistory.observe(this) { histories ->
@@ -83,15 +77,22 @@ class SearchActivity : AppCompatActivity() {
                     layoutInflater,
                     binding.searchHistoryChipGroup,
                     false
-                ).apply {
-                    root.text = history
-                    root.setOnCloseIconClickListener {
-                        Log.d(TAG, "칩 삭제됨")
-                        binding.searchHistoryChipGroup.removeView(root)
-                        viewModel.removeSearchHistory(history)
+                )
+
+                chipBinding.root.apply {
+                    text = history
+                    setOnClickListener {
+                        binding.searchBar.setText(history)
+                        binding.searchBar.setSelection(history.length)
+                        binding.searchBar.requestFocus()
+
+                        val imm =
+                            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.showSoftInput(binding.searchBar, InputMethodManager.SHOW_IMPLICIT)
                     }
-                    root.setOnClickListener {
-                        // TODO 클릭 시 검색바에 텍스트가 적용되도록
+                    setOnCloseIconClickListener {
+                        binding.searchHistoryChipGroup.removeView(it)
+                        viewModel.removeSearchHistory(history)
                     }
                 }
 
@@ -107,10 +108,18 @@ class SearchActivity : AppCompatActivity() {
                     layoutInflater,
                     binding.todayKeywordsChipGroup,
                     false
-                ).apply {
-                    root.text = keyword
-                    root.setOnClickListener {
-                        // TODO 클릭 시 검색바에 텍스트가 적용되도록
+                )
+
+                chipBinding.root.apply {
+                    text = keyword
+                    setOnClickListener {
+                        binding.searchBar.setText(keyword)
+                        binding.searchBar.setSelection(keyword.length)
+                        binding.searchBar.requestFocus()
+
+                        val imm =
+                            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.showSoftInput(binding.searchBar, InputMethodManager.SHOW_IMPLICIT)
                     }
                 }
 
