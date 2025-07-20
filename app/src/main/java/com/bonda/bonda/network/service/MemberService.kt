@@ -1,6 +1,8 @@
 package com.bonda.bonda.network.service
 
 import com.bonda.bonda.network.ApiResponse
+import com.bonda.bonda.network.model.member.GetBadgeDetailResponse
+import com.bonda.bonda.network.model.member.GetCollectedBadgesResponse
 import com.bonda.bonda.network.model.member.GetMyActivityResponse
 import com.bonda.bonda.network.model.member.GetProfileResponse
 import com.bonda.bonda.network.model.member.UpdateProfileResponse
@@ -10,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface MemberService {
     /**
@@ -34,4 +37,18 @@ interface MemberService {
      */
     @GET("members/my-activity")
     suspend fun getMyActivity(): ApiResponse<GetMyActivityResponse>
+
+    /**
+     * 수집한 뱃지 목록
+     */
+    @GET("badges/me")
+    suspend fun getCollectedBadges(): ApiResponse<GetCollectedBadgesResponse>
+
+    /**
+     * 뱃지 상세 조회
+     */
+    @GET("badges/{badgeId}")
+    suspend fun getBadgeDetail(
+        @Path("badgeId") badgeId: Int
+    ): ApiResponse<GetBadgeDetailResponse>
 }

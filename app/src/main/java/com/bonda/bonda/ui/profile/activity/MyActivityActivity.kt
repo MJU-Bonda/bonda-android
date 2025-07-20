@@ -6,11 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityMyActivityBinding
+import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.ui.modal.BadgeDetailViewModal
+import kotlinx.coroutines.launch
 
 class MyActivityActivity : AppCompatActivity() {
+
+    private val memberService = ApiClient.memberService
 
     lateinit var binding: ActivityMyActivityBinding
 
@@ -33,18 +39,45 @@ class MyActivityActivity : AppCompatActivity() {
             finish()
         }
 
-        badgeViewBinds.forEachIndexed { index, badgeView ->
-            badgeView.badgeImage.setImageResource(badgeImages[index])
-            badgeView.badgeTitle.setText(badgeTitles[index])
-            badgeView.root.setOnClickListener {
-                BadgeDetailViewModal
-                    .newInstance(
-                        "발견의 마법사",
-                        "조회한 도서 ( 01 / 10 )",
-                        "10개의 도서를 조하여 '발견의 마법사'뱃지를 획득했어요",
-                        badgeImages[index]
-                    )
-                    .show(supportFragmentManager, "TAG")
+        val vm = ViewModelProvider(this)[MyActivityViewModel::class.java]
+
+        vm.collectedBadgeList.observe(this) { badgeList ->
+            if (badgeList.isEmpty()) return@observe
+
+            badgeViewBinds.forEachIndexed { index, badgeView ->
+                badgeView.badgeTitle.setText(badgeList[index].name)
+
+                if (badgeList[index].isUnlocked) {
+                    badgeView.badgeImage.setImageResource(badgeImages[index])
+                } else {
+                    badgeView.badgeImage.setImageResource(badgeDisabledImages[index])
+                }
+
+                badgeView.root.setOnClickListener {
+                    lifecycleScope.launch {
+                        val res = memberService.getBadgeDetail(badgeList[index].id).unwrapOrThrow()
+
+                        if (badgeList[index].isUnlocked) {
+                            BadgeDetailViewModal
+                                .newInstance(
+                                    res.name,
+                                    res.acquiredDate!!,
+                                    res.description,
+                                    badgeDetailImages[index]
+                                )
+                                .show(supportFragmentManager, "TAG")
+                        } else {
+                            BadgeDetailViewModal
+                                .newInstance(
+                                    res.name,
+                                    "${res.currentProgress} / ${res.goal}",
+                                    res.description,
+                                    badgeDetailImages[index]
+                                )
+                                .show(supportFragmentManager, "TAG")
+                        }
+                    }
+                }
             }
         }
     }
@@ -111,54 +144,6 @@ class MyActivityActivity : AppCompatActivity() {
             R.drawable.badge_collect_4_detail,
             R.drawable.badge_collect_5_detail,
             R.drawable.badge_collect_6_detail
-        )
-    }
-    private val badgeTitles by lazy {
-        listOf(
-            R.string.discover_badge1_title,
-            R.string.discover_badge2_title,
-            R.string.discover_badge3_title,
-            R.string.discover_badge4_title,
-            R.string.discover_badge5_title,
-            R.string.discover_badge6_title,
-            R.string.collect_badge1_title,
-            R.string.collect_badge2_title,
-            R.string.collect_badge3_title,
-            R.string.collect_badge4_title,
-            R.string.collect_badge5_title,
-            R.string.collect_badge6_title
-        )
-    }
-    private val badgeHints by lazy {
-        listOf(
-            R.string.discover_badge1_hint,
-            R.string.discover_badge2_hint,
-            R.string.discover_badge3_hint,
-            R.string.discover_badge4_hint,
-            R.string.discover_badge5_hint,
-            R.string.discover_badge6_hint,
-            R.string.collect_badge1_hint,
-            R.string.collect_badge2_hint,
-            R.string.collect_badge3_hint,
-            R.string.collect_badge4_hint,
-            R.string.collect_badge5_hint,
-            R.string.collect_badge6_hint
-        )
-    }
-    private val badgeDescriptions by lazy {
-        listOf(
-            R.string.discover_badge1_description,
-            R.string.discover_badge2_description,
-            R.string.discover_badge3_description,
-            R.string.discover_badge4_description,
-            R.string.discover_badge5_description,
-            R.string.discover_badge6_description,
-            R.string.collect_badge1_description,
-            R.string.collect_badge2_description,
-            R.string.collect_badge3_description,
-            R.string.collect_badge4_description,
-            R.string.collect_badge5_description,
-            R.string.collect_badge6_description
         )
     }
 }
