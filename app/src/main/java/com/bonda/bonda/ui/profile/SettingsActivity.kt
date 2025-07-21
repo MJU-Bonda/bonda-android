@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.MainActivity
 import com.bonda.bonda.databinding.ActivitySettingsBinding
 import com.bonda.bonda.network.ApiClient
+import com.bonda.bonda.network.model.auth.LogoutRequest
 import com.bonda.bonda.util.AccessTokenProvider
 import com.bonda.bonda.util.PREFS_NAME
 import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
@@ -86,7 +87,14 @@ class SettingsActivity : AppCompatActivity() {
     private fun performLogout() {
         lifecycleScope.launch {
             try {
-                val res = authService.logout().unwrapOrThrow()
+                val res = authService.logout(
+                    LogoutRequest(
+                        AccessTokenProvider.getAccessToken()!!,
+                        getSharedPreferences(PREFS_NAME, MODE_PRIVATE).getString(
+                            PREF_KEY_REFRESH_TOKEN, null
+                        )!!
+                    )
+                ).unwrapOrThrow()
                 Log.d(TAG, res.toString())
             } catch (e: Exception) {
                 Log.e(TAG, e.toString())
