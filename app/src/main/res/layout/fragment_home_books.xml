@@ -2,7 +2,8 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_default_primary">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -14,7 +15,8 @@
             android:background="@color/surface_default_tertiary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:title="도서"
-            app:titleTextAppearance="@style/Title2">
+            app:titleTextAppearance="@style/Title2"
+            app:titleTextColor="@color/text_accent_primary">
 
             <ImageButton
                 android:id="@+id/search_button"
@@ -36,38 +38,34 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="24dp">
+            android:orientation="vertical"
+            android:paddingVertical="20dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/books_header"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
                 android:text="방금 도착한 새로운 책"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textAppearance="@style/Title2"
+                android:textColor="@color/text_default_primary" />
 
             <HorizontalScrollView
                 android:id="@+id/book_category_chip_scroller"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:scrollbars="none"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/books_header">
-
+                android:scrollbars="none">
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/book_category_chip_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    app:selectionRequired="true"
                     app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
@@ -100,70 +98,60 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="반려동물" />
-
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
             <GridLayout
                 android:id="@+id/recent_arrival_books_container"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/book_category_chip_scroller" />
+                android:orientation="horizontal" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/books_category_header"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="60dp"
                 android:text="카테고리"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recent_arrival_books_container" />
+                android:textAppearance="@style/Title2"
+                android:textColor="@color/text_default_primary" />
 
             <GridLayout
                 android:id="@+id/categories_grid_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
                 android:alignmentMode="alignMargins"
                 android:columnCount="5"
-                android:useDefaultMargins="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/books_category_header" />
+                android:useDefaultMargins="true" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/popular_header"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="60dp"
                 android:text="요즘 가장 많이 사랑 받은 책"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/categories_grid_container" />
+                android:textAppearance="@style/Title2"
+                android:textColor="@color/text_default_primary" />
 
             <HorizontalScrollView
                 android:id="@+id/popular_chip_scroller"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:scrollbars="none"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/popular_header">
+                android:scrollbars="none">
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/popular_chip_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="24dp"
+                    app:selectionRequired="true"
                     app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
@@ -201,22 +189,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="반려동물" />
-
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
             <GridLayout
                 android:id="@+id/most_loved_books_container"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
                 android:orientation="vertical"
-                android:useDefaultMargins="true"
+                android:useDefaultMargins="true" />
 
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/popular_chip_scroller" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
