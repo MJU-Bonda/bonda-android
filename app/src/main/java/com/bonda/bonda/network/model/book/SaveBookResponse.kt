@@ -5,9 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SaveBookResponse(
     val bookId: Long,
-    val message: Message,
+    val message: String,
     val isNewBadge: Boolean
-) {
-    @Serializable
-    data class Message(val message: String)
-}
+)

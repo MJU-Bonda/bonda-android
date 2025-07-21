@@ -16,7 +16,7 @@ import retrofit2.http.Query
 
 interface BookService {
     @POST("books/save/{bookId}")
-    suspend fun saveBook(
+    suspend fun toggleSaveBook(
         @Path("bookId") bookId: Long
     ): ApiResponse<SaveBookResponse>
 
