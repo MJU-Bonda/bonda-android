@@ -41,6 +41,10 @@ class MyActivityActivity : AppCompatActivity() {
 
         val vm = ViewModelProvider(this)[MyActivityViewModel::class.java]
 
+        vm.viewedBookCount.observe(this) { binding.tvViewedBookCount.text = "지금까지 총 ${it}권을 탐색했고," }
+        vm.collectedBookCount.observe(this) { binding.tvSavedBookCount.text = "그중 ${it}권을 수집했어요." }
+        vm.collectedBadgeCount.observe(this) { binding.tvBadgeCount.text = "총 ${it}개의 뱃지를 획득했어요." }
+
         vm.collectedBadgeList.observe(this) { badgeList ->
             if (badgeList.isEmpty()) return@observe
 

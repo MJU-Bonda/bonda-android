@@ -16,32 +16,40 @@ class MyActivityViewModel : ViewModel() {
 
     private val memberService = ApiClient.memberService
 
+    private val _viewedBookCount = MutableLiveData<Int>()
     private val _collectedBookCount = MutableLiveData<Int>()
     private val _collectedBadgeCount = MutableLiveData<Int>()
     private val _collectedBookCategory = MutableLiveData<List<BookCategory>>()
-    private val _collectedBadgeList = MutableLiveData<List<GetCollectedBadgesResponse.Badge>>(emptyList())
+    private val _collectedBadgeList =
+        MutableLiveData<List<GetCollectedBadgesResponse.Badge>>(emptyList())
 
+    val viewedBookCount: MutableLiveData<Int>
+        get() = _viewedBookCount
     val collectedBookCount: MutableLiveData<Int>
         get() = _collectedBookCount
-    val collectedBadgeCount: MutableLiveData<Int>
-        get() = _collectedBadgeCount
     val collectedBookCategory: MutableLiveData<List<BookCategory>>
         get() = _collectedBookCategory
+    val collectedBadgeCount: MutableLiveData<Int>
+        get() = _collectedBadgeCount
     val collectedBadgeList: MutableLiveData<List<GetCollectedBadgesResponse.Badge>>
         get() = _collectedBadgeList
 
     init {
         viewModelScope.launch {
             try {
-                val res = memberService
-                    .getCollectedBadges()
-                    .unwrapOrThrow()
+                val bookRes = memberService.getMyActivity().unwrapOrThrow()
+                val badgeRes = memberService.getCollectedBadges().unwrapOrThrow()
 
-                _collectedBadgeCount.value = res.badgeCount
-                _collectedBadgeList.value =
-                    (res.viewBadgeList + res.saveBadgeList)
+                _viewedBookCount.value = bookRes.bookViewCount
+                _collectedBookCount.value = bookRes.bookcaseCount
 
-                Log.d(TAG, _collectedBadgeList.value.toString())
+                // TODO 컬러 맵핑 코드 수정
+                bookRes.categoryCountList.map {
+                    BookCategory(it.category, it.count, R.color.surface_default_base.toColor())
+                }
+
+                _collectedBadgeCount.value = badgeRes.badgeCount
+                _collectedBadgeList.value = (badgeRes.viewBadgeList + badgeRes.saveBadgeList)
             } catch (e: Exception) {
                 Log.e(TAG, e.toString())
             }
