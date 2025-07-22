@@ -9,31 +9,46 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bonda.bonda.databinding.ActivitySearchBinding
+import com.bonda.bonda.databinding.FragmentSearchResultAllBinding
 import com.bonda.bonda.databinding.ViewChipSearchHistoryBinding
 import com.bonda.bonda.databinding.ViewChipSearchRecommendBinding
 import com.bonda.bonda.ui.profile.DialogView
+import com.bonda.bonda.ui.profile.recent.articles.ArticlesFragment
 import com.bonda.bonda.util.TAG
+import com.google.android.material.tabs.TabLayoutMediator
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
+    private val searchResultTabTitles = listOf("전체", "도서", "아티클")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         val viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+
+        /**
+         * 검색 결과 tab binding
+         */
+        binding.searchResultViewpager.adapter = object : FragmentStateAdapter(this) {
+            override fun getItemCount(): Int = searchResultTabTitles.size
+            override fun createFragment(position: Int): Fragment =
+                SearchResultFragment.newInstance(searchResultTabTitles[position])
+        }
+        TabLayoutMediator(binding.searchResultTablayout, binding.searchResultViewpager) {tab, pos ->
+            tab.text = searchResultTabTitles[pos]
+        }.attach()
 
         binding.buttonClose.setOnClickListener { finish() }
         binding.buttonToggleSaveHistory.setOnClickListener { viewModel.setIsHistoryActivated() }

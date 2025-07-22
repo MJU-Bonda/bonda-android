@@ -43,4 +43,6 @@ interface SearchService {
      */
     @DELETE("/search-term/recent/all")
     suspend fun deleteAllSearchHistory(): ApiResponse<DeleteSearchAllHistoryResponse>
+
+
 }

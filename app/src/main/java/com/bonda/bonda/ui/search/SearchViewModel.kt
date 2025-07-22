@@ -26,8 +26,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val _searchText = MutableLiveData<String>()
     private val _searchHistory = MutableLiveData<List<String>>()
     private val _recommendedKeyword = MutableLiveData<List<String>>()
-    private val _bookSearchResult = MutableLiveData<List<Book>>()
-    private val _articleSearchResult = MutableLiveData<List<Article>>()
+    private val _bookSearchResult = MutableLiveData<List<Book>>(emptyList())
+    private val _articleSearchResult = MutableLiveData<List<Article>>(emptyList())
 
     val isLoading: LiveData<Boolean> = _isLoading
     val isEmpty: LiveData<Boolean> = _isEmpty
@@ -54,8 +54,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     )
 
     init {
-//        _bookSearchResult.value = emptyList()
-//        _articleSearchResult.value = emptyList()
         _isHistoryActivated.value = prefs.getBoolean(PREF_KEY_SEARCH_HISTORY_ACTIVATED, false)
 
         loadSearchHistory()
