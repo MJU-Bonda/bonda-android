@@ -1,9 +1,9 @@
-package com.bonda.bonda.network.model.article
+package com.bonda.bonda.network.model.search
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchArticlesResponse(
+data class SearchArticlesResponse (
     val page: Int,
     val total: Int,
     val word: String,

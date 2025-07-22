@@ -2,29 +2,31 @@ package com.bonda.bonda.ui.search
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bonda.bonda.databinding.ActivitySearchBinding
-import com.bonda.bonda.databinding.FragmentSearchResultAllBinding
 import com.bonda.bonda.databinding.ViewChipSearchHistoryBinding
 import com.bonda.bonda.databinding.ViewChipSearchRecommendBinding
 import com.bonda.bonda.ui.profile.DialogView
-import com.bonda.bonda.ui.profile.recent.articles.ArticlesFragment
-import com.bonda.bonda.util.TAG
 import com.google.android.material.tabs.TabLayoutMediator
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
     private val searchResultTabTitles = listOf("전체", "도서", "아티클")
+    val vm: SearchViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,6 @@ class SearchActivity : AppCompatActivity() {
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
 
         /**
          * 검색 결과 tab binding
@@ -46,12 +47,15 @@ class SearchActivity : AppCompatActivity() {
             override fun createFragment(position: Int): Fragment =
                 SearchResultFragment.newInstance(searchResultTabTitles[position])
         }
-        TabLayoutMediator(binding.searchResultTablayout, binding.searchResultViewpager) {tab, pos ->
+        TabLayoutMediator(
+            binding.searchResultTablayout,
+            binding.searchResultViewpager
+        ) { tab, pos ->
             tab.text = searchResultTabTitles[pos]
         }.attach()
 
         binding.buttonClose.setOnClickListener { finish() }
-        binding.buttonToggleSaveHistory.setOnClickListener { viewModel.setIsHistoryActivated() }
+        binding.buttonToggleSaveHistory.setOnClickListener { vm.setIsHistoryActivated() }
 
         /**
          * 검색 기록 삭제
@@ -68,22 +72,51 @@ class SearchActivity : AppCompatActivity() {
             "clear_history", this
         ) { _, bundle ->
             if (bundle.getBoolean("isConfirmed", false)) {
-                viewModel.removeAllSearchHistory()
+                vm.removeAllSearchHistory()
             }
         }
 
+        /**
+         * 검색바 로직
+         */
+        binding.searchBar.setOnKeyListener { _, actionId, event ->
+            val isSearchAction = actionId == EditorInfo.IME_ACTION_SEARCH ||
+                        actionId == EditorInfo.IME_ACTION_DONE ||
+                        (event?.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
 
-        viewModel.isHistoryActivated.observe(this) { activated ->
+            if (isSearchAction) {
+                val query = binding.searchBar.text.toString().trim()
+                if (query.isNotEmpty()) {
+                    vm.clearSearch()
+                    vm.search(query)
+                    binding.searchResult.visibility = View.VISIBLE
+
+                    // 키보드 숨기기
+                    (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                        .hideSoftInputFromWindow(binding.searchBar.windowToken, 0)
+                }
+                true
+            } else {
+                false
+            }
+        }
+
+        /**
+         * 자동 저장 토글
+         */
+        vm.isHistoryActivated.observe(this) { activated ->
             if (activated) binding.buttonToggleSaveHistory.text = "자동저장 끄기"
             else binding.buttonToggleSaveHistory.text = "자동저장 켜기"
         }
 
-        viewModel.isEmpty.observe(this) { isEmpty ->
+        /**
+         * 검색 기록 binding
+         */
+        vm.isSearchHistoryEmpty.observe(this) { isEmpty ->
             if (isEmpty) binding.textIsEmpty.visibility = View.VISIBLE
             else binding.textIsEmpty.visibility = View.GONE
         }
-
-        viewModel.searchHistory.observe(this) { histories ->
+        vm.searchHistory.observe(this) { histories ->
             binding.searchHistoryChipGroup.removeAllViews()
 
             histories.forEach { history ->
@@ -106,7 +139,7 @@ class SearchActivity : AppCompatActivity() {
                     }
                     setOnCloseIconClickListener {
                         binding.searchHistoryChipGroup.removeView(it)
-                        viewModel.removeSearchHistory(history)
+                        vm.removeSearchHistory(history)
                     }
                 }
 
@@ -114,7 +147,10 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.recommendedKeyword.observe(this) { keywords ->
+        /**
+         * 추천 키워드 binding
+         */
+        vm.recommendedKeyword.observe(this) { keywords ->
             binding.todayKeywordsChipGroup.removeAllViews()
 
             keywords.forEach { keyword ->
@@ -139,6 +175,18 @@ class SearchActivity : AppCompatActivity() {
 
                 binding.todayKeywordsChipGroup.addView(chipBinding.root)
             }
+        }
+    }
+
+    /**
+     * 뒤로 가기 버튼 클릭 시 검색 결과 창 닫음
+     */
+    override fun onBackPressed() {
+        if (binding.searchResult.isVisible) {
+            binding.searchResult.visibility = View.GONE
+            vm.clearSearch()
+        } else {
+            super.onBackPressed()
         }
     }
 }

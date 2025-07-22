@@ -30,6 +30,8 @@
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:hint="검색어를 입력해 주세요"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
                 android:singleLine="true"
                 android:textAppearance="@style/Body3" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -154,6 +156,7 @@
         android:id="@+id/search_result"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -5,6 +5,8 @@ import com.bonda.bonda.network.model.search.DeleteSearchAllHistoryResponse
 import com.bonda.bonda.network.model.search.DeleteSearchHistoryResponse
 import com.bonda.bonda.network.model.search.GetRecommendedKeywordResponse
 import com.bonda.bonda.network.model.search.GetSearchHistoryResponse
+import com.bonda.bonda.network.model.search.SearchArticlesResponse
+import com.bonda.bonda.network.model.search.SearchBooksResponse
 import com.bonda.bonda.network.model.search.ToggleAutoSaveResponse
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -44,5 +46,26 @@ interface SearchService {
     @DELETE("/search-term/recent/all")
     suspend fun deleteAllSearchHistory(): ApiResponse<DeleteSearchAllHistoryResponse>
 
+    /**
+     * 도서를 검색합니다
+     */
+    @GET("/books/search")
+    suspend fun searchBooks(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 24,
+        @Query("orderBy") orderBy: String = "newest",
+        @Query("word") word: String
+    ): ApiResponse<SearchBooksResponse>
+
+    /**
+     * 아티클을 검색합니다
+     */
+    @GET("/articles/search")
+    suspend fun searchArticles(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 24,
+        @Query("orderBy") orderBy: String = "newest",
+        @Query("word") word: String
+    ): ApiResponse<SearchArticlesResponse>
 
 }

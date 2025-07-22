@@ -17,61 +17,121 @@ import androidx.core.content.edit
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
     private val searchService = ApiClient.searchService
+    private var bookPage = 0
+    private var articlePage = 0
 
     private val prefs = application.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
     private val _isLoading = MutableLiveData<Boolean>()
-    private val _isEmpty = MutableLiveData<Boolean>()
+    private val _isSearchHistoryEmpty = MutableLiveData<Boolean>()
     private val _isHistoryActivated = MutableLiveData<Boolean>()
-    private val _searchText = MutableLiveData<String>()
     private val _searchHistory = MutableLiveData<List<String>>()
     private val _recommendedKeyword = MutableLiveData<List<String>>()
-    private val _bookSearchResult = MutableLiveData<List<Book>>(emptyList())
-    private val _articleSearchResult = MutableLiveData<List<Article>>(emptyList())
+    private val _booksSearchResult = MutableLiveData<List<Book>>(emptyList())
+    private val _articlesSearchResult = MutableLiveData<List<Article>>(emptyList())
+    private val _booksHasNextPage = MutableLiveData<Boolean>(false)
+    private val _articlesHasNextPage = MutableLiveData<Boolean>(false)
+    private val _booksSearchResultCount = MutableLiveData<Int>(0)
+    private val _articlesSearchResultCount = MutableLiveData<Int>(0)
 
     val isLoading: LiveData<Boolean> = _isLoading
-    val isEmpty: LiveData<Boolean> = _isEmpty
+    val isSearchHistoryEmpty: LiveData<Boolean> = _isSearchHistoryEmpty
     val isHistoryActivated: LiveData<Boolean> = _isHistoryActivated
-    val searchText: LiveData<String> = _searchText
     val searchHistory: LiveData<List<String>> = _searchHistory
     val recommendedKeyword: LiveData<List<String>> = _recommendedKeyword
-    val bookSearchResult: LiveData<List<Book>> = _bookSearchResult
-    val articleSearchResult: LiveData<List<Article>> = _articleSearchResult
-
-    data class Book(
-        val id: Int,
-        val title: String,
-        val author: String,
-        val imageUrl: String,
-        val category: String
-    )
-
-    data class Article(
-        val id: Int,
-        val title: String,
-        val imageUrl: String,
-        val category: String
-    )
+    val booksSearchResult: LiveData<List<Book>> = _booksSearchResult
+    val articlesSearchResult: LiveData<List<Article>> = _articlesSearchResult
+    val booksHasNextPage: LiveData<Boolean> = _booksHasNextPage
+    val articlesHasNextPage: LiveData<Boolean> = _articlesHasNextPage
+    val booksSearchResultCount: LiveData<Int> = _booksSearchResultCount
+    val articlesSearchResultCount: LiveData<Int> = _articlesSearchResultCount
 
     init {
         _isHistoryActivated.value = prefs.getBoolean(PREF_KEY_SEARCH_HISTORY_ACTIVATED, false)
-
         loadSearchHistory()
         loadRecommendedKeyword()
     }
 
+    /**
+     * 검색 기능 연결
+     */
+    fun search(keyword: String) {
+        searchBooks(keyword)
+        searchArticles(keyword)
+        loadSearchHistory()
+    }
 
     fun searchBooks(keyword: String) {
+        viewModelScope.launch {
+            try {
+                val res = searchService
+                    .searchBooks(page = bookPage, word = keyword)
+                    .unwrapOrThrow()
 
+                val current = _booksSearchResult.value.orEmpty()
+                val newBooks = res.bookList.map { book ->
+                    Book(
+                        id = book.id,
+                        imageUrl = book.imageUrl,
+                        category = book.category,
+                        title = book.title,
+                        subtitle = book.author
+                    )
+                }
+
+                val updated = current + newBooks
+
+                _booksSearchResult.value = updated
+                _booksHasNextPage.value = res.hasNextPage
+                _booksSearchResultCount.value = res.total
+
+                Log.d(TAG, "도서 검색 결과 ${_booksSearchResult.value.toString()}")
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun getNextBooks(keyword: String) {
+        if (_booksHasNextPage.value != true) return
+        bookPage++
+        searchBooks(keyword)
     }
 
     fun searchArticles(keyword: String) {
+        viewModelScope.launch {
+            try {
+                val res = searchService
+                    .searchArticles(page = articlePage, word = keyword)
+                    .unwrapOrThrow()
 
+                val current = _articlesSearchResult.value.orEmpty()
+                val newArticles = res.articleList.map { article ->
+                    Article(
+                        id = article.articleId,
+                        imageUrl = article.imageUrl,
+                        category = article.articleCategory,
+                        title = article.title
+                    )
+                }
+
+                val updated = current + newArticles
+
+                _articlesSearchResult.value = updated
+                _articlesHasNextPage.value = res.hasNextPage
+                _articlesSearchResultCount.value = res.total
+
+                Log.d(TAG, "아티클 검색 결과 ${_articlesSearchResult.value.toString()}")
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
+            }
+        }
     }
 
-
-    fun setSearchText(text: String) {
-        _searchText.value = text
+    fun getNextArticles(keyword: String) {
+        if (_articlesHasNextPage.value != true) return
+        articlePage++
+        searchArticles(keyword)
     }
 
 
@@ -87,12 +147,13 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
                 _searchHistory.value = _searchHistory.value
                     ?.filterNot { it == keyword }
-                _isEmpty.value = _searchHistory.value!!.isEmpty()
+                _isSearchHistoryEmpty.value = _searchHistory.value!!.isEmpty()
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             }
         }
     }
+
 
     /**
      * 검색 기록 불러오기
@@ -104,7 +165,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
                 val response = searchService.getSearchHistory().unwrapOrThrow()
 
-                _isEmpty.value = response.recentSearchTermList.isEmpty()
+                _isSearchHistoryEmpty.value = response.recentSearchTermList.isEmpty()
                 _searchHistory.value = response.recentSearchTermList
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
@@ -113,6 +174,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
     }
+
 
     /**
      * 검색 기록 저장 설정
@@ -132,6 +194,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+
     /**
      * 모든 검색 기록 삭제
      */
@@ -143,7 +206,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
             try {
                 searchService.deleteAllSearchHistory().unwrapOrThrow()
-                _isEmpty.value = true
+                _isSearchHistoryEmpty.value = true
                 _searchHistory.value = emptyList()
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
@@ -152,6 +215,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
     }
+
 
     /**
      * 추천 검색어 로드
@@ -169,5 +233,15 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 _isLoading.value = false
             }
         }
+    }
+
+    /**
+     * 검색 창 닫기
+     */
+    fun clearSearch() {
+        _booksSearchResult.value = emptyList()
+        _articlesSearchResult.value = emptyList()
+        _booksHasNextPage.value = false
+        _articlesHasNextPage.value = false
     }
 }

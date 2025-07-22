@@ -6,7 +6,6 @@ import com.bonda.bonda.network.model.article.GetArticlesResponse
 import com.bonda.bonda.network.model.article.GetRecentViewedArticlesResponse
 import com.bonda.bonda.network.model.article.GetSavedArticlesResponse
 import com.bonda.bonda.network.model.article.SaveArticleResponse
-import com.bonda.bonda.network.model.article.SearchArticlesResponse
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -39,17 +38,6 @@ interface ArticleService {
     suspend fun getArticleDetail(
         @Path("articleId") articleId: Long
     ): ApiResponse<GetArticleDetailResponse>
-
-    /**
-     * 아티클 검색
-     */
-    @GET("articles/search")
-    suspend fun searchArticles(
-        @Query("page") page: Int = 0,
-        @Query("size") size: Int = 24,
-        @Query("orderBy") orderBy: String = "newest",
-        @Query("word") word: String
-    ): ApiResponse<SearchArticlesResponse>
 
     /**
      * 저장한 아티클 검색
