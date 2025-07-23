@@ -118,20 +118,33 @@ class BookActivity : AppCompatActivity() {
         vm.size.observe(this) { binding.bookSize.text = it }
         vm.pageLength.observe(this) { binding.bookPageLength.text = it.toString() }
         vm.theme.observe(this) { theme ->
-            binding.bookThemeChipGroup.removeAllViews()
+            if(theme.isNullOrBlank()) {
+                binding.bookThemeChipGroup.visibility = View.GONE
+                binding.bookThemeHeader.visibility = View.GONE
+            } else {
+                //TODO chip binding 코드 수정하자
+                binding.bookThemeChipGroup.removeAllViews()
 
-            val itemBinding = ViewChipBookCategoryBinding.inflate(
-                layoutInflater,
-                binding.bookThemeChipGroup,
-                false
-            )
+                val itemBinding = ViewChipBookCategoryBinding.inflate(
+                    layoutInflater,
+                    binding.bookThemeChipGroup,
+                    false
+                )
 
-            itemBinding.root.text = theme
+                itemBinding.root.text = theme
 
-            binding.bookThemeChipGroup.addView(itemBinding.root)
+                binding.bookThemeChipGroup.addView(itemBinding.root)
+            }
         }
 
-        vm.body.observe(this) { binding.body.text = it }
+        vm.body.observe(this) { body ->
+            if(body.isNullOrBlank()){
+                binding.bookBodyHeader.visibility = View.GONE
+                binding.body.visibility = View.GONE
+            } else {
+                binding.body.text = body
+            }
+        }
 
         /**
          * 연관된 article 목록 표시

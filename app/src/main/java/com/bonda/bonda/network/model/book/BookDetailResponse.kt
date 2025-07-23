@@ -14,8 +14,8 @@ data class BookDetailResponse(
     val publisher: String,
     val plateType: String,
     val page: Int,
-    val subject: String,
-    val introduction: String,
+    val subject: String?,
+    val introduction: String?,
     val content: String,
     val isNewBadge: Boolean,
     @SerialName("related_article_list")

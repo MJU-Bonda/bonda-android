@@ -8,7 +8,7 @@ data class BooksByCategoryResponse(
     val total: Int,
     val category: String,
     val orderBy: String,
-    val hasNextPage: String,
+    val hasNextPage: Boolean,
     val bookList: List<Book>,
 ) {
     @Serializable
