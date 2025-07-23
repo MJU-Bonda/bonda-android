@@ -29,7 +29,6 @@
                     android:layout_height="0dp"
                     android:contentDescription="아티클 이미지"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/default_image"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintTop_toTopOf="parent" />
 

@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import coil3.load
+import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeBooksBinding
 import com.bonda.bonda.databinding.ViewBookCategoryButtonBinding
 import com.bonda.bonda.databinding.ViewBookHorizontalBinding
@@ -47,6 +49,16 @@ class BooksFragment : Fragment() {
             val text: LiveData<String>,
             val icon: LiveData<Int>
         )
+
+        binding.popularChipGroup.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId){
+                R.id.chipPopularCategory0 -> booksViewModel.getNewArrivedBooks("ALL")
+                R.id.chipPopularCategory1 -> booksViewModel.getNewArrivedBooks("PLANT")
+                R.id.chipPopularCategory2 -> booksViewModel.getNewArrivedBooks("COOKING")
+                R.id.chipPopularCategory3 -> booksViewModel.getNewArrivedBooks("MUSIC")
+                R.id.chipPopularCategory4 -> booksViewModel.getNewArrivedBooks("ART")
+            }
+        }
 
         val categories = listOf(
             Category(booksViewModel.categoryNovelButtonText,       booksViewModel.categoryNovelButtonIcon),
@@ -97,7 +109,7 @@ class BooksFragment : Fragment() {
                     false
                 )
 
-                itemBinding.coverImage.setImageResource(book.coverImage)
+                itemBinding.coverImage.load(book.coverImage)
                 itemBinding.title.text = book.title
                 itemBinding.author.text = book.author
                 itemBinding.category.root.text = book.category
@@ -130,7 +142,7 @@ class BooksFragment : Fragment() {
                     false
                 )
 
-                itemBinding.coverImage.setImageResource(book.coverImage)
+                itemBinding.coverImage.load(book.coverImage)
                 itemBinding.title.text = book.title
                 itemBinding.author.text = book.author
                 itemBinding.category.root.text = book.category

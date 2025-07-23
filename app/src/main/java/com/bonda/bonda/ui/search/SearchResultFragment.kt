@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import coil3.load
+import coil3.request.ImageRequest
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentSearchResultAllBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
@@ -75,6 +76,7 @@ class SearchResultFragment : Fragment() {
         /**
          * 도서 검색 결과 binding
          */
+        // TODO Recycler View로 교체
         vm.booksSearchResult.observe(viewLifecycleOwner) { books ->
             binding.gridBooks.removeAllViews()
 
@@ -85,7 +87,13 @@ class SearchResultFragment : Fragment() {
                     false
                 )
 
-                itemBinding.coverImage.load(book.imageUrl)
+                itemBinding.coverImage.load(book.imageUrl) {
+                    listener(
+                        onError = { request, throwable ->
+                            Log.e("BookGrid", "이미지 로드 실패: ${throwable}")
+                        }
+                    )
+                }
                 itemBinding.title.text = book.title
                 itemBinding.author.text = book.subtitle
                 itemBinding.category.root.text = book.category
@@ -109,6 +117,7 @@ class SearchResultFragment : Fragment() {
         /**
          * 아티클 검색 결과 binding
          */
+        // TODO Recycler View로 교체
         vm.articlesSearchResult.observe(viewLifecycleOwner) { articles ->
             binding.gridArticles.removeAllViews()
 
@@ -182,11 +191,23 @@ class SearchResultFragment : Fragment() {
             "도서" -> {
                 binding.articlesContainer.visibility = View.GONE
                 binding.btBookAll.visibility = View.GONE
+                binding.nestedScrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                    val scrollView = binding.nestedScrollView
+                    if (scrollY > 0 && scrollView.getChildAt(0).bottom <= scrollView.height + scrollView.scrollY) {
+                        vm.getNextBooks()
+                    }
+                }
             }
 
             "아티클" -> {
                 binding.booksContainer.visibility = View.GONE
                 binding.btArticleAll.visibility = View.GONE
+                binding.nestedScrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                    val scrollView = binding.nestedScrollView
+                    if (scrollY > 0 && scrollView.getChildAt(0).bottom <= scrollView.height + scrollView.scrollY) {
+                        vm.getNextArticles()
+                    }
+                }
             }
         }
     }

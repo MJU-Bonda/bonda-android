@@ -19,6 +19,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val searchService = ApiClient.searchService
     private var bookPage = 0
     private var articlePage = 0
+    private var searchKeyword = ""
 
     private val prefs = application.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
@@ -56,6 +57,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
      * 검색 기능 연결
      */
     fun search(keyword: String) {
+        searchKeyword = keyword
         searchBooks(keyword)
         searchArticles(keyword)
         loadSearchHistory()
@@ -92,10 +94,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun getNextBooks(keyword: String) {
+    fun getNextBooks() {
         if (_booksHasNextPage.value != true) return
         bookPage++
-        searchBooks(keyword)
+        searchBooks(searchKeyword)
     }
 
     fun searchArticles(keyword: String) {
@@ -128,10 +130,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun getNextArticles(keyword: String) {
+    fun getNextArticles() {
         if (_articlesHasNextPage.value != true) return
         articlePage++
-        searchArticles(keyword)
+        searchArticles(searchKeyword)
     }
 
 
