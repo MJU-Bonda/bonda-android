@@ -1,23 +1,31 @@
 package com.bonda.bonda.ui.book
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import coil3.load
+import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityBookDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
-import com.bonda.bonda.databinding.ViewChipWriterBinding
-import com.bonda.bonda.databinding.ViewChipThemeBinding
+import com.bonda.bonda.model.ArticleCategory
+import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.ui.article.ArticleActivity
+import com.bonda.bonda.ui.profile.activity.MyActivityActivity
+import com.bonda.bonda.util.SnackbarType
+import com.bonda.bonda.util.showSnackbar
+import kotlinx.coroutines.launch
 
 class BookActivity : AppCompatActivity() {
 
@@ -39,18 +47,59 @@ class BookActivity : AppCompatActivity() {
             insets
         }
 
-        supportActionBar?.apply {
-            title = "BONDA"
-            setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+
+
+        val vm = ViewModelProvider(this)[BookViewModel::class.java]
+        vm.getBookDetail(bookId)
+
+        vm.title.observe(this) { binding.toolbar.title = it }
+
+        vm.isSaved.observe(this) { isSaved ->
+            binding.bookmarkButton.apply {
+                if (isSaved) setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
+                else setImageResource(R.drawable.ic_action_bookmark_empty_24dp)
+                setOnClickListener {
+                    lifecycleScope.launch {
+                        try{
+                            // TODO 스낵바 버그 있음
+
+                            val hasNewBadge = vm.toggleSaveBook(bookId)
+
+                            showSnackbar(
+                                message = "도서 저장이 완료되었습니다!",
+                                buttonText = "서재로 이동",
+                                onButtonClick = {
+                                    // TODO 서재로 이동 로직 구현
+                                },
+                                type = SnackbarType.SAVE
+                            )
+
+                            if(hasNewBadge)
+                                showSnackbar(
+                                    message = "새로운 뱃지를 획득했습니다!",
+                                    buttonText = "확인하기",
+                                    onButtonClick = {
+                                        val intent = Intent(this@BookActivity, MyActivityActivity::class.java)
+                                        startActivity(intent)
+                                    },
+                                    type = SnackbarType.BADGE
+                                )
+                        } catch (e: Exception) {
+                            showSnackbar(
+                                message = "저장에 실패했어요. 다시 시도해 주세요.",
+                                type = SnackbarType.ERROR
+                            )
+                        }
+                    }
+                }
+            }
         }
 
-        val bookViewModel = ViewModelProvider(this)[BookViewModel::class.java]
-
-        bookViewModel.getBookDetail(bookId)
-
-        // TODO: isSaved binding 코드 추가
-        bookViewModel.coverImage.observe(this) { binding.coverImage.load(it) }
-        bookViewModel.category.observe(this) { category ->
+        vm.coverImage.observe(this) { binding.coverImage.load(it) }
+        vm.category.observe(this) { category ->
             binding.bookCategoryChipGroup.removeAllViews()
 
             val itemBinding = ViewChipBookCategoryBinding.inflate(
@@ -63,31 +112,44 @@ class BookActivity : AppCompatActivity() {
 
             binding.bookCategoryChipGroup.addView(itemBinding.root)
         }
-        bookViewModel.title.observe(this) { binding.title.text = it }
-        bookViewModel.author.observe(this) { binding.author.text = it }
-        bookViewModel.publisher.observe(this) { binding.bookPublisher.text = it }
-        bookViewModel.size.observe(this) { binding.bookSize.text = it }
-        bookViewModel.pageLength.observe(this) { binding.bookPageLength.text = it.toString() }
-        bookViewModel.theme.observe(this) { theme ->
-            binding.bookThemeChipGroup.removeAllViews()
+        vm.title.observe(this) { binding.title.text = it }
+        vm.author.observe(this) { binding.author.text = it }
+        vm.publisher.observe(this) { binding.bookPublisher.text = it }
+        vm.size.observe(this) { binding.bookSize.text = it }
+        vm.pageLength.observe(this) { binding.bookPageLength.text = it.toString() }
+        vm.theme.observe(this) { theme ->
+            if(theme.isNullOrBlank()) {
+                binding.bookThemeChipGroup.visibility = View.GONE
+                binding.bookThemeHeader.visibility = View.GONE
+            } else {
+                //TODO chip binding 코드 수정하자
+                binding.bookThemeChipGroup.removeAllViews()
 
-            val itemBinding = ViewChipBookCategoryBinding.inflate(
-                layoutInflater,
-                binding.bookThemeChipGroup,
-                false
-            )
+                val itemBinding = ViewChipBookCategoryBinding.inflate(
+                    layoutInflater,
+                    binding.bookThemeChipGroup,
+                    false
+                )
 
-            itemBinding.root.text = theme
+                itemBinding.root.text = theme
 
-            binding.bookThemeChipGroup.addView(itemBinding.root)
+                binding.bookThemeChipGroup.addView(itemBinding.root)
+            }
         }
 
-        bookViewModel.body.observe(this) { binding.body.text = it }
+        vm.body.observe(this) { body ->
+            if(body.isNullOrBlank()){
+                binding.bookBodyHeader.visibility = View.GONE
+                binding.body.visibility = View.GONE
+            } else {
+                binding.body.text = body
+            }
+        }
 
         /**
          * 연관된 article 목록 표시
          */
-        bookViewModel.articles.observe(this) { articles ->
+        vm.articles.observe(this) { articles ->
             binding.bookArticlesContainer.removeAllViews()
 
             var lastAddedViewId: Int? = null
@@ -108,18 +170,31 @@ class BookActivity : AppCompatActivity() {
                     itemBinding.articleImage.load(article.coverImage)
                     itemBinding.articleTitle.text = article.title
 
-                    // TODO: chip 로직 수정
-                    if (article.category == "테마") {
-                        ViewChipThemeBinding.inflate(
-                            layoutInflater,
-                            itemBinding.articleCategoryChipGroup,
-                            true
-                        )
-                    } else if (article.category == "작가/출판사") {
-                        ViewChipWriterBinding.inflate(
-                            layoutInflater,
-                            itemBinding.articleCategoryChipGroup,
-                            true
+                    article.category.also {
+                        val category = it.toArticleCategory()
+
+                        itemBinding.articleCategory.root.text = category.label
+
+                        val bgColorRes = when (category) {
+                            ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.surface_context_writer
+                            ArticleCategory.BOOKSTORE -> R.color.surface_context_store
+                            ArticleCategory.THEME -> R.color.surface_context_theme
+                            else -> R.color.surface_default_primary
+                        }
+                        val textColorRes = when (category) {
+                            ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.text_context_writer
+                            ArticleCategory.BOOKSTORE -> R.color.text_context_store
+                            ArticleCategory.THEME -> R.color.text_context_theme
+                            else -> R.color.text_accent_primary
+                        }
+
+                        // Chip 에 적용
+                        itemBinding.articleCategory.root.chipBackgroundColor =
+                            ColorStateList.valueOf(
+                                ContextCompat.getColor(this, bgColorRes)
+                            )
+                        itemBinding.articleCategory.root.setTextColor(
+                            ContextCompat.getColor(this, textColorRes)
                         )
                     }
 

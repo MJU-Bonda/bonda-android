@@ -3,13 +3,9 @@ package com.bonda.bonda.network.model.book
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BooksByCategoryResponse(
-    val page: Int,
-    val total: Int,
-    val category: String,
-    val orderBy: String,
-    val hasNextPage: Boolean,
-    val bookList: List<Book>,
+data class MostLovedBooksResponse(
+    val subject: String,
+    val bookList: List<Book>
 ) {
     @Serializable
     data class Book(
@@ -17,6 +13,6 @@ data class BooksByCategoryResponse(
         val title: String,
         val author: String,
         val imageUrl: String,
-        val category: String,
+        val category: String
     )
 }

@@ -22,7 +22,12 @@ import com.bonda.bonda.ui.profile.recent.RecentActivity
 
 enum class SnackbarType { SAVE, BADGE, ERROR }
 
-fun AppCompatActivity.showSnackbar(type: SnackbarType) {
+fun AppCompatActivity.showSnackbar(
+    message: String,
+    buttonText: String? = null,
+    onButtonClick: (() -> Unit)? = null,
+    type: SnackbarType
+) {
     val snackbarBottomMargin = (12 * resources.displayMetrics.density).toInt()
 
     val root = findViewById<ViewGroup>(android.R.id.content)
@@ -52,31 +57,30 @@ fun AppCompatActivity.showSnackbar(type: SnackbarType) {
 
     val binding = ViewSnackbarBinding.inflate(layoutInflater, container, false)
 
+    binding.text.text = message
+    if(buttonText.isNullOrBlank()) {
+        binding.button.visibility = View.GONE
+
+        val lp = binding.text.layoutParams as ConstraintLayout.LayoutParams
+        lp.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+        binding.text.layoutParams = lp
+    }
+
+    if(!buttonText.isNullOrBlank() && onButtonClick != null){
+        binding.button.apply {
+            text = buttonText
+            paintFlags = binding.button.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            setOnClickListener { onButtonClick() }
+        }
+    }
+
     when (type) {
         SnackbarType.SAVE -> {
             binding.icon.setImageResource(R.drawable.ic_notification_check_24dp)
-            binding.text.text = "도서 저장이 완료되었습니다!"
-            binding.button.apply {
-                text = "서재로 이동"
-                paintFlags = binding.button.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-
-                setOnClickListener {
-                    startActivity(Intent(context, RecentActivity::class.java))
-                }
-            }
         }
 
         SnackbarType.BADGE -> {
             binding.icon.setImageResource(R.drawable.ic_description_reward_24dp)
-            binding.text.text = "새로운 뱃지를 획득했습니다!"
-            binding.button.apply {
-                text = "확인하기"
-                paintFlags = binding.button.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-
-                setOnClickListener {
-                    startActivity(Intent(context, MyActivityActivity::class.java))
-                }
-            }
         }
 
         SnackbarType.ERROR -> {
@@ -86,23 +90,15 @@ fun AppCompatActivity.showSnackbar(type: SnackbarType) {
                 backgroundTintList =
                     ContextCompat.getColorStateList(context, R.color.system_error_secondary)
             }
-
             binding.icon.apply {
                 setImageResource(R.drawable.ic_notification_check_24dp)
                 imageTintList =
                     ContextCompat.getColorStateList(context, R.color.system_error_primary)
             }
-
             binding.text.apply {
                 text = "저장에 실패했어요. 다시 시도해 주세요."
                 setTextColor(ContextCompat.getColor(context, R.color.system_error_primary))
             }
-
-            binding.button.visibility = View.GONE
-
-            val lp = binding.text.layoutParams as ConstraintLayout.LayoutParams
-            lp.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-            binding.text.layoutParams = lp
         }
     }
 

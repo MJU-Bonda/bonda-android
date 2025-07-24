@@ -1,16 +1,21 @@
 package com.bonda.bonda.ui.profile.recent.articles
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil3.load
 import com.bonda.bonda.R
+import com.bonda.bonda.model.ArticleCategory
+import com.bonda.bonda.model.toArticleCategory
 import com.google.android.material.chip.Chip
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
+import kotlin.coroutines.coroutineContext
 
 class ArticleAdapter(
     private val onClick: (Article) -> Unit
@@ -32,6 +37,35 @@ class ArticleAdapter(
             titleTv.text      = article.title
             imageView.load(article.imageUrl)
             categoryChip.text = article.category
+
+            article.category.also {
+                val category = it.toArticleCategory()
+
+                categoryChip.text = category.label
+
+                val bgColorRes = when (category) {
+                    ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.surface_context_writer
+                    ArticleCategory.BOOKSTORE -> R.color.surface_context_store
+                    ArticleCategory.THEME -> R.color.surface_context_theme
+                    else -> R.color.surface_default_primary
+                }
+                val textColorRes = when (category) {
+                    ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.text_context_writer
+                    ArticleCategory.BOOKSTORE -> R.color.text_context_store
+                    ArticleCategory.THEME -> R.color.text_context_theme
+                    else -> R.color.text_accent_primary
+                }
+
+                // Chip 에 적용
+                categoryChip.chipBackgroundColor =
+                    ColorStateList.valueOf(
+                        ContextCompat.getColor(itemView.context, bgColorRes)
+                    )
+                categoryChip.setTextColor(
+                    ContextCompat.getColor(itemView.context, textColorRes)
+                )
+            }
+
             itemView.setOnClickListener { onClick(article) }
         }
     }

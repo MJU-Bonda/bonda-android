@@ -1,11 +1,19 @@
 package com.bonda.bonda.ui.home.books
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.R
+import com.bonda.bonda.network.ApiClient
+import com.bonda.bonda.util.TAG
+import kotlinx.coroutines.launch
 
 class BooksViewModel : ViewModel() {
+
+    private val bookService = ApiClient.bookService
+
     // private live data
     private val _categoryNovelButtonText = MutableLiveData<String>()
     private val _categoryPoemButtonText = MutableLiveData<String>()
@@ -49,8 +57,8 @@ class BooksViewModel : ViewModel() {
 
     // data-class declaration
     data class Book(
-        val id: Int,
-        val coverImage: Int,
+        val id: Long,
+        val coverImage: String,
         val category: String,
         val title: String,
         val author: String,
@@ -76,53 +84,56 @@ class BooksViewModel : ViewModel() {
         _categoryIllustrationButtonIcon.value = R.drawable.ic_category_illustrationbook_24dp
         _categoryMagazineButtonIcon.value = R.drawable.ic_category_magazine_24dp
 
-        _recentArrivalBooks.value = listOf(
-            Book(
-                id = 1,
-                coverImage = R.drawable.dummy_book5,
-                category = "에세이",
-                title = "어쩐지 제주에 오고 싶었어",
-                author = "김희원"
-            ),
-            Book(
-                id = 2,
-                coverImage = R.drawable.dummy_book6,
-                category = "에세이",
-                title = "산책가자",
-                author = "배송일"
-            ),
-            Book(
-                id = 3,
-                coverImage = R.drawable.dummy_book7,
-                category = "에세이",
-                title = "파도시집선 019 고백",
-                author = "길보배"
-            )
-        )
+        getNewArrivedBooks("ALL")
+        getMostLovedBooks("ALL")
+    }
 
-        // 요즘 가장 사랑 받은 책 3권
-        _mostLovedBooks.value = listOf(
-            Book(
-                id = 101,
-                coverImage = R.drawable.dummy_book8,
-                category = "에세이",
-                title = "80년대생들의 유서",
-                author = "홍글"
-            ),
-            Book(
-                id = 102,
-                coverImage = R.drawable.dummy_book9,
-                category = "에세이",
-                title = "느슨한 성실",
-                author = "세모"
-            ),
-            Book(
-                id = 103,
-                coverImage = R.drawable.dummy_book10,
-                category = "에세이",
-                title = "시선이 머무는 순간들",
-                author = "천예원"
-            )
-        )
+    fun getNewArrivedBooks(category: String) {
+        viewModelScope.launch {
+            try {
+                val res = bookService.getBooksByCategory(
+                    size = 3,
+                    category = category
+                ).unwrapOrThrow()
+
+                Log.d(TAG, res.toString())
+
+                _recentArrivalBooks.value = res.bookList.map {
+                    Book(
+                        id = it.id,
+                        coverImage = it.imageUrl,
+                        category = it.category,
+                        title = it.title,
+                        author = it.author
+                    )
+                }
+            } catch (e :Exception) {
+                Log.e(TAG, e.message.toString())
+            }
+        }
+    }
+
+    fun getMostLovedBooks(category: String) {
+        viewModelScope.launch {
+            try {
+                val res = bookService.getMostLovedBooks(
+                    subject = category
+                ).unwrapOrThrow()
+
+                Log.d(TAG, res.toString())
+
+                _mostLovedBooks.value = res.bookList.map {
+                    Book(
+                        id = it.id,
+                        coverImage = it.imageUrl,
+                        category = it.category,
+                        title = it.title,
+                        author = it.author
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
+            }
+        }
     }
 }

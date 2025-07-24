@@ -52,15 +52,24 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textview2"
+                    android:id="@+id/tv_viewed_book_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="지금까지 총 349권을 탐색했고,\n그중 27권을 수집했어요."
                     android:textAppearance="@style/Body8"
                     android:textColor="@color/text_accent_primary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textview1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_saved_book_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="@style/Body8"
+                    android:textColor="@color/text_accent_primary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_viewed_book_count" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
@@ -70,7 +79,7 @@
                     app:cardCornerRadius="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textview2"
+                    app:layout_constraintTop_toBottomOf="@id/tv_saved_book_count"
                     app:strokeWidth="0dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,18 +92,19 @@
                             android:id="@+id/materialCardView"
                             android:layout_width="0dp"
                             android:layout_height="18dp"
-                            app:cardCornerRadius="9dp"
-                            app:strokeWidth="0dp"
                             android:backgroundTint="@color/border_default_tertiary"
-                            app:layout_constraintTop_toTopOf="parent"
+                            app:cardCornerRadius="9dp"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
+
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/graph_container"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:paddingVertical="24dp"
-                                android:paddingHorizontal="20dp">
+                                android:paddingHorizontal="20dp"
+                                android:paddingVertical="24dp">
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </com.google.android.material.card.MaterialCardView>
@@ -103,9 +113,9 @@
                             android:id="@+id/legend_container"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
                             android:layout_marginTop="24dp"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/materialCardView">
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -133,9 +143,9 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_badge_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="총 5개의 뱃지를 획득했어요."
                     android:textAppearance="@style/Body8"
                     android:textColor="@color/text_accent_primary"
                     app:layout_constraintStart_toStartOf="parent"

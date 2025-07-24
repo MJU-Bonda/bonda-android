@@ -1,13 +1,11 @@
 package com.bonda.bonda.network.service
 
 import com.bonda.bonda.network.ApiResponse
-import com.bonda.bonda.network.model.article.DeleteSavedArticleResponse
 import com.bonda.bonda.network.model.article.GetArticleDetailResponse
 import com.bonda.bonda.network.model.article.GetArticlesResponse
 import com.bonda.bonda.network.model.article.GetRecentViewedArticlesResponse
 import com.bonda.bonda.network.model.article.GetSavedArticlesResponse
 import com.bonda.bonda.network.model.article.SaveArticleResponse
-import com.bonda.bonda.network.model.article.SearchArticlesResponse
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -22,14 +20,6 @@ interface ArticleService {
     suspend fun saveArticle(
         @Path("articleId") articleId: Long
     ): ApiResponse<SaveArticleResponse>
-
-    /**
-     * 아티클 저장 삭제
-     */
-    @DELETE("articles/save/{articleId}")
-    suspend fun deleteSavedArticle(
-        @Path("articleId") articleId: Long
-    ): ApiResponse<DeleteSavedArticleResponse>
 
     /**
      * 아티클 홈 화면 (카테고리별 조회)
@@ -48,17 +38,6 @@ interface ArticleService {
     suspend fun getArticleDetail(
         @Path("articleId") articleId: Long
     ): ApiResponse<GetArticleDetailResponse>
-
-    /**
-     * 아티클 검색
-     */
-    @GET("articles/search")
-    suspend fun searchArticles(
-        @Query("page") page: Int = 0,
-        @Query("size") size: Int = 24,
-        @Query("orderBy") orderBy: String = "newest",
-        @Query("word") word: String
-    ): ApiResponse<SearchArticlesResponse>
 
     /**
      * 저장한 아티클 검색

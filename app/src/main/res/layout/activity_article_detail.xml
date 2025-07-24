@@ -27,9 +27,8 @@
                     android:id="@+id/article_image"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:contentDescription="@string/article_image_description"
+                    android:contentDescription="아티클 이미지"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/default_image"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,37 +42,39 @@
                     app:layout_constraintTop_toTopOf="@id/article_image" />
 
                 <TextView
-                    android:id="@+id/article_title"
+                    android:id="@+id/subtitle_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:textColor="@color/white"
-                    android:textSize="32sp"
-                    app:layout_constraintBottom_toTopOf="@id/article_subtitle"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/article_subtitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="32dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="32dp"
+                    android:text="아티클 소제목"
+                    android:textAppearance="@style/Body7"
                     android:textColor="@color/text_default_tertiary"
-                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/article_image"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/article_category_chip_group"
+                <TextView
+                    android:id="@+id/title_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="12dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/article_title"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="아티클 제목"
+                    android:textAppearance="@style/Headline1"
+                    android:textColor="@color/text_default_inverse"
+                    app:layout_constraintBottom_toTopOf="@id/subtitle_tv"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <include
+                    android:id="@+id/category_chip"
+                    layout="@layout/view_chip_article_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toTopOf="@id/title_tv"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <com.google.android.material.appbar.MaterialToolbar
@@ -107,16 +108,18 @@
                 android:id="@+id/article_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="28dp"
-                android:layout_marginVertical="36dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="32dp"
                 android:lineSpacingMultiplier="1.2"
-                android:textSize="16sp" />
+                android:text="아티클 본문"
+                android:textAppearance="@style/Body5"
+                android:textColor="@color/text_default_secondary" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="28dp"
-                android:layout_marginVertical="12dp">
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="60dp">
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/view_pager"
@@ -132,62 +135,78 @@
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="48dp"
-                app:dividerThickness="1dp" />
+                android:layout_marginTop="60dp"
+                app:dividerThickness="4dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="28dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="60dp"
                 android:text="@string/article_book_list"
-                android:textColor="#90B7D5"
-                android:textSize="16sp" />
+                android:textAppearance="@style/Body6"
+                android:textColor="@color/surface_graph_secondary" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="28dp"
+                android:layout_marginHorizontal="24dp"
                 android:text="@string/article_book_list_explain"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/Title2"
+                android:textColor="@color/text_default_primary" />
 
             <GridLayout
                 android:id="@+id/books_grid_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="28dp"
-                android:layout_marginVertical="36dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="16dp"
                 android:columnCount="2" />
 
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="48dp"
-                app:dividerThickness="1dp" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="28dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="60dp"
                 android:text="@string/article_curation_list"
-                android:textColor="#90B7D5"
-                android:textSize="16sp" />
+                android:textAppearance="@style/Body6"
+                android:textColor="@color/surface_graph_secondary" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="28dp"
+                android:layout_marginHorizontal="24dp"
                 android:text="@string/article_curation_list_explain"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/Title2"
+                android:textColor="@color/text_default_primary" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/articles_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="64dp" />
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="64dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/error_network"
+        layout="@layout/layout_error_network"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/error_common"
+        layout="@layout/layout_error_common"
+        android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

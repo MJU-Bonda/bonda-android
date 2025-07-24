@@ -1,10 +1,12 @@
 package com.bonda.bonda.ui.home.profile
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil3.load
@@ -13,6 +15,7 @@ import com.bonda.bonda.ui.profile.EditProfileActivity
 import com.bonda.bonda.ui.profile.SettingsActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.ui.profile.recent.RecentActivity
+import androidx.core.net.toUri
 
 class ProfileFragment : Fragment() {
 
@@ -50,6 +53,20 @@ class ProfileFragment : Fragment() {
 
         binding.buttonActivity.setOnClickListener {
             startActivity(Intent(requireContext(), MyActivityActivity::class.java))
+        }
+
+        binding.buttonNotice.setOnClickListener {
+            val url = "https://hulking-papaya-a80.notion.site/BONDA-2308b15a2d1d80e1a0a6d7e04c07f2b7"
+            val builder = CustomTabsIntent.Builder()
+            val customTabsIntent = builder.build()
+            customTabsIntent.launchUrl(requireContext(), url.toUri())
+        }
+
+        binding.buttonPolicy.setOnClickListener {
+            val url = "https://hulking-papaya-a80.notion.site/BONDA-1f88b15a2d1d8085a4d1c6fa47e1dfc7"
+            val builder = CustomTabsIntent.Builder()
+            val customTabsIntent = builder.build()
+            customTabsIntent.launchUrl(requireContext(), url.toUri())
         }
     }
 

@@ -15,6 +15,7 @@ class ArticlesViewModel : ViewModel() {
      * 네트워크 서비스 인스턴스 생성
      */
     private val articleService = ApiClient.articleService
+    private var isLoading = false
 
     /**
      *
@@ -73,29 +74,35 @@ class ArticlesViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, e.toString())
-                // TODO 예외처리 만들자
+                // TODO 오류 스낵바 표시
             }
         }
     }
 
     fun toggleSaved(articleId: Long) {
+        if (isLoading) return
+
         viewModelScope.launch {
-            val currentList = _articles.value
-            val target = currentList!!.find { it.id == articleId } ?: return@launch
-            val isSaved = target.isSaved
+            isLoading = true
 
             try {
-                if (!isSaved) {
-                    articleService.saveArticle(articleId)
-                } else {
-                    articleService.deleteSavedArticle(articleId)
-                }
-
                 _articles.value = _articles.value?.map {
                     if (it.id == articleId) it.copy(isSaved = !it.isSaved) else it
                 }
+
+                articleService.saveArticle(articleId)
+
+                // TODO 스낵바 표시해야함
             } catch (e: Exception) {
+                _articles.value = _articles.value?.map {
+                    if (it.id == articleId) it.copy(isSaved = !it.isSaved) else it
+                }
+
                 Log.e(TAG, e.message.toString())
+
+                // TODO 오류 스낵바 표시
+            } finally {
+                isLoading = false
             }
         }
     }

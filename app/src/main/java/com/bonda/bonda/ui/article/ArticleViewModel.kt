@@ -13,8 +13,8 @@ class ArticleViewModel : ViewModel() {
 
     private val articleService = ApiClient.articleService
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    private val _isError = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData(false)
+    private val _isError = MutableLiveData(false)
     private val _id = MutableLiveData<Long>()
     private val _isSaved = MutableLiveData<Boolean>()
     private val _coverImage = MutableLiveData<String>()
@@ -104,20 +104,12 @@ class ArticleViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                if (!currentlySaved)
-                    articleService.saveArticle(currentArticleId)
-                else
-                    articleService.deleteSavedArticle(currentArticleId)
+                articleService.saveArticle(currentArticleId)
 
                 _isSaved.value = !currentlySaved
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             }
         }
-    }
-
-    init {
-        _isLoading.value = true
-        _isError.value = false
     }
 }

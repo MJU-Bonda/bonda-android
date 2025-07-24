@@ -20,6 +20,8 @@ import com.bonda.bonda.ui.auth.PermissionRequestActivity
 import com.bonda.bonda.ui.auth.SignUpActivity
 import com.bonda.bonda.util.PREF_KEY_PERMISSION_REQUIRED
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
+import com.bonda.bonda.util.SnackbarType
+import com.bonda.bonda.util.showSnackbar
 
 class MainActivity : AppCompatActivity() {
 
