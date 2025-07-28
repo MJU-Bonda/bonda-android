@@ -6,15 +6,10 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.max
-import kotlin.math.roundToInt
 
 class ShelfDecoration(
     context: Context,
@@ -31,7 +26,6 @@ class ShelfDecoration(
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val lm = parent.layoutManager as? GridLayoutManager ?: return
 
-        // row(group)별 가장 아래 child의 bottom을 수집
         val rowBottomMap = HashMap<Int, Int>()
         for (i in 0 until parent.childCount) {
             val child = parent.getChildAt(i)
@@ -43,7 +37,6 @@ class ShelfDecoration(
             rowBottomMap[group] = max(rowBottomMap[group] ?: Int.MIN_VALUE, bottom)
         }
 
-        // 한 줄에 책이 하나라도 있으면 선반을 그림
         val parentWidth = parent.width - parent.paddingStart - parent.paddingEnd
         val scaledHeight = (shelfBitmap.height * (parentWidth.toFloat() / shelfBitmap.width)).toInt()
 

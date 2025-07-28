@@ -32,7 +32,7 @@ class LibraryScrollerFragment : Fragment() {
         }
 
         binding.rv.layoutManager = GridLayoutManager(requireContext(), 3)
-
+        binding.rv.adapter = adapter
         binding.rv.addItemDecoration(
             ShelfDecoration(
                 context = requireContext(),
@@ -42,7 +42,7 @@ class LibraryScrollerFragment : Fragment() {
             )
         )
 
-        binding.rv.adapter = adapter
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             vm.savedBooksFlow.collectLatest { adapter.submitData(it) }
@@ -64,6 +64,7 @@ class LibraryScrollerFragment : Fragment() {
         when (arguments?.getInt("position")) {
             0 -> { // 저장한 도서 표시
                 setupBooksRecycler()
+
             }
 
             1 -> { // 저장한 아티클 표시

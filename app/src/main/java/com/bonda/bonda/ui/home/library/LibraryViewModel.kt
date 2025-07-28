@@ -16,11 +16,11 @@ class LibraryViewModel : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     private val _savedBookCount = MutableLiveData<Int>()
-    private val _articleCount = MutableLiveData<Int>()
+    private val _savedArticleCount = MutableLiveData<Int>()
 
     val isLoading: LiveData<Boolean> = _isLoading
     val savedBookCount: LiveData<Int> = _savedBookCount
-    val articleCount: LiveData<Int> = _articleCount
+    val savedArticleCount: LiveData<Int> = _savedArticleCount
 
     init {
         
@@ -31,5 +31,6 @@ class LibraryViewModel : ViewModel() {
             config = PagingConfig(pageSize = 24, prefetchDistance = 2, enablePlaceholders = false),
             pagingSourceFactory = { SavedBooksPagingSource(bookService) }
         ).flow.cachedIn(viewModelScope)
+
 
 }
