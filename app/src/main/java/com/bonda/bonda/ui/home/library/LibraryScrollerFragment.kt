@@ -1,19 +1,53 @@
 package com.bonda.bonda.ui.home.library
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
-import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeLibraryScrollerBinding
-import com.bonda.bonda.databinding.ViewRecentArticleBinding
+import com.bonda.bonda.ui.book.BookActivity
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class LibraryScrollerFragment : Fragment() {
 
     private var _binding: FragmentHomeLibraryScrollerBinding? = null
     private val binding get() = _binding!!
+
+    private val vm: LibraryViewModel by viewModels({ requireParentFragment() })
+    private lateinit var adapter: SavedBookPagingAdapter
+
+    private fun setupBooksRecycler() {
+        adapter = SavedBookPagingAdapter { book ->
+            val intent = Intent(requireContext(), BookActivity::class.java)
+            intent.putExtra("book_detail_id", book.id)
+            startActivity(intent)
+        }
+
+        binding.rv.layoutManager = GridLayoutManager(requireContext(), 3)
+
+        binding.rv.addItemDecoration(
+            ShelfDecoration(
+                context = requireContext(),
+                shelfResId = R.drawable.bg_bookshelf,
+                spanCount = 3,
+                offsetFromRowBottomDp = 6
+            )
+        )
+
+        binding.rv.adapter = adapter
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.savedBooksFlow.collectLatest { adapter.submitData(it) }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,94 +61,13 @@ class LibraryScrollerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        when(arguments?.getInt("position")) {
-            /**
-             * position이 0인 경우 도서를 표시하는 로직 작성
-             */
-            0 -> { // 도서 추가
-                val parent = binding.container
-
-                val gridLayout = GridLayout(parent.context).apply {
-                    columnCount = 3
-                    val pad = (16 * resources.displayMetrics.density).toInt()
-                    setPadding(pad, 0, pad, 0)
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-                }
-
-                for (i in 1..16) {
-                    val imageView = ImageView(parent.context).apply {
-                        val resId = resources.getIdentifier("dummy_book$i", "drawable", parent.context.packageName)
-                        setImageResource(resId)
-
-                        adjustViewBounds = true
-                        scaleType = ImageView.ScaleType.FIT_CENTER
-                    }
-
-                    val marginHorizontal = (18 * parent.context.resources.displayMetrics.density).toInt()
-                    val marginTop = (40 * parent.context.resources.displayMetrics.density).toInt()
-
-                    val specCol = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                    val specRow = GridLayout.spec(GridLayout.UNDEFINED,GridLayout.BOTTOM, 1f)
-                    val lp = GridLayout.LayoutParams(specRow, specCol).apply {
-                        width = 0
-                        height = ViewGroup.LayoutParams.WRAP_CONTENT
-                        setMargins(marginHorizontal,marginTop, marginHorizontal,0)
-                    }
-
-                    gridLayout.addView(imageView, lp)
-                }
-
-                parent.addView(gridLayout)
+        when (arguments?.getInt("position")) {
+            0 -> { // 저장한 도서 표시
+                setupBooksRecycler()
             }
 
-            /**
-             * position이 1인 경우 아티클을 표시하는 로직 작성
-             */
-            1 -> { // 아티클 추가
+            1 -> { // 저장한 아티클 표시
 
-                val parent = binding.container
-
-                val gridLayout = GridLayout(parent.context).apply {
-                    columnCount = 2
-                    val pad = (24 * resources.displayMetrics.density).toInt()
-                    setPadding(pad, 0, pad, 0)
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
-                }
-
-                for (i in 1..16) {
-                    val itemBinding = ViewRecentArticleBinding.inflate(layoutInflater, gridLayout, false)
-
-
-
-                    val imageView = ImageView(parent.context).apply {
-                        val resId = resources.getIdentifier("dummy_book$i", "drawable", parent.context.packageName)
-                        setImageResource(resId)
-
-                        adjustViewBounds = true
-                        scaleType = ImageView.ScaleType.FIT_CENTER
-                    }
-
-                    val marginHorizontal = (18 * parent.context.resources.displayMetrics.density).toInt()
-                    val marginTop = (40 * parent.context.resources.displayMetrics.density).toInt()
-
-                    val specCol = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                    val specRow = GridLayout.spec(GridLayout.UNDEFINED,GridLayout.BOTTOM, 1f)
-                    val lp = GridLayout.LayoutParams(specRow, specCol).apply {
-                        width = 0
-                        height = ViewGroup.LayoutParams.WRAP_CONTENT
-                        setMargins(marginHorizontal,marginTop, marginHorizontal,0)
-                    }
-
-                    gridLayout.addView(imageView, lp)
-                }
-
-                parent.addView(gridLayout)
             }
         }
     }
