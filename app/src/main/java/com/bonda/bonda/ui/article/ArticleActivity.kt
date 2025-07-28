@@ -25,6 +25,7 @@ import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.model.ArticleCategory
 import com.bonda.bonda.model.toArticleCategory
+import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.ui.book.BookActivity
 
 class ArticleActivity : AppCompatActivity() {
@@ -142,7 +143,7 @@ class ArticleActivity : AppCompatActivity() {
                 itemBinding.coverImage.load(book.coverImage)
                 itemBinding.title.text = book.title
                 itemBinding.author.text = book.author
-                itemBinding.category.root.text = book.category
+                itemBinding.category.root.text = book.category.toBookCategory().label
 
                 val params = itemBinding.root.layoutParams as GridLayout.LayoutParams
                 params.width = 0

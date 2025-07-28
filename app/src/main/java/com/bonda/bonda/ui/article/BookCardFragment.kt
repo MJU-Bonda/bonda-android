@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import coil3.load
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentBookCardBinding
+import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.ui.book.BookActivity
 
 class BookCardFragment : Fragment(R.layout.fragment_book_card) {
@@ -65,7 +66,7 @@ class BookCardFragment : Fragment(R.layout.fragment_book_card) {
         val index = args.getInt(ARG_INDEX)
         val id = args.getLong(ARG_ID)
         val coverImage = args.getString(ARG_COVER_IMAGE)
-        val category = args.getString(ARG_CATEGORY)!!
+        val category = args.getString(ARG_CATEGORY)!!.toBookCategory().label
         val title = args.getString(ARG_TITLE)!!
         val author = args.getString(ARG_AUTHOR)!!
         val body = args.getString(ARG_BODY)!!
