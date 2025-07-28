@@ -25,11 +25,10 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/item_count"
+            android:id="@+id/tv_item_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="10"
             android:textAppearance="@style/Caption1"
             android:textColor="@color/text_default_secondary"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +36,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/button_sort"
+            android:id="@+id/bt_sort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
