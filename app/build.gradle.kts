@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.v2.user)
     implementation(libs.coil)
     implementation(libs.coil.network.okhttp)
+    implementation(libs.androidx.paging.runtime.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
