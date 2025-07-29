@@ -7,25 +7,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProvider
 import coil3.load
-import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeBooksBinding
 import com.bonda.bonda.databinding.ViewBookCategoryButtonBinding
 import com.bonda.bonda.databinding.ViewBookHorizontalBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
+import com.bonda.bonda.databinding.ViewChipBookCategoryFilterBinding
+import com.bonda.bonda.model.BookCategory
+import com.bonda.bonda.model.BookTheme
+import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.ui.book.BookActivity
 import com.bonda.bonda.ui.search.SearchActivity
-import java.nio.channels.InterruptedByTimeoutException
 
 class BooksFragment : Fragment() {
 
     private var _binding: FragmentHomeBooksBinding? = null
-
     private val binding get() = _binding!!
+    private val vm: BooksViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +44,39 @@ class BooksFragment : Fragment() {
             startActivity(Intent(requireContext(), SearchActivity::class.java))
         }
 
-        val booksViewModel = ViewModelProvider(this)[BooksViewModel::class.java]
+        /**
+         * 방금 도착한 새로운 책 카테고리 binding
+         */
+        binding.popularChipGroup.removeAllViews()
+        BookCategory.entries.forEachIndexed { index, category ->
+            val itemBinding = ViewChipBookCategoryFilterBinding.inflate(
+                layoutInflater,
+                binding.popularChipGroup,
+                false
+            )
+            itemBinding.root.text = category.label
+            if (index == 0) itemBinding.root.isChecked = true
+            itemBinding.root.setOnClickListener { vm.setSelectedNewArrivedBooksCategory(category.code) }
+
+            binding.popularChipGroup.addView(itemBinding.root)
+        }
+
+        /**
+         * 요즘 가장 많이 사랑 받은 책 카테고리 binding
+         */
+        binding.lovedChipGroup.removeAllViews()
+        BookTheme.entries.forEachIndexed { index, category ->
+            val itemBinding = ViewChipBookCategoryFilterBinding.inflate(
+                layoutInflater,
+                binding.popularChipGroup,
+                false
+            )
+            itemBinding.root.text = category.label
+            if (index == 0) itemBinding.root.isChecked = true
+            itemBinding.root.setOnClickListener { vm.setSelectedMostLovedBooksCategory(category.code) }
+
+            binding.lovedChipGroup.addView(itemBinding.root)
+        }
 
         // 카테고리 버튼 추가
         data class Category(
@@ -51,25 +84,15 @@ class BooksFragment : Fragment() {
             val icon: LiveData<Int>
         )
 
-        binding.popularChipGroup.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId){
-                R.id.chipPopularCategory0 -> booksViewModel.getNewArrivedBooks("ALL")
-                R.id.chipPopularCategory1 -> booksViewModel.getNewArrivedBooks("PLANT")
-                R.id.chipPopularCategory2 -> booksViewModel.getNewArrivedBooks("COOKING")
-                R.id.chipPopularCategory3 -> booksViewModel.getNewArrivedBooks("MUSIC")
-                R.id.chipPopularCategory4 -> booksViewModel.getNewArrivedBooks("ART")
-            }
-        }
-
         val categories = listOf(
-            Category(booksViewModel.categoryNovelButtonText,       booksViewModel.categoryNovelButtonIcon),
-            Category(booksViewModel.categoryPoemButtonText,        booksViewModel.categoryPoemButtonIcon),
-            Category(booksViewModel.categoryEssayButtonText,       booksViewModel.categoryEssayButtonIcon),
-            Category(booksViewModel.categoryComicButtonText,       booksViewModel.categoryComicButtonIcon),
-            Category(booksViewModel.categoryPhotoButtonText,       booksViewModel.categoryPhotoButtonIcon),
-            Category(booksViewModel.categoryArtButtonText,         booksViewModel.categoryArtButtonIcon),
-            Category(booksViewModel.categoryIllustrationButtonText,booksViewModel.categoryIllustrationButtonIcon),
-            Category(booksViewModel.categoryMagazineButtonText,    booksViewModel.categoryMagazineButtonIcon)
+            Category(vm.categoryNovelButtonText, vm.categoryNovelButtonIcon),
+            Category(vm.categoryPoemButtonText, vm.categoryPoemButtonIcon),
+            Category(vm.categoryEssayButtonText, vm.categoryEssayButtonIcon),
+            Category(vm.categoryComicButtonText, vm.categoryComicButtonIcon),
+            Category(vm.categoryPhotoButtonText, vm.categoryPhotoButtonIcon),
+            Category(vm.categoryArtButtonText, vm.categoryArtButtonIcon),
+            Category(vm.categoryIllustrationButtonText, vm.categoryIllustrationButtonIcon),
+            Category(vm.categoryMagazineButtonText, vm.categoryMagazineButtonIcon)
         )
 
         categories.forEach { category ->
@@ -102,7 +125,7 @@ class BooksFragment : Fragment() {
         }
 
         // 방금 도착한 새로운 책 binding
-        booksViewModel.recentArrivalBooks.observe(viewLifecycleOwner) { list ->
+        vm.recentArrivalBooks.observe(viewLifecycleOwner) { list ->
             binding.recentArrivalBooksContainer.removeAllViews()
 
             list.forEach { book ->
@@ -135,7 +158,7 @@ class BooksFragment : Fragment() {
         }
 
         // 요즘 가장 사랑 받은 책 binding
-        booksViewModel.mostLovedBooks.observe(viewLifecycleOwner) { list ->
+        vm.mostLovedBooks.observe(viewLifecycleOwner) { list ->
             binding.mostLovedBooksContainer.removeAllViews()
 
             list.forEach { book ->
@@ -161,6 +184,7 @@ class BooksFragment : Fragment() {
                 binding.mostLovedBooksContainer.addView(itemBinding.root)
             }
         }
+
     }
 
     override fun onDestroyView() {

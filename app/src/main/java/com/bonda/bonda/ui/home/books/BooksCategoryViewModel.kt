@@ -74,7 +74,7 @@ class BooksCategoryViewModel : ViewModel() {
     /**
      * 카테고리 선택
      */
-    fun selectCategory(category: String) {
+    fun setSelectedCategory(category: String) {
         _selectedCategory.value = category
     }
 

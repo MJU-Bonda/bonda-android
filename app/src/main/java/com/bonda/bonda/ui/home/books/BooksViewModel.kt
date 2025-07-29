@@ -6,15 +6,33 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.R
+import com.bonda.bonda.model.BookCategory
+import com.bonda.bonda.model.BookTheme
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 
 class BooksViewModel : ViewModel() {
-
+    /**
+     * network service 선언
+     */
     private val bookService = ApiClient.bookService
 
-    // private live data
+    /**
+     * view model 데이터 선언
+     */
+    private val _selectedNewArrivedBooksCategory = MutableLiveData(BookCategory.ALL.code)
+    private val _selectedMostLovedBooksCategory = MutableLiveData(BookTheme.ALL.code)
+
+    /**
+     * 관찰용 live data
+     */
+    val selectedNewArrivedBooksCategory: LiveData<String> = _selectedNewArrivedBooksCategory
+    val selectedMostLovedBooksCategory: LiveData<String> = _selectedMostLovedBooksCategory
+
+    /**
+     * 삭제 예정
+     */
     private val _categoryNovelButtonText = MutableLiveData<String>()
     private val _categoryPoemButtonText = MutableLiveData<String>()
     private val _categoryEssayButtonText = MutableLiveData<String>()
@@ -33,9 +51,6 @@ class BooksViewModel : ViewModel() {
     private val _categoryMagazineButtonIcon = MutableLiveData<Int>()
     private val _recentArrivalBooks = MutableLiveData<List<Book>>()
     private val _mostLovedBooks = MutableLiveData<List<Book>>()
-
-
-    // read-only properties
     val categoryNovelButtonText: LiveData<String> = _categoryNovelButtonText
     val categoryPoemButtonText: LiveData<String> = _categoryPoemButtonText
     val categoryEssayButtonText: LiveData<String> = _categoryEssayButtonText
@@ -55,7 +70,6 @@ class BooksViewModel : ViewModel() {
     val recentArrivalBooks: LiveData<List<Book>> = _recentArrivalBooks
     val mostLovedBooks: LiveData<List<Book>> = _mostLovedBooks
 
-    // data-class declaration
     data class Book(
         val id: Long,
         val coverImage: String,
@@ -65,8 +79,16 @@ class BooksViewModel : ViewModel() {
     )
 
 
-    // init properties
+    /**
+     * 영구 관찰
+     */
     init {
+        _selectedNewArrivedBooksCategory.observeForever { getNewArrivedBooks(it) }
+        _selectedMostLovedBooksCategory.observeForever { getMostLovedBooks(it) }
+
+        /**
+         * 삭제 예정 코드
+         */
         _categoryNovelButtonText.value = "소설"
         _categoryPoemButtonText.value = "시집"
         _categoryEssayButtonText.value = "에세이"
@@ -83,11 +105,11 @@ class BooksViewModel : ViewModel() {
         _categoryArtButtonIcon.value = R.drawable.ic_category_artbook_24dp
         _categoryIllustrationButtonIcon.value = R.drawable.ic_category_illustrationbook_24dp
         _categoryMagazineButtonIcon.value = R.drawable.ic_category_magazine_24dp
-
-        getNewArrivedBooks("ALL")
-        getMostLovedBooks("ALL")
     }
 
+    /**
+     * 방금 도착한 새로운 책 조회
+     */
     fun getNewArrivedBooks(category: String) {
         viewModelScope.launch {
             try {
@@ -107,12 +129,15 @@ class BooksViewModel : ViewModel() {
                         author = it.author
                     )
                 }
-            } catch (e :Exception) {
+            } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             }
         }
     }
 
+    /**
+     * 요즘 가장 많이 사랑 받은 책 조회
+     */
     fun getMostLovedBooks(category: String) {
         viewModelScope.launch {
             try {
@@ -136,4 +161,14 @@ class BooksViewModel : ViewModel() {
             }
         }
     }
+
+    fun setSelectedMostLovedBooksCategory(category: String) {
+        _selectedMostLovedBooksCategory.value = category
+    }
+
+    fun setSelectedNewArrivedBooksCategory(category: String) {
+        _selectedNewArrivedBooksCategory.value = category
+    }
+
+
 }

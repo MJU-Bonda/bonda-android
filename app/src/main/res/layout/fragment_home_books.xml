@@ -66,64 +66,7 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="24dp"
                     app:selectionRequired="true"
-                    app:singleSelection="true">
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipPopularCategory0"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="전체"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipPopularCategory1"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="로컬/여행"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipPopularCategory2"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="요리"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipPopularCategory3"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="미니멀리즘"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipPopularCategory4"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="반려동물"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-                </com.google.android.material.chip.ChipGroup>
+                    app:singleSelection="true" />
             </HorizontalScrollView>
 
             <GridLayout
@@ -177,64 +120,7 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="24dp"
                     app:selectionRequired="true"
-                    app:singleSelection="true">
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipCategoryA"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="전체"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipCategoryB"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="로컬/여행"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipCategoryC"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="요리"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipCategoryD"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="미니멀리즘"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipCategoryE"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="반려동물"
-                        android:textColor="@color/chip_text_color_selector"
-                        app:chipBackgroundColor="@color/chip_bg_color_selector"
-                        app:chipStrokeColor="@color/chip_stroke_color_selector"
-                        app:chipStrokeWidth="1dp" />
-                </com.google.android.material.chip.ChipGroup>
+                    app:singleSelection="true" />
             </HorizontalScrollView>
 
             <GridLayout

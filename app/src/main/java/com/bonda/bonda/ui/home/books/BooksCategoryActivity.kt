@@ -2,7 +2,6 @@ package com.bonda.bonda.ui.home.books
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +14,6 @@ import com.bonda.bonda.databinding.ActivityBooksCategoryBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryFilterBinding
 import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.ui.book.BookActivity
-import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -58,7 +56,7 @@ class BooksCategoryActivity : AppCompatActivity() {
         vm.categories.observe(this) { categories ->
             binding.catgoryChipGroup.removeAllViews()
 
-            categories.map { category ->
+            categories.forEach { category ->
 
                 val itemBinding = ViewChipBookCategoryFilterBinding.inflate(
                     layoutInflater,
@@ -67,10 +65,7 @@ class BooksCategoryActivity : AppCompatActivity() {
                 )
                 itemBinding.root.text = category.toBookCategory().label
                 if(categorySelected == category) { itemBinding.root.isChecked = true }
-                itemBinding.root.setOnClickListener {
-                    vm.selectCategory(category)
-
-                }
+                itemBinding.root.setOnClickListener { vm.setSelectedCategory(category) }
 
                 binding.catgoryChipGroup.addView(itemBinding.root)
             }
