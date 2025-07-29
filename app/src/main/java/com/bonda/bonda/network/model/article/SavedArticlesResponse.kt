@@ -3,7 +3,7 @@ package com.bonda.bonda.network.model.article
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetSavedArticlesResponse(
+data class SavedArticlesResponse(
     val page: Int,
     val total: Int,
     val orderBy: String,

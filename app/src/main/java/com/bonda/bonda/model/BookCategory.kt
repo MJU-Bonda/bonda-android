@@ -8,8 +8,8 @@ enum class BookCategory(val code: String, val label: String) {
     CARTOON("CARTOON", "만화"),
     PHOTO_BOOK("PHOTO_BOOK", "사진집"),
     ART_BOOK("ART_BOOK", "아트북"),
-    ILLUSTRATION("ILLUSTRATION", "일러스트북"),
-    MAGAZINE("MAGAZINE", "메거진");
+    ILLUSTRATION("ILLUSTRATION", "일러스트집"),
+    MAGAZINE("MAGAZINE", "매거진");
 
     companion object {
         val BUSINESS_CATEGORIES: List<BookCategory> = entries.filter { it != ALL }

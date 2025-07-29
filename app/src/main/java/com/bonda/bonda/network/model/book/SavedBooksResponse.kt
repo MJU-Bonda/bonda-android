@@ -12,7 +12,7 @@ data class SavedBooksResponse(
 ) {
     @Serializable
     data class Book(
-        val id: Int,
+        val id: Long,
         val title: String,
         val author: String,
         val imageUrl: String,
