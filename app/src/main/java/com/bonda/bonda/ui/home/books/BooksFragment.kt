@@ -19,6 +19,7 @@ import com.bonda.bonda.databinding.ViewBookHorizontalBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.ui.book.BookActivity
 import com.bonda.bonda.ui.search.SearchActivity
+import java.nio.channels.InterruptedByTimeoutException
 
 class BooksFragment : Fragment() {
 
@@ -87,7 +88,9 @@ class BooksFragment : Fragment() {
             }
 
             itemBinding.root.setOnClickListener {
-                Toast.makeText(requireContext(), category.text.toString(), Toast.LENGTH_SHORT).show()
+                val intent = Intent(requireContext(), BooksCategoryActivity::class.java)
+                intent.putExtra("category_selected", itemBinding.icText.text)
+                startActivity(intent)
             }
 
             val params = itemBinding.root.layoutParams as GridLayout.LayoutParams

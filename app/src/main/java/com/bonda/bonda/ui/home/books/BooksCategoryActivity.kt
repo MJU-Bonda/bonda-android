@@ -3,24 +3,31 @@ package com.bonda.bonda.ui.home.books
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.GridLayout
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bonda.bonda.databinding.ActivityBooksCategoryBinding
-import com.bonda.bonda.databinding.ViewBookVerticalBinding
+import com.bonda.bonda.databinding.ViewChipBookCategoryFilterBinding
+import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.ui.book.BookActivity
+import com.bonda.bonda.util.TAG
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class BooksCategoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBooksCategoryBinding
+    private lateinit var booksAdapter: BookPagingAdapter
+    private val vm: BooksCategoryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var categorySelected = intent.getStringExtra("category_selected")
+        val categorySelected = intent.getStringExtra("category_selected")
         enableEdgeToEdge()
 
         binding = ActivityBooksCategoryBinding.inflate(layoutInflater)
@@ -36,54 +43,57 @@ class BooksCategoryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = categorySelected
 
-        val booksCategoryViewModel= ViewModelProvider(this)[BooksCategoryViewModel::class.java]
+        booksAdapter = BookPagingAdapter {book ->
+            val intent = Intent(this, BookActivity::class.java)
+            intent.putExtra("book_detail_id", book.id)
+            startActivity(intent)
+        }
 
-        // 카테고리 chip binding
-//        booksCategoryViewModel.categories.observe(this) { list ->
-//            binding.categoryChipSelector.removeAllViews()
-//
-//            list.forEach { category ->
-//                val chipBinding =  ViewSelectableChipBinding.inflate(
-//                    layoutInflater,
-//                    binding.categoryChipSelector,
-//                    true
-//                )
-//                chipBinding.root.text = category
-//            }
-//        }
+        binding.rv.layoutManager = GridLayoutManager(this, 3)
+        binding.rv.adapter = booksAdapter
 
-        // 도서 binding
-        booksCategoryViewModel.books.observe(this) { list ->
-            binding.booksGridContainer.removeAllViews()
+        lifecycleScope.launch { vm.booksFlow.collectLatest { booksAdapter.submitData(it) } }
 
-            list.forEach { book ->
-                val itemBinding = ViewBookVerticalBinding.inflate(
+        vm.totalBookCount.observe(this){ binding.tvBookCount.text = it.toString() }
+        vm.categories.observe(this) { categories ->
+            binding.catgoryChipGroup.removeAllViews()
+
+            categories.map { category ->
+
+                val itemBinding = ViewChipBookCategoryFilterBinding.inflate(
                     layoutInflater,
-                    binding.booksGridContainer,
+                    binding.catgoryChipGroup,
                     false
                 )
-
-                itemBinding.coverImage.setImageResource(book.coverImage)
-                itemBinding.title.text = book.title
-                itemBinding.author.text = book.author
-                itemBinding.category.root.text = book.category
-
-                val params = itemBinding.root.layoutParams as GridLayout.LayoutParams
-                params.width = 0
-                params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                itemBinding.root.layoutParams = params
-
-                // book 상세 페이지로 이동
+                itemBinding.root.text = category.toBookCategory().label
+                if(categorySelected == category) { itemBinding.root.isChecked = true }
                 itemBinding.root.setOnClickListener {
-                    val intent = Intent(this, BookActivity::class.java)
-                    intent.putExtra("book_detail_id", book.id)
-                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
-                    startActivity(intent)
+                    vm.selectCategory(category)
+
                 }
 
-                binding.booksGridContainer.addView(itemBinding.root)
+                binding.catgoryChipGroup.addView(itemBinding.root)
             }
+
         }
+
+
+
+
+        /**
+         *         viewLifecycleOwner.lifecycleScope.launch {
+         *             vm.savedBooksFlow.collectLatest { booksAdapter.submitData(it) }
+         *         }
+         *
+         *         vm.savedBookCount.observe(viewLifecycleOwner) {
+         *             binding.tvItemCount.text = it.toString()
+         *         }
+         *
+         *         binding.btSort.setOnClickListener {
+         *             // TODO 정렬 기능 구현해야함
+         *         }
+         */
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
