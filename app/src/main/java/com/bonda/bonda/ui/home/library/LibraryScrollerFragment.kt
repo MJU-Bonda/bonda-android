@@ -39,7 +39,7 @@ class LibraryScrollerFragment : Fragment() {
                 context = requireContext(),
                 shelfResId = R.drawable.bg_bookshelf,
                 spanCount = 3,
-                offsetFromRowBottomDp = 6
+                offsetFromRowBottomDp = 4
             )
         )
 
