@@ -57,10 +57,6 @@ class ArticleActivity : AppCompatActivity() {
         /**
          * 오류 페이지 처리
          */
-        vm.isLoading.observe(this) {
-            binding.progressIndicator.isVisible = it
-            binding.scrollView.isGone = it
-        }
         vm.isError.observe(this) {
             binding.errorCommon.root.isVisible = it
             binding.scrollView.isGone = it

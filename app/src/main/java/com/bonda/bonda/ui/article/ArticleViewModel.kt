@@ -13,7 +13,6 @@ class ArticleViewModel : ViewModel() {
 
     private val articleService = ApiClient.articleService
 
-    private val _isLoading = MutableLiveData(false)
     private val _isError = MutableLiveData(false)
     private val _id = MutableLiveData<Long>()
     private val _isSaved = MutableLiveData<Boolean>()
@@ -25,7 +24,6 @@ class ArticleViewModel : ViewModel() {
     private val _books = MutableLiveData<List<Book>>()
     private val _articles = MutableLiveData<List<Article>>()
 
-    val isLoading: LiveData<Boolean> = _isLoading
     val isError: LiveData<Boolean> = _isError
     val id: LiveData<Long> = _id
     val isSaved: LiveData<Boolean> = _isSaved
@@ -54,8 +52,6 @@ class ArticleViewModel : ViewModel() {
     )
 
     fun getArticleData(articleId: Long) {
-        _isLoading.value = true
-
         viewModelScope.launch {
             try {
                 val response = articleService.getArticleDetail(articleId).unwrapOrThrow()
@@ -92,8 +88,6 @@ class ArticleViewModel : ViewModel() {
                 Log.e(TAG, e.message.toString())
 
                 _isError.value = true
-            } finally {
-                _isLoading.value = false
             }
         }
     }
