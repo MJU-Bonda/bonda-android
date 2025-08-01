@@ -31,6 +31,9 @@ interface BookService {
         @Path("bookId") bookId: Long
     ): ApiResponse<BookDetailResponse>
 
+    /**
+     * 내가 저장한 도서 목록 조회
+     * */
     @GET("books/my-save")
     suspend fun getSavedBooks(
         @Query("page") page:Int = 0,

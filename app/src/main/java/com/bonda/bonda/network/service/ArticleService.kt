@@ -4,9 +4,8 @@ import com.bonda.bonda.network.ApiResponse
 import com.bonda.bonda.network.model.article.GetArticleDetailResponse
 import com.bonda.bonda.network.model.article.GetArticlesResponse
 import com.bonda.bonda.network.model.article.GetRecentViewedArticlesResponse
-import com.bonda.bonda.network.model.article.GetSavedArticlesResponse
+import com.bonda.bonda.network.model.article.SavedArticlesResponse
 import com.bonda.bonda.network.model.article.SaveArticleResponse
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -47,7 +46,7 @@ interface ArticleService {
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 24,
         @Query("orderBy") orderBy: String = "recentlySaved"
-    ): ApiResponse<GetSavedArticlesResponse>
+    ): ApiResponse<SavedArticlesResponse>
 
     /**
      * 최근 조회한 아티클 목록 조회

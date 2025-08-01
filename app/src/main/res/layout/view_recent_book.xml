@@ -23,8 +23,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/dummy_book4" />
+            android:layout_height="match_parent" />
     </com.google.android.material.card.MaterialCardView>
 
     <include
