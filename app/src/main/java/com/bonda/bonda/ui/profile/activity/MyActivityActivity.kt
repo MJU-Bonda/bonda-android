@@ -1,15 +1,22 @@
 package com.bonda.bonda.ui.profile.activity
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityMyActivityBinding
+import com.bonda.bonda.databinding.ViewGraphLegendBinding
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.ui.modal.BadgeDetailViewModal
 import kotlinx.coroutines.launch
@@ -18,7 +25,8 @@ class MyActivityActivity : AppCompatActivity() {
 
     private val memberService = ApiClient.memberService
 
-    lateinit var binding: ActivityMyActivityBinding
+    private lateinit var binding: ActivityMyActivityBinding
+    private val vm: MyActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +41,89 @@ class MyActivityActivity : AppCompatActivity() {
             insets
         }
 
+        /**
+         * actionbar 로직
+         */
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
 
-        val vm = ViewModelProvider(this)[MyActivityViewModel::class.java]
-
+        /**
+         * 탐색한 도서 및 수집한 도서 count binding
+         */
         vm.viewedBookCount.observe(this) { binding.tvViewedBookCount.text = "지금까지 총 ${it}권을 탐색했고," }
         vm.collectedBookCount.observe(this) { binding.tvSavedBookCount.text = "그중 ${it}권을 수집했어요." }
-        vm.collectedBadgeCount.observe(this) { binding.tvBadgeCount.text = "총 ${it}개의 뱃지를 획득했어요." }
 
+        /**
+         * 수집한 도서 갯수 별 막대그래프 binding
+         */
+        vm.collectedBookCategory.observe(this) { categories ->
+            binding.graphContainer.removeAllViews()
+            binding.graphContainer.weightSum =
+                categories.sumOf { it.count }.toFloat()
+
+            categories.forEachIndexed { index, category ->
+                val params = LinearLayout.LayoutParams(
+                    0,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    category.count.toFloat()
+                )
+
+                val item = ConstraintLayout(this).apply {
+                    layoutParams = params
+                    setBackgroundColor(
+                        ContextCompat.getColor(
+                            context,
+                            when (index) {
+                                0 -> R.color.surface_graph_primary
+                                1 -> R.color.surface_graph_secondary
+                                2 -> R.color.surface_graph_tertiary
+                                else -> Color.TRANSPARENT
+                            }
+                        )
+                    )
+                }
+
+                binding.graphContainer.addView(item)
+            }
+
+            /**
+             * 수집한 도서 갯수 별 범례 binding
+             */
+            binding.legendContainer.removeAllViews()
+            categories.forEachIndexed { index, category ->
+                val itemBinding =
+                    ViewGraphLegendBinding.inflate(
+                        layoutInflater,
+                        binding.legendContainer,
+                        false
+                    )
+
+                itemBinding.tvCategory.text = category.category
+                itemBinding.tvCount.text = category.count.toString()
+
+                val colorInt = ContextCompat.getColor(
+                    this,
+                    when (index) {
+                        0 -> R.color.surface_graph_primary
+                        1 -> R.color.surface_graph_secondary
+                        2 -> R.color.surface_graph_tertiary
+                        else -> R.color.border_default_tertiary
+                    }
+                )
+                val tintList = ColorStateList.valueOf(colorInt)
+                itemBinding.cvDot.backgroundTintList = tintList
+
+                binding.legendContainer.addView(itemBinding.root)
+            }
+        }
+
+        /**
+         * 획득한 뱃지 list binding
+         */
+        vm.collectedBadgeCount.observe(this) { binding.tvBadgeCount.text = "총 ${it}개의 뱃지를 획득했어요." }
         vm.collectedBadgeList.observe(this) { badgeList ->
             if (badgeList.isEmpty()) return@observe
 
@@ -84,8 +163,12 @@ class MyActivityActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
+    /**
+     * 뱃지 이미지 프로퍼티
+     */
     private val badgeViewBinds by lazy {
         listOf(
             binding.discoverBadge1,

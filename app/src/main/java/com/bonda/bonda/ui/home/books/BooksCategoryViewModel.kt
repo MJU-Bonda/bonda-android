@@ -1,35 +1,78 @@
 package com.bonda.bonda.ui.home.books
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.bonda.bonda.R
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.bonda.bonda.model.BookCategory
+import com.bonda.bonda.network.ApiClient
+import com.bonda.bonda.network.model.book.BooksByCategoryResponse
+import com.bonda.bonda.util.TAG
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.launch
 
 class BooksCategoryViewModel : ViewModel() {
-    // private live data
-    private val _categories = MutableLiveData<List<String>>()
-    private val _selectedCategory = MutableLiveData<String>()
-    private val _books = MutableLiveData<List<Book>>()
+    /**
+     * network service 선언
+     */
+    private val bookService = ApiClient.bookService
 
-    // read-only properties
+    /**
+     * view model 데이터 선언
+     */
+    private val _categories = MutableLiveData(BookCategory.entries.map { it.code })
+    private val _selectedCategory = MutableLiveData(BookCategory.ALL.code)
+    private val _totalBookCount = MutableLiveData(0)
+
+    /**
+     * 관찰용 live data
+     */
     val categories: LiveData<List<String>> = _categories
     val selectedCategory: LiveData<String> = _selectedCategory
-    val books: LiveData<List<Book>> = _books
+    val totalBookCount: LiveData<Int> = _totalBookCount
 
-    // data-class declaration
-    data class Book (
-        val id: Int,
-        val coverImage: Int,
-        val category: String,
-        val title: String,
-        val author : String
-    )
+    /**
+     * 도서 목록 페이지네이션
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val booksFlow: Flow<PagingData<BooksByCategoryResponse.Book>> =
+        selectedCategory.asFlow()
+            .flatMapLatest { category ->
+                Pager(
+                    config = PagingConfig(
+                        pageSize = 24,
+                        prefetchDistance = 2,
+                        enablePlaceholders = false
+                    ),
+                    pagingSourceFactory = { BooksPagingSource(bookService, category) }
+                ).flow
+            }.cachedIn(viewModelScope)
 
-    init {
-        _categories.value = listOf(
-            "소설", "시집", "에세이", "비평/평론", "만화", "기술", "교육", "여행", "요리"
-        )
-        _selectedCategory.value = "에세이"
-        _books.value = emptyList()
+    /**
+     * 카테고리 변경 및 총 도서 갯수 로드
+     */
+    fun setSelectedCategory(category: String) {
+        _selectedCategory.value = category
+
+        viewModelScope.launch {
+            try {
+                val resp = bookService.getBooksByCategory(
+                    size = 1,
+                    category = category
+                ).unwrapOrThrow()
+                _totalBookCount.value = resp.total
+            } catch (e: Exception) {
+                Log.e(TAG, e.message.toString())
+            }
+        }
     }
+
 }

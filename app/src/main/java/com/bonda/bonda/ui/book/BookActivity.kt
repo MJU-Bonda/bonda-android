@@ -21,6 +21,8 @@ import com.bonda.bonda.databinding.ViewArticleMiniBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
 import com.bonda.bonda.model.ArticleCategory
 import com.bonda.bonda.model.toArticleCategory
+import com.bonda.bonda.model.toBookCategory
+import com.bonda.bonda.model.toBookTheme
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.util.SnackbarType
@@ -63,7 +65,7 @@ class BookActivity : AppCompatActivity() {
                 else setImageResource(R.drawable.ic_action_bookmark_empty_24dp)
                 setOnClickListener {
                     lifecycleScope.launch {
-                        try{
+                        try {
                             // TODO 스낵바 버그 있음
 
                             val hasNewBadge = vm.toggleSaveBook(bookId)
@@ -77,12 +79,15 @@ class BookActivity : AppCompatActivity() {
                                 type = SnackbarType.SAVE
                             )
 
-                            if(hasNewBadge)
+                            if (hasNewBadge)
                                 showSnackbar(
                                     message = "새로운 뱃지를 획득했습니다!",
                                     buttonText = "확인하기",
                                     onButtonClick = {
-                                        val intent = Intent(this@BookActivity, MyActivityActivity::class.java)
+                                        val intent = Intent(
+                                            this@BookActivity,
+                                            MyActivityActivity::class.java
+                                        )
                                         startActivity(intent)
                                     },
                                     type = SnackbarType.BADGE
@@ -98,47 +103,27 @@ class BookActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * 도서 정보를 binding 합니다
+         */
         vm.coverImage.observe(this) { binding.coverImage.load(it) }
-        vm.category.observe(this) { category ->
-            binding.bookCategoryChipGroup.removeAllViews()
-
-            val itemBinding = ViewChipBookCategoryBinding.inflate(
-                layoutInflater,
-                binding.bookCategoryChipGroup,
-                false
-            )
-
-            itemBinding.root.text = category
-
-            binding.bookCategoryChipGroup.addView(itemBinding.root)
-        }
+        vm.category.observe(this) { binding.bookCategory.root.text = it.toBookCategory().label }
         vm.title.observe(this) { binding.title.text = it }
         vm.author.observe(this) { binding.author.text = it }
         vm.publisher.observe(this) { binding.bookPublisher.text = it }
         vm.size.observe(this) { binding.bookSize.text = it }
         vm.pageLength.observe(this) { binding.bookPageLength.text = it.toString() }
         vm.theme.observe(this) { theme ->
-            if(theme.isNullOrBlank()) {
-                binding.bookThemeChipGroup.visibility = View.GONE
+            if (theme.isNullOrBlank()) {
+                binding.bookTheme.root.visibility = View.GONE
                 binding.bookThemeHeader.visibility = View.GONE
             } else {
-                //TODO chip binding 코드 수정하자
-                binding.bookThemeChipGroup.removeAllViews()
-
-                val itemBinding = ViewChipBookCategoryBinding.inflate(
-                    layoutInflater,
-                    binding.bookThemeChipGroup,
-                    false
-                )
-
-                itemBinding.root.text = theme
-
-                binding.bookThemeChipGroup.addView(itemBinding.root)
+                binding.bookTheme.root.text = theme.toBookTheme().label
             }
         }
 
         vm.body.observe(this) { body ->
-            if(body.isNullOrBlank()){
+            if (body.isNullOrBlank()) {
                 binding.bookBodyHeader.visibility = View.GONE
                 binding.body.visibility = View.GONE
             } else {

@@ -72,7 +72,7 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:backgroundTint="@color/background_default_primary"
                     app:cardCornerRadius="12dp"
@@ -98,26 +98,34 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:strokeWidth="0dp">
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
+                            <LinearLayout
                                 android:id="@+id/graph_container"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:paddingHorizontal="20dp"
-                                android:paddingVertical="24dp">
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
+                                android:orientation="horizontal" />
                         </com.google.android.material.card.MaterialCardView>
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
+                        <com.google.android.flexbox.FlexboxLayout
                             android:id="@+id/legend_container"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="24dp"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:flexWrap="wrap"
+                            app:justifyContent="flex_start"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/materialCardView">
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/materialCardView" />
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                            android:id="@+id/legend_container"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="24dp"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toBottomOf="@id/materialCardView">-->
+
+<!--                        </androidx.constraintlayout.widget.ConstraintLayout>-->
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
             </androidx.constraintlayout.widget.ConstraintLayout>

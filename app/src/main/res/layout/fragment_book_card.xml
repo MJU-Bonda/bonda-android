@@ -7,7 +7,7 @@
     android:paddingHorizontal="20dp"
     android:paddingVertical="28dp">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/index"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -34,36 +34,41 @@
             android:contentDescription="@string/book_image_description" />
     </com.google.android.material.card.MaterialCardView>
 
-
-    <com.google.android.material.chip.Chip
+    <include
         android:id="@+id/category"
-        style="@style/Widget.Bonda.Badge.Category"
+        layout="@layout/view_chip_book_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="12dp"
         app:layout_constraintBottom_toTopOf="@id/title"
         app:layout_constraintStart_toEndOf="@id/image_holder"
         app:layout_constraintTop_toTopOf="@id/image_holder" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textAppearance="@style/Title1"
         android:textColor="@color/text_default_primary"
         app:layout_constraintBottom_toTopOf="@id/author"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/image_holder"
         app:layout_constraintTop_toBottomOf="@id/category" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/author"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textAppearance="@style/Body8"
         android:textColor="@color/text_default_secondary"
         app:layout_constraintBottom_toBottomOf="@id/image_holder"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/image_holder"
         app:layout_constraintTop_toBottomOf="@id/title" />
 

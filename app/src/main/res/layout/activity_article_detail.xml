@@ -47,7 +47,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginBottom="32dp"
-                    android:text="아티클 소제목"
                     android:textAppearance="@style/Body7"
                     android:textColor="@color/text_default_tertiary"
                     app:layout_constraintBottom_toBottomOf="@id/article_image"
@@ -60,7 +59,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginBottom="8dp"
-                    android:text="아티클 제목"
                     android:textAppearance="@style/Headline1"
                     android:textColor="@color/text_default_inverse"
                     app:layout_constraintBottom_toTopOf="@id/subtitle_tv"
@@ -111,7 +109,6 @@
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="32dp"
                 android:lineSpacingMultiplier="1.2"
-                android:text="아티클 본문"
                 android:textAppearance="@style/Body5"
                 android:textColor="@color/text_default_secondary" />
 
@@ -188,16 +185,6 @@
                 android:layout_marginBottom="64dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/error_network"
