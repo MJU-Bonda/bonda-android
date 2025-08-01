@@ -20,7 +20,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 class BooksCategoryViewModel : ViewModel() {
-
+    /**
+     * network service 선언
+     */
     private val bookService = ApiClient.bookService
 
     /**
@@ -55,35 +57,22 @@ class BooksCategoryViewModel : ViewModel() {
             }.cachedIn(viewModelScope)
 
     /**
-     * 총 도서 갯수 로드
+     * 카테고리 변경 및 총 도서 갯수 로드
      */
-    private fun fetchTotalBookCount() {
+    fun setSelectedCategory(category: String) {
+        _selectedCategory.value = category
+
         viewModelScope.launch {
             try {
                 val resp = bookService.getBooksByCategory(
                     size = 1,
-                    category = selectedCategory.value ?: ""
+                    category = category
                 ).unwrapOrThrow()
                 _totalBookCount.value = resp.total
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             }
         }
-    }
-
-    /**
-     * 카테고리 선택
-     */
-    fun setSelectedCategory(category: String) {
-        _selectedCategory.value = category
-    }
-
-    /**
-     * 초기 값 설정
-     */
-    init {
-        fetchTotalBookCount()
-        _selectedCategory.observeForever { fetchTotalBookCount() }
     }
 
 }

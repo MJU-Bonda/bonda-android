@@ -36,6 +36,7 @@ class BookPagingAdapter(
             binding.title.text = item.title
             binding.author.text = item.author
             binding.category.root.text = item.category
+            binding.root.setOnClickListener { onClick(item) }
         }
     }
 

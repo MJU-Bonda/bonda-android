@@ -77,7 +77,7 @@ class BookCardFragment : Fragment(R.layout.fragment_book_card) {
             append(" / 04")
         }
         binding.coverImage.load(coverImage)
-        binding.category.text = category
+        binding.category.root.text = category
         binding.title.text = title
         binding.author.text = author
         binding.body.text = body

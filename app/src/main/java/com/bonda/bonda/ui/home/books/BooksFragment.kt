@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.GridLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import coil3.load
 import com.bonda.bonda.databinding.FragmentHomeBooksBinding
 import com.bonda.bonda.databinding.ViewBookCategoryButtonBinding
@@ -18,7 +17,6 @@ import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryFilterBinding
 import com.bonda.bonda.model.BookCategory
 import com.bonda.bonda.model.BookTheme
-import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.ui.book.BookActivity
 import com.bonda.bonda.ui.search.SearchActivity
 
@@ -62,69 +60,8 @@ class BooksFragment : Fragment() {
         }
 
         /**
-         * 요즘 가장 많이 사랑 받은 책 카테고리 binding
+         * 방금 도착한 새로운 책 binding
          */
-        binding.lovedChipGroup.removeAllViews()
-        BookTheme.entries.forEachIndexed { index, category ->
-            val itemBinding = ViewChipBookCategoryFilterBinding.inflate(
-                layoutInflater,
-                binding.popularChipGroup,
-                false
-            )
-            itemBinding.root.text = category.label
-            if (index == 0) itemBinding.root.isChecked = true
-            itemBinding.root.setOnClickListener { vm.setSelectedMostLovedBooksCategory(category.code) }
-
-            binding.lovedChipGroup.addView(itemBinding.root)
-        }
-
-        // 카테고리 버튼 추가
-        data class Category(
-            val text: LiveData<String>,
-            val icon: LiveData<Int>
-        )
-
-        val categories = listOf(
-            Category(vm.categoryNovelButtonText, vm.categoryNovelButtonIcon),
-            Category(vm.categoryPoemButtonText, vm.categoryPoemButtonIcon),
-            Category(vm.categoryEssayButtonText, vm.categoryEssayButtonIcon),
-            Category(vm.categoryComicButtonText, vm.categoryComicButtonIcon),
-            Category(vm.categoryPhotoButtonText, vm.categoryPhotoButtonIcon),
-            Category(vm.categoryArtButtonText, vm.categoryArtButtonIcon),
-            Category(vm.categoryIllustrationButtonText, vm.categoryIllustrationButtonIcon),
-            Category(vm.categoryMagazineButtonText, vm.categoryMagazineButtonIcon)
-        )
-
-        categories.forEach { category ->
-            val itemBinding = ViewBookCategoryButtonBinding.inflate(
-                layoutInflater,
-                binding.categoriesGridContainer,
-                false
-            )
-
-            category.text.observe(viewLifecycleOwner) {
-                itemBinding.icText.text = it
-                itemBinding.icImage.contentDescription = it
-            }
-            category.icon.observe(viewLifecycleOwner) {
-                itemBinding.icImage.setImageResource(it)
-            }
-
-            itemBinding.root.setOnClickListener {
-                val intent = Intent(requireContext(), BooksCategoryActivity::class.java)
-                intent.putExtra("category_selected", itemBinding.icText.text)
-                startActivity(intent)
-            }
-
-            val params = itemBinding.root.layoutParams as GridLayout.LayoutParams
-            params.width = 0
-            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-            itemBinding.root.layoutParams = params
-
-            binding.categoriesGridContainer.addView(itemBinding.root)
-        }
-
-        // 방금 도착한 새로운 책 binding
         vm.recentArrivalBooks.observe(viewLifecycleOwner) { list ->
             binding.recentArrivalBooksContainer.removeAllViews()
 
@@ -157,7 +94,55 @@ class BooksFragment : Fragment() {
             }
         }
 
-        // 요즘 가장 사랑 받은 책 binding
+        /**
+         * 카테고리 버튼 binding
+         */
+        binding.categoriesGridContainer.removeAllViews()
+        BookCategory.BUSINESS_CATEGORIES.forEach { category ->
+            val itemBinding = ViewBookCategoryButtonBinding.inflate(
+                layoutInflater,
+                binding.categoriesGridContainer,
+                false
+            )
+
+            itemBinding.apply {
+                icText.text = category.label
+                icImage.setImageResource(category.iconRes!!)
+                root.setOnClickListener {
+                    val intent = Intent(requireContext(), BooksCategoryActivity::class.java)
+                    intent.putExtra("category_selected", category.code)
+                    startActivity(intent)
+                }
+            }
+
+            val params = itemBinding.root.layoutParams as GridLayout.LayoutParams
+            params.width = 0
+            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+            itemBinding.root.layoutParams = params
+
+            binding.categoriesGridContainer.addView(itemBinding.root)
+        }
+
+        /**
+         * 요즘 가장 많이 사랑 받은 책 카테고리 binding
+         */
+        binding.lovedChipGroup.removeAllViews()
+        BookTheme.entries.forEachIndexed { index, category ->
+            val itemBinding = ViewChipBookCategoryFilterBinding.inflate(
+                layoutInflater,
+                binding.popularChipGroup,
+                false
+            )
+            itemBinding.root.text = category.label
+            if (index == 0) itemBinding.root.isChecked = true
+            itemBinding.root.setOnClickListener { vm.setSelectedMostLovedBooksCategory(category.code) }
+
+            binding.lovedChipGroup.addView(itemBinding.root)
+        }
+
+        /**
+         * 요즘 가장 사랑 받은 책 binding
+         */
         vm.mostLovedBooks.observe(viewLifecycleOwner) { list ->
             binding.mostLovedBooksContainer.removeAllViews()
 

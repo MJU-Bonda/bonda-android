@@ -25,7 +25,6 @@ class BooksCategoryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val categorySelected = intent.getStringExtra("category_selected")
         enableEdgeToEdge()
 
         binding = ActivityBooksCategoryBinding.inflate(layoutInflater)
@@ -37,22 +36,22 @@ class BooksCategoryActivity : AppCompatActivity() {
             insets
         }
 
+        /**
+         * activity 실행 시 카테고리 선택 값을 받아옵니다
+         */
+        val categorySelected = intent.getStringExtra("category_selected")
+        vm.setSelectedCategory(categorySelected!!)
+
+        /**
+         * action bar 설정
+         */
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = categorySelected
+        vm.selectedCategory.observe(this) { supportActionBar?.title = it.toBookCategory().label }
 
-        booksAdapter = BookPagingAdapter {book ->
-            val intent = Intent(this, BookActivity::class.java)
-            intent.putExtra("book_detail_id", book.id)
-            startActivity(intent)
-        }
-
-        binding.rv.layoutManager = GridLayoutManager(this, 3)
-        binding.rv.adapter = booksAdapter
-
-        lifecycleScope.launch { vm.booksFlow.collectLatest { booksAdapter.submitData(it) } }
-
-        vm.totalBookCount.observe(this){ binding.tvBookCount.text = it.toString() }
+        /**
+         * category chip을 화면에 표시합니다
+         */
         vm.categories.observe(this) { categories ->
             binding.catgoryChipGroup.removeAllViews()
 
@@ -64,7 +63,9 @@ class BooksCategoryActivity : AppCompatActivity() {
                     false
                 )
                 itemBinding.root.text = category.toBookCategory().label
-                if(categorySelected == category) { itemBinding.root.isChecked = true }
+                if (categorySelected == category) {
+                    itemBinding.root.isChecked = true
+                }
                 itemBinding.root.setOnClickListener { vm.setSelectedCategory(category) }
 
                 binding.catgoryChipGroup.addView(itemBinding.root)
@@ -72,22 +73,24 @@ class BooksCategoryActivity : AppCompatActivity() {
 
         }
 
-
-
+        /**
+         * 총 도서 갯수를 표시합니다
+         */
+        vm.totalBookCount.observe(this) { binding.tvBookCount.text = it.toString() }
 
         /**
-         *         viewLifecycleOwner.lifecycleScope.launch {
-         *             vm.savedBooksFlow.collectLatest { booksAdapter.submitData(it) }
-         *         }
-         *
-         *         vm.savedBookCount.observe(viewLifecycleOwner) {
-         *             binding.tvItemCount.text = it.toString()
-         *         }
-         *
-         *         binding.btSort.setOnClickListener {
-         *             // TODO 정렬 기능 구현해야함
-         *         }
+         * 도서 조회 결과를 rv 어댑터에 binding 합니다
          */
+        booksAdapter = BookPagingAdapter { book ->
+            val intent = Intent(this, BookActivity::class.java)
+            intent.putExtra("book_detail_id", book.id)
+            startActivity(intent)
+        }
+
+        binding.rv.layoutManager = GridLayoutManager(this, 3)
+        binding.rv.adapter = booksAdapter
+
+        lifecycleScope.launch { vm.booksFlow.collectLatest { booksAdapter.submitData(it) } }
 
     }
 
