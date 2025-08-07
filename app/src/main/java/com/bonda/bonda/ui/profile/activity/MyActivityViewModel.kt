@@ -1,12 +1,9 @@
 package com.bonda.bonda.ui.profile.activity
 
-import android.graphics.Color
 import android.util.Log
-import androidx.core.graphics.toColor
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonda.bonda.R
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.member.GetCollectedBadgesResponse
 import com.bonda.bonda.network.model.member.GetMyActivityResponse
