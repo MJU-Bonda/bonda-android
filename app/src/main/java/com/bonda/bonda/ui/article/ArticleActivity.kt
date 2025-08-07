@@ -68,7 +68,7 @@ class ArticleActivity : AppCompatActivity() {
         /**
          * 데이터 바인딩
          */
-        vm.title.observe(this) { binding.titleTv.text = it }
+        vm.title.observe(this) { binding.titleTv.text = it.replace("\\n", "\n") }
         vm.subTitle.observe(this) { binding.subtitleTv.text = it }
         vm.body.observe(this) { binding.articleBody.text = it }
         vm.coverImage.observe(this) { binding.articleImage.load(it) }

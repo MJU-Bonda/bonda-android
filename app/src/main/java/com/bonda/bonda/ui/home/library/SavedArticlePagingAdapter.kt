@@ -38,7 +38,7 @@ class SavedArticlePagingAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: SavedArticlesResponse.Article) {
             binding.image.load(item.imageUrl)
-            binding.title.text = item.title
+            binding.title.text = item.title.replace("\\n", "\n")
 
             item.articleCategory.also {
                 val category = it.toArticleCategory()

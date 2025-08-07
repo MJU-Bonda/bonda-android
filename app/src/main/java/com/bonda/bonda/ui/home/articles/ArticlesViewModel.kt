@@ -33,18 +33,6 @@ class ArticlesViewModel : ViewModel() {
     val hasNextPage: LiveData<Boolean> = _hasNextPage
     val articles: LiveData<List<Article>> = _articles
 
-    /**
-     * data-class declaration
-     */
-    data class Article(
-        val id: Long,
-        val isSaved: Boolean,
-        val coverImage: String,
-        val category: String,
-        val title: String,
-        val subTitle: String
-    )
-
     init {
         viewModelScope.launch {
             try {

@@ -60,7 +60,7 @@ class ArticlesFragment : Fragment() {
                 // view-model binding
                 // TODO 이미지 로드 오류 처리 필요
                 itemBinding.articleImage.load(article.coverImage)
-                itemBinding.articleTitle.text = article.title
+                itemBinding.articleTitle.text = article.title.replace("\\n", "\n")
                 itemBinding.articleSubtitle.text = article.subTitle
 
                 article.category.also {
