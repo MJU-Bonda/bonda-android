@@ -10,9 +10,15 @@ import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 
 class ArticleViewModel : ViewModel() {
-
+    /**
+     * 서비스 인스턴스 선언
+     */
     private val articleService = ApiClient.articleService
+    private var isLoading = false
 
+    /**
+     * live-data 선언
+     */
     private val _isError = MutableLiveData(false)
     private val _id = MutableLiveData<Long>()
     private val _isSaved = MutableLiveData<Boolean>()
@@ -24,6 +30,9 @@ class ArticleViewModel : ViewModel() {
     private val _books = MutableLiveData<List<Book>>()
     private val _articles = MutableLiveData<List<Article>>()
 
+    /**
+     * 관찰용 live-data 선언
+     */
     val isError: LiveData<Boolean> = _isError
     val id: LiveData<Long> = _id
     val isSaved: LiveData<Boolean> = _isSaved
@@ -35,6 +44,9 @@ class ArticleViewModel : ViewModel() {
     val books: LiveData<List<Book>> = _books
     val articles: LiveData<List<Article>> = _articles
 
+    /**
+     * data class 선언
+     */
     data class Book(
         val id: Long,
         val coverImage: String,
@@ -51,6 +63,9 @@ class ArticleViewModel : ViewModel() {
         val title: String
     )
 
+    /**
+     * 아티클 데이터 조회
+     */
     fun getArticleData(articleId: Long) {
         viewModelScope.launch {
             try {
@@ -92,18 +107,26 @@ class ArticleViewModel : ViewModel() {
         }
     }
 
-    fun toggleSaved() {
-        val currentlySaved = _isSaved.value ?: return
-        val currentArticleId = _id.value ?: return
+    /**
+     * 아티클 저장 토글
+     */
+    suspend fun toggleSaved(): Boolean {
+        if (isLoading)
+            return false
+        isLoading = true
 
-        viewModelScope.launch {
-            try {
-                articleService.saveArticle(currentArticleId)
+        val currentlySaved = _isSaved.value ?: return false
+        val currentArticleId = _id.value ?: return false
 
-                _isSaved.value = !currentlySaved
-            } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
-            }
+        try {
+            val res = articleService.saveArticle(currentArticleId).unwrapOrThrow()
+            _isSaved.value = !currentlySaved
+            isLoading = false
+            return res.isNewBadge
+        } catch (e: Exception) {
+            isLoading = false
+            throw e
         }
     }
+
 }

@@ -6,24 +6,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil3.load
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityBookDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
-import com.bonda.bonda.databinding.ViewChipBookCategoryBinding
 import com.bonda.bonda.model.ArticleCategory
 import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.model.toBookTheme
 import com.bonda.bonda.ui.article.ArticleActivity
+import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.util.SnackbarType
 import com.bonda.bonda.util.showSnackbar
@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 class BookActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBookDetailBinding
+    private val vm: BookViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,7 @@ class BookActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val bookId = intent.getLongExtra("book_detail_id", 0)
+        vm.getBookDetail(bookId)
         Log.d("DEBUG", "started_book_detail_activity_id : $bookId")
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
@@ -49,55 +51,68 @@ class BookActivity : AppCompatActivity() {
             insets
         }
 
+        /**
+         * toolbar binding
+         */
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-
-
-        val vm = ViewModelProvider(this)[BookViewModel::class.java]
-        vm.getBookDetail(bookId)
-
         vm.title.observe(this) { binding.toolbar.title = it }
 
+        /**
+         * bookmark button binding
+         */
         vm.isSaved.observe(this) { isSaved ->
-            binding.bookmarkButton.apply {
-                if (isSaved) setImageResource(R.drawable.ic_action_bookmark_fill_24dp)
-                else setImageResource(R.drawable.ic_action_bookmark_empty_24dp)
-                setOnClickListener {
-                    lifecycleScope.launch {
-                        try {
-                            // TODO 스낵바 버그 있음
+            binding.bookmarkButton.setImageResource(
+                if (isSaved) R.drawable.ic_action_bookmark_fill_24dp
+                else R.drawable.ic_action_bookmark_empty_24dp
+            )
+            binding.bookmarkButton.setOnClickListener {
+                lifecycleScope.launch {
+                    try {
+                        val hasNewBadge = vm.toggleSaveBook(bookId)
 
-                            val hasNewBadge = vm.toggleSaveBook(bookId)
-
+                        /**
+                         * 도서 저장 완료시
+                         */
+                        if (!isSaved)
                             showSnackbar(
                                 message = "도서 저장이 완료되었습니다!",
                                 buttonText = "서재로 이동",
                                 onButtonClick = {
-                                    // TODO 서재로 이동 로직 구현
+                                    val intent = Intent(this@BookActivity, HomeActivity::class.java)
+                                    intent.putExtra("navDest", "library")
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                    startActivity(intent)
+                                    finish()
                                 },
                                 type = SnackbarType.SAVE
                             )
 
-                            if (hasNewBadge)
-                                showSnackbar(
-                                    message = "새로운 뱃지를 획득했습니다!",
-                                    buttonText = "확인하기",
-                                    onButtonClick = {
-                                        val intent = Intent(
-                                            this@BookActivity,
-                                            MyActivityActivity::class.java
-                                        )
-                                        startActivity(intent)
-                                    },
-                                    type = SnackbarType.BADGE
-                                )
-                        } catch (e: Exception) {
+                        /**
+                         * 새로운 뱃지 획득시
+                         */
+                        if (hasNewBadge)
                             showSnackbar(
-                                message = "저장에 실패했어요. 다시 시도해 주세요.",
-                                type = SnackbarType.ERROR
+                                message = "새로운 뱃지를 획득했습니다!",
+                                buttonText = "확인하기",
+                                onButtonClick = {
+                                    val intent = Intent(
+                                        this@BookActivity,
+                                        MyActivityActivity::class.java
+                                    )
+                                    startActivity(intent)
+                                },
+                                type = SnackbarType.BADGE
                             )
-                        }
+                    } catch (e: Exception) {
+                        /**
+                         * 오류 발생시
+                         */
+                        showSnackbar(
+                            message = "저장에 실패했어요. 다시 시도해 주세요.",
+                            type = SnackbarType.ERROR
+                        )
                     }
                 }
             }
@@ -153,7 +168,7 @@ class BookActivity : AppCompatActivity() {
                     itemBinding.root.id = View.generateViewId()
 
                     itemBinding.articleImage.load(article.coverImage)
-                    itemBinding.articleTitle.text = article.title
+                    itemBinding.articleTitle.text = article.title.replace("\\n", " ")
 
                     article.category.also {
                         val category = it.toArticleCategory()

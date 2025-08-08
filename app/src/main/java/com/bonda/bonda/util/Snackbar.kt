@@ -1,6 +1,5 @@
 package com.bonda.bonda.util
 
-import android.content.Intent
 import android.graphics.Paint
 import android.view.Gravity
 import android.view.View
@@ -17,8 +16,6 @@ import androidx.core.view.isEmpty
 import androidx.core.view.updatePadding
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ViewSnackbarBinding
-import com.bonda.bonda.ui.profile.activity.MyActivityActivity
-import com.bonda.bonda.ui.profile.recent.RecentActivity
 
 enum class SnackbarType { SAVE, BADGE, ERROR }
 
@@ -49,7 +46,12 @@ fun AppCompatActivity.showSnackbar(
             ViewCompat.requestApplyInsets(this)
             ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                view.updatePadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    systemBars.bottom
+                )
                 insets
             }
         }
@@ -57,8 +59,15 @@ fun AppCompatActivity.showSnackbar(
 
     val binding = ViewSnackbarBinding.inflate(layoutInflater, container, false)
 
+    /**
+     * text
+     */
     binding.text.text = message
-    if(buttonText.isNullOrBlank()) {
+
+    /**
+     * button text
+     */
+    if (buttonText.isNullOrBlank()) {
         binding.button.visibility = View.GONE
 
         val lp = binding.text.layoutParams as ConstraintLayout.LayoutParams
@@ -66,7 +75,7 @@ fun AppCompatActivity.showSnackbar(
         binding.text.layoutParams = lp
     }
 
-    if(!buttonText.isNullOrBlank() && onButtonClick != null){
+    if (!buttonText.isNullOrBlank() && onButtonClick != null) {
         binding.button.apply {
             text = buttonText
             paintFlags = binding.button.paintFlags or Paint.UNDERLINE_TEXT_FLAG
@@ -74,6 +83,9 @@ fun AppCompatActivity.showSnackbar(
         }
     }
 
+    /**
+     * icon & icon tint & background tint
+     */
     when (type) {
         SnackbarType.SAVE -> {
             binding.icon.setImageResource(R.drawable.ic_notification_check_24dp)
@@ -105,14 +117,20 @@ fun AppCompatActivity.showSnackbar(
     val childLp = LinearLayout.LayoutParams(
         LinearLayout.LayoutParams.WRAP_CONTENT,
         LinearLayout.LayoutParams.WRAP_CONTENT
-    ).apply {
-        topMargin = snackbarBottomMargin
-    }
+    )
+    childLp.topMargin = snackbarBottomMargin
     container.addView(binding.root, childLp)
 
+    /**
+     * animation
+     */
     binding.root.startAnimation(
         AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
     )
+
+    /**
+     * disappearance animation
+     */
     binding.root.postDelayed({
         binding.root.animate()
             .alpha(0f)
