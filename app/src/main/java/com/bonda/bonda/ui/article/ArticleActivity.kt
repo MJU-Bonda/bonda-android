@@ -174,7 +174,7 @@ class ArticleActivity : AppCompatActivity() {
 
                 // view-model binding
                 itemBinding.articleImage.load(article.coverImage)
-                itemBinding.articleTitle.text = article.title
+                itemBinding.articleTitle.text = article.title.replace("\\n", " ")
 
                 article.category.also {
                     val category = it.toArticleCategory()
