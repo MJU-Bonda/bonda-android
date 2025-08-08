@@ -71,7 +71,8 @@ class LibraryScrollerFragment : Fragment() {
                 }
 
                 vm.savedBookCount.observe(viewLifecycleOwner) {
-                    binding.tvItemCount.text = it.toString()
+                    if (it < 1000) binding.tvItemCount.text = it.toString()
+                    else binding.tvItemCount.text = "999+"
                 }
 
                 binding.btSort.setOnClickListener {
@@ -97,7 +98,8 @@ class LibraryScrollerFragment : Fragment() {
                 }
 
                 vm.savedArticleCount.observe(viewLifecycleOwner) {
-                    binding.tvItemCount.text = it.toString()
+                    if (it < 1000) binding.tvItemCount.text = it.toString()
+                    else binding.tvItemCount.text = "999+"
                 }
 
                 binding.btSort.setOnClickListener {

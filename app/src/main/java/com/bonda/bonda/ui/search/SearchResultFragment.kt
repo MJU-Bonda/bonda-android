@@ -152,8 +152,14 @@ class SearchResultFragment : Fragment() {
         /**
          * 검색 결과 갯수 binding
          */
-        vm.booksSearchResultCount.observe(viewLifecycleOwner) { binding.tvResultBookCount.text = it.toString()}
-        vm.articlesSearchResultCount.observe(viewLifecycleOwner) { binding.tvResultArticleCount.text = it.toString()}
+        vm.booksSearchResultCount.observe(viewLifecycleOwner) {
+            if (it < 1000) binding.tvResultBookCount.text = it.toString()
+            else binding.tvResultBookCount.text = "999+"
+        }
+        vm.articlesSearchResultCount.observe(viewLifecycleOwner) {
+            if (it < 1000) binding.tvResultArticleCount.text = it.toString()
+            else binding.tvResultArticleCount.text = "999+"
+        }
 
         /**
          * 검색 결과 전체 보기 버튼
