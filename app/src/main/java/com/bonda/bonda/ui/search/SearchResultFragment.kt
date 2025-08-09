@@ -18,6 +18,7 @@ import com.bonda.bonda.databinding.FragmentSearchResultAllBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.databinding.ViewRecentArticleBinding
+import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.book.BookActivity
 import com.bonda.bonda.util.TAG
@@ -128,8 +129,8 @@ class SearchResultFragment : Fragment() {
                     false
                 )
 
-                itemBinding.title.text = article.title
-                itemBinding.category.root.text = article.category
+                itemBinding.title.text = article.title.replace("\\n", "\n")
+                itemBinding.category.root.text = article.category.toArticleCategory().label
                 itemBinding.image.load(article.imageUrl)
 
                 val params = itemBinding.root.layoutParams as GridLayout.LayoutParams
@@ -151,8 +152,14 @@ class SearchResultFragment : Fragment() {
         /**
          * 검색 결과 갯수 binding
          */
-        vm.booksSearchResultCount.observe(viewLifecycleOwner) { binding.tvResultBookCount.text = it.toString()}
-        vm.articlesSearchResultCount.observe(viewLifecycleOwner) { binding.tvResultArticleCount.text = it.toString()}
+        vm.booksSearchResultCount.observe(viewLifecycleOwner) {
+            if (it < 1000) binding.tvResultBookCount.text = it.toString()
+            else binding.tvResultBookCount.text = "999+"
+        }
+        vm.articlesSearchResultCount.observe(viewLifecycleOwner) {
+            if (it < 1000) binding.tvResultArticleCount.text = it.toString()
+            else binding.tvResultArticleCount.text = "999+"
+        }
 
         /**
          * 검색 결과 전체 보기 버튼

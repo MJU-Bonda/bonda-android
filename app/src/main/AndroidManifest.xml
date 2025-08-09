@@ -55,7 +55,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="oauth"
-                    android:scheme="kakao52c614c7066242cd93789ae602f2c4f7" />
+                    android:scheme="kakao${kakaoAppKey}" />
             </intent-filter>
         </activity>
     </application>

@@ -18,7 +18,7 @@ class ArticlesViewModel : ViewModel() {
     private var isLoading = false
 
     /**
-     *
+     * live-data declaration
      */
     private val _page = MutableLiveData<Int>()
     private val _category = MutableLiveData<String>()
@@ -26,7 +26,7 @@ class ArticlesViewModel : ViewModel() {
     private val _articles = MutableLiveData<List<Article>>()
 
     /**
-     * read-only properties
+     * read-only declaration
      */
     val page: LiveData<Int> = _page
     val category: LiveData<String> = _category
@@ -34,17 +34,8 @@ class ArticlesViewModel : ViewModel() {
     val articles: LiveData<List<Article>> = _articles
 
     /**
-     * data-class declaration
+     * 데이터 로드 및 바인딩
      */
-    data class Article(
-        val id: Long,
-        val isSaved: Boolean,
-        val coverImage: String,
-        val category: String,
-        val title: String,
-        val subTitle: String
-    )
-
     init {
         viewModelScope.launch {
             try {
@@ -74,36 +65,29 @@ class ArticlesViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, e.toString())
-                // TODO 오류 스낵바 표시
             }
         }
     }
 
-    fun toggleSaved(articleId: Long) {
-        if (isLoading) return
+    /**
+     * 아티클 저장 여부를 토글합니다
+     */
+    suspend fun toggleSaved(articleId: Long): Boolean {
+        if (isLoading) return false
+        isLoading = true
 
-        viewModelScope.launch {
-            isLoading = true
-
-            try {
-                _articles.value = _articles.value?.map {
-                    if (it.id == articleId) it.copy(isSaved = !it.isSaved) else it
-                }
-
-                articleService.saveArticle(articleId)
-
-                // TODO 스낵바 표시해야함
-            } catch (e: Exception) {
-                _articles.value = _articles.value?.map {
-                    if (it.id == articleId) it.copy(isSaved = !it.isSaved) else it
-                }
-
-                Log.e(TAG, e.message.toString())
-
-                // TODO 오류 스낵바 표시
-            } finally {
-                isLoading = false
+        try {
+            val res = articleService.saveArticle(articleId).unwrapOrThrow()
+            _articles.value = _articles.value?.map {
+                if (it.id == articleId) it.copy(isSaved = !it.isSaved) else it
             }
+
+            isLoading = false
+            return res.isNewBadge
+        } catch (e: Exception) {
+            isLoading = false
+            throw e
         }
     }
+
 }

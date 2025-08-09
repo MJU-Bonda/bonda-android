@@ -1,12 +1,9 @@
 package com.bonda.bonda.ui.profile.activity
 
-import android.graphics.Color
 import android.util.Log
-import androidx.core.graphics.toColor
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonda.bonda.R
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.member.GetCollectedBadgesResponse
 import com.bonda.bonda.network.model.member.GetMyActivityResponse
@@ -28,10 +25,10 @@ class MyActivityViewModel : ViewModel() {
         get() = _viewedBookCount
     val collectedBookCount: MutableLiveData<Int>
         get() = _collectedBookCount
-    val collectedBookCategory: MutableLiveData<List<GetMyActivityResponse.Category>>
-        get() = _collectedBookCategory
     val collectedBadgeCount: MutableLiveData<Int>
         get() = _collectedBadgeCount
+    val collectedBookCategory: MutableLiveData<List<GetMyActivityResponse.Category>>
+        get() = _collectedBookCategory
     val collectedBadgeList: MutableLiveData<List<GetCollectedBadgesResponse.Badge>>
         get() = _collectedBadgeList
 
@@ -48,22 +45,10 @@ class MyActivityViewModel : ViewModel() {
                 _collectedBookCount.value = bookRes.bookcaseCount
 
                 /**
-                 * 카테고리별 도서 갯수 정렬 후 저장
+                 * 카테고리별 도서 갯수 기준 내림차순 정렬 후 저장
                  */
-                _collectedBookCategory.value = bookRes.categoryCountList
-                    .sortedByDescending { it.count }
-                    .let { sorted ->
-                        if (sorted.size <= 3) {
-                            sorted
-                        } else {
-                            val top3 = sorted.take(3)
-                            val etcSum = sorted.drop(3).sumOf { it.count }
-                            top3 + GetMyActivityResponse.Category(
-                                category = "기타",
-                                count = etcSum
-                            )
-                        }
-                    }
+                _collectedBookCategory.value =
+                    bookRes.categoryCountList.sortedByDescending { it.count }
 
                 /**
                  * 뱃지 갯수와 리스트 저장

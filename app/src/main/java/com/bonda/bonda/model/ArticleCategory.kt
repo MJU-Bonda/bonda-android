@@ -1,6 +1,5 @@
 package com.bonda.bonda.model
 
-
 enum class ArticleCategory(val code: String, val label: String) {
     ALL("ALL", "전체"),
     AUTHOR_OR_PUBLISHER("AUTHOR_OR_PUBLISHER", "작가/출판사"),

@@ -1,4 +1,6 @@
 package com.bonda.bonda.network
 
-internal const val BASE_URL = "http://13.209.21.98:8080/"
+import com.bonda.bonda.BuildConfig
+
+internal const val BASE_URL = BuildConfig.baseUrl
 internal const val HEADER_AUTHORIZATION = "Authorization"

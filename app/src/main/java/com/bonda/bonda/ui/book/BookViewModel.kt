@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bonda.bonda.R
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.network.model.book.SaveBookResponse
-import com.bonda.bonda.ui.profile.recent.books.Book
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 
@@ -87,27 +84,23 @@ class BookViewModel : ViewModel() {
         }
     }
 
-    fun toggleSaveBook(bookId: Long): Boolean {
-        if (_isLoading.value == true) return false
+    /**
+     * 도서 북마크 여부를 토글합니다
+     */
+    suspend fun toggleSaveBook(bookId: Long): Boolean {
+        if (_isLoading.value == true)
+            return false
         _isLoading.value = true
 
-        var hasNewBadge = false
-
-        viewModelScope.launch {
-            try {
-                val res = bookService.toggleSaveBook(bookId).unwrapOrThrow()
-                Log.d(TAG, res.toString())
-
-                val current = _isSaved.value
-                _isSaved.value = !current!!
-                hasNewBadge = res.isNewBadge
-            } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
-            } finally {
-                _isLoading.value = false
-            }
+        try {
+            val res = bookService.toggleSaveBook(bookId).unwrapOrThrow().isNewBadge
+            val current = _isSaved.value
+            _isSaved.value = !current!!
+            _isLoading.value = false
+            return res
+        } catch (e: Exception) {
+            _isLoading.value = false
+            throw e
         }
-
-        return hasNewBadge
     }
 }

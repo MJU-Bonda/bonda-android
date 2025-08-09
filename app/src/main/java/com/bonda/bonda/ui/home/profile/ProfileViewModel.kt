@@ -10,26 +10,38 @@ import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
-
+    /**
+     * 서비스 인스턴스 생성
+     */
     private val memberService = ApiClient.memberService
 
+    /**
+     * live-data declaration
+     */
     private val _username = MutableLiveData<String>()
-    private val _profileImage = MutableLiveData<String>()
+    private val _profileImage = MutableLiveData("")
     private val _savedBookCount = MutableLiveData<Int>()
     private val _collectedBadgeCount = MutableLiveData<Int>()
 
+    /**
+     * read-only properties
+     */
     val username: LiveData<String> = _username
     val profileImage: LiveData<String> = _profileImage
     val savedBookCount: LiveData<Int> = _savedBookCount
     val collectedBadgeCount: LiveData<Int> = _collectedBadgeCount
 
+    /**
+     * init
+     */
     init {
         viewModelScope.launch {
             try {
                 val res = memberService.getProfile().unwrapOrThrow()
 
                 _username.value = res.nickname
-                _profileImage.value = res.profileImage
+                if (!res.profileImage.isNullOrBlank())
+                    _profileImage.value = res.profileImage.toString()
                 _savedBookCount.value = res.savedBookCount
                 _collectedBadgeCount.value = res.badgeCount
 

@@ -25,60 +25,6 @@ class LibraryScrollerFragment : Fragment() {
     private lateinit var booksAdapter: SavedBookPagingAdapter
     private lateinit var articlesAdapter: SavedArticlePagingAdapter
 
-    private fun setupBooksRecycler() {
-        booksAdapter = SavedBookPagingAdapter { book ->
-            val intent = Intent(requireContext(), BookActivity::class.java)
-            intent.putExtra("book_detail_id", book.id)
-            startActivity(intent)
-        }
-
-        binding.rv.layoutManager = GridLayoutManager(requireContext(), 3)
-        binding.rv.adapter = booksAdapter
-        binding.rv.addItemDecoration(
-            ShelfDecoration(
-                context = requireContext(),
-                shelfResId = R.drawable.bg_bookshelf,
-                spanCount = 3,
-                offsetFromRowBottomDp = 4
-            )
-        )
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            vm.savedBooksFlow.collectLatest { booksAdapter.submitData(it) }
-        }
-
-        vm.savedBookCount.observe(viewLifecycleOwner) {
-            binding.tvItemCount.text = it.toString()
-        }
-
-        binding.btSort.setOnClickListener {
-            // TODO 정렬 기능 구현해야함
-        }
-    }
-
-    private fun setupArticleRecycler() {
-        articlesAdapter = SavedArticlePagingAdapter { article ->
-            val intent = Intent(requireContext(), ArticleActivity::class.java)
-            intent.putExtra("article_detail_id", article.articleId)
-            startActivity(intent)
-        }
-
-        binding.rv.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.rv.adapter = articlesAdapter
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            vm.savedArticlesFlow.collectLatest { articlesAdapter.submitData(it) }
-        }
-
-        vm.savedArticleCount.observe(viewLifecycleOwner) {
-            binding.tvItemCount.text = it.toString()
-        }
-
-        binding.btSort.setOnClickListener {
-            // TODO 정렬 기능 구현해야함
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -92,8 +38,74 @@ class LibraryScrollerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         when (arguments?.getInt("position")) {
-            0 -> { setupBooksRecycler() }
-            1 -> { setupArticleRecycler() }
+            /**
+             * 저장한 도서 목록을 표시합니다.
+             */
+            0 -> {
+                booksAdapter = SavedBookPagingAdapter { book ->
+                    val intent = Intent(requireContext(), BookActivity::class.java)
+                    intent.putExtra("book_detail_id", book.id)
+                    startActivity(intent)
+                }
+
+                binding.rv.layoutManager = GridLayoutManager(requireContext(), 3)
+                binding.rv.adapter = booksAdapter
+                binding.rv.addItemDecoration(
+                    HorizontalSpacingDecoration(
+                        context = requireContext(),
+                        horizontalDp = 32,
+                        spanCount = 3
+                    )
+                )
+                binding.rv.addItemDecoration(
+                    ShelfDecoration(
+                        context = requireContext(),
+                        shelfResId = R.drawable.bg_bookshelf,
+                        spanCount = 3,
+                        offsetFromRowBottomDp = -2
+                    )
+                )
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    vm.savedBooksFlow.collectLatest { booksAdapter.submitData(it) }
+                }
+
+                vm.savedBookCount.observe(viewLifecycleOwner) {
+                    if (it < 1000) binding.tvItemCount.text = it.toString()
+                    else binding.tvItemCount.text = "999+"
+                }
+
+                binding.btSort.setOnClickListener {
+                    // TODO 정렬 기능 구현해야함
+                }
+            }
+
+            /**
+             * 저장한 아티클 목록을 표시합니다.
+             */
+            1 -> {
+                articlesAdapter = SavedArticlePagingAdapter { article ->
+                    val intent = Intent(requireContext(), ArticleActivity::class.java)
+                    intent.putExtra("article_detail_id", article.articleId)
+                    startActivity(intent)
+                }
+
+                binding.rv.layoutManager = GridLayoutManager(requireContext(), 2)
+                binding.rv.adapter = articlesAdapter
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    vm.savedArticlesFlow.collectLatest { articlesAdapter.submitData(it) }
+                }
+
+                vm.savedArticleCount.observe(viewLifecycleOwner) {
+                    if (it < 1000) binding.tvItemCount.text = it.toString()
+                    else binding.tvItemCount.text = "999+"
+                }
+
+                binding.btSort.setOnClickListener {
+                    // TODO 정렬 기능 구현해야함
+                }
+            }
         }
     }
 

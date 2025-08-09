@@ -1,7 +1,6 @@
 package com.bonda.bonda.ui.profile.activity
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -77,10 +76,10 @@ class MyActivityActivity : AppCompatActivity() {
                         ContextCompat.getColor(
                             context,
                             when (index) {
-                                0 -> R.color.surface_graph_primary
-                                1 -> R.color.surface_graph_secondary
-                                2 -> R.color.surface_graph_tertiary
-                                else -> Color.TRANSPARENT
+                                0 -> R.color.surface_graph_tertiary
+                                1 -> R.color.surface_graph_primary
+                                2 -> R.color.surface_graph_secondary
+                                else -> R.color.border_default_tertiary
                             }
                         )
                     )
@@ -107,9 +106,9 @@ class MyActivityActivity : AppCompatActivity() {
                 val colorInt = ContextCompat.getColor(
                     this,
                     when (index) {
-                        0 -> R.color.surface_graph_primary
-                        1 -> R.color.surface_graph_secondary
-                        2 -> R.color.surface_graph_tertiary
+                        0 -> R.color.surface_graph_tertiary
+                        1 -> R.color.surface_graph_primary
+                        2 -> R.color.surface_graph_secondary
                         else -> R.color.border_default_tertiary
                     }
                 )

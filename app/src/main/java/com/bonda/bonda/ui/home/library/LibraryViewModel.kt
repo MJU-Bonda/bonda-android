@@ -17,18 +17,23 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class LibraryViewModel : ViewModel() {
-
+    /**
+     * 네트워크 서비스 인스턴스 생성
+     */
     private val bookService = ApiClient.bookService
     private val articleService = ApiClient.articleService
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    /**
+     * 관찰용 live-data 선언
+     */
     private val _savedBookCount = MutableLiveData<Int>()
     private val _savedArticleCount = MutableLiveData<Int>()
-
-    val isLoading: LiveData<Boolean> = _isLoading
     val savedBookCount: LiveData<Int> = _savedBookCount
     val savedArticleCount: LiveData<Int> = _savedArticleCount
 
+    /**
+     * 저장한 도서와 아티클 갯수를 불러옵니다.
+     */
     init {
         viewModelScope.launch {
             try {
@@ -40,16 +45,21 @@ class LibraryViewModel : ViewModel() {
         }
     }
 
+    /**
+     * 저장한 도서를 페이지네이션합니다.
+     */
     val savedBooksFlow: Flow<PagingData<SavedBooksResponse.Book>> =
         Pager(
             config = PagingConfig(pageSize = 24, prefetchDistance = 2, enablePlaceholders = false),
             pagingSourceFactory = { SavedBooksPagingSource(bookService) }
         ).flow.cachedIn(viewModelScope)
 
+    /**
+     * 저장한 아티클을 페이지네이션합니다.
+     */
     val savedArticlesFlow: Flow<PagingData<SavedArticlesResponse.Article>> =
         Pager(
             config = PagingConfig(pageSize = 24, prefetchDistance = 2, enablePlaceholders = false),
             pagingSourceFactory = { SavedArticlesPagingSource(articleService) }
         ).flow.cachedIn(viewModelScope)
-
 }
