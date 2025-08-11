@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeLibraryScrollerBinding
+import com.bonda.bonda.model.toSortOrder
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.book.BookActivity
 import kotlinx.coroutines.flow.collectLatest
@@ -66,18 +69,26 @@ class LibraryScrollerFragment : Fragment() {
                     )
                 )
 
-                viewLifecycleOwner.lifecycleScope.launch {
-                    vm.savedBooksFlow.collectLatest { booksAdapter.submitData(it) }
-                }
-
                 vm.savedBookCount.observe(viewLifecycleOwner) {
                     if (it < 1000) binding.tvItemCount.text = it.toString()
                     else binding.tvItemCount.text = "999+"
                 }
 
-                binding.btSort.setOnClickListener {
-                    // TODO 정렬 기능 구현해야함
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        vm.savedBooksFlow.collectLatest { booksAdapter.submitData(it) }
+                    }
                 }
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        vm.bookSortOrder.collect {
+                            binding.textSortIndicator.text = it.toSortOrder().label
+                        }
+                    }
+                }
+
+                binding.btSort.setOnClickListener { vm.toggleBookSortOrder() }
             }
 
             /**
@@ -93,18 +104,26 @@ class LibraryScrollerFragment : Fragment() {
                 binding.rv.layoutManager = GridLayoutManager(requireContext(), 2)
                 binding.rv.adapter = articlesAdapter
 
-                viewLifecycleOwner.lifecycleScope.launch {
-                    vm.savedArticlesFlow.collectLatest { articlesAdapter.submitData(it) }
-                }
-
                 vm.savedArticleCount.observe(viewLifecycleOwner) {
                     if (it < 1000) binding.tvItemCount.text = it.toString()
                     else binding.tvItemCount.text = "999+"
                 }
 
-                binding.btSort.setOnClickListener {
-                    // TODO 정렬 기능 구현해야함
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        vm.savedArticlesFlow.collectLatest { articlesAdapter.submitData(it) }
+                    }
                 }
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        vm.articleSortOrder.collect {
+                            binding.textSortIndicator.text = it.toSortOrder().label
+                        }
+                    }
+                }
+
+                binding.btSort.setOnClickListener { vm.toggleArticleSortOrder() }
             }
         }
     }

@@ -6,13 +6,15 @@ import com.bonda.bonda.network.model.article.SavedArticlesResponse
 import com.bonda.bonda.network.service.ArticleService
 
 class SavedArticlesPagingSource(
-    private val service: ArticleService
+    private val service: ArticleService,
+    private val orderBy: String
 ) : PagingSource<Int, SavedArticlesResponse.Article>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SavedArticlesResponse.Article> {
         val page = params.key ?: 0
         return try {
-            val resp = service.getSavedArticles(page = page, size = params.loadSize)
+            val resp =
+                service.getSavedArticles(page = page, size = params.loadSize, orderBy = orderBy)
             val data = resp.data.articleList
             LoadResult.Page(
                 data = data,
