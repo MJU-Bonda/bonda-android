@@ -64,11 +64,6 @@ class OnboardingActivity : AppCompatActivity() {
             override fun createFragment(pos: Int) = pages[pos]
         }
 
-        // TODO: Tab Indicator 추가
-//        TabLayoutMediator(binding.tabIndicator, binding.viewPager) { tab, position ->
-//
-//        }.attach()
-
         binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (position != pages.lastIndex) {
@@ -88,10 +83,6 @@ class OnboardingActivity : AppCompatActivity() {
                 )
                 finish()
             }
-        }
-
-        binding.closeButton.setOnClickListener {
-            finish()
         }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
