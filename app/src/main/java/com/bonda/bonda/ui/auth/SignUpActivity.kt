@@ -1,10 +1,13 @@
 package com.bonda.bonda.ui.auth
 
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -13,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
+import com.bonda.bonda.MainActivity
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivitySignUpBinding
 import com.bonda.bonda.network.ApiClient
@@ -20,6 +24,7 @@ import com.bonda.bonda.ui.auth.onboarding.OnboardingActivity
 import com.bonda.bonda.ui.profile.ProfileImageSelectorView
 import com.bonda.bonda.util.AccessTokenProvider
 import com.bonda.bonda.util.PREFS_NAME
+import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
@@ -34,6 +39,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
     private var profileImage: Uri? = null
+    private val vm: SignUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,14 +56,29 @@ class SignUpActivity : AppCompatActivity() {
             insets
         }
 
+        /**
+         * 액션바 구성 설정
+         */
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
         binding.toolbar.setNavigationOnClickListener {
-            // TODO 회원 가입을 취소하시겠습니까? 모달표시
-            onBackPressedDispatcher.onBackPressed()
+            Toast.makeText(this, "로그아웃되었습니다", Toast.LENGTH_LONG).show()
+
+            AccessTokenProvider.removeAccessToken()
+            getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit() {
+                remove(PREF_KEY_REFRESH_TOKEN)
+                remove(PREF_KEY_SIGNUP_REQUIRED)
+            }
+
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
+        /**
+         * 회원 가입 버튼
+         */
         binding.nextButton.setOnClickListener {
             lifecycleScope.launch {
                 try {
@@ -73,14 +94,14 @@ class SignUpActivity : AppCompatActivity() {
                         )
                     }
 
-                    val response = memberService.updateProfile(
+                    val res = memberService.updateProfile(
                         AccessTokenProvider.getAccessToken()!!
                             .toRequestBody("text/plain".toMediaType()),
                         binding.textEditorUsername.text.toString()
                             .toRequestBody("text/plain".toMediaType()),
                         binaryImage,
                     )
-                    Log.d(TAG, response.toString())
+                    Log.d(TAG, res.toString())
 
                     finish()
                 } catch (e: Exception) {
@@ -88,6 +109,9 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
 
+            /**
+             * 로그인 성공하면 signup required 를 false로 설정합니다
+             */
             prefs.edit() {
                 putBoolean(PREF_KEY_SIGNUP_REQUIRED, false)
             }
@@ -97,6 +121,9 @@ class SignUpActivity : AppCompatActivity() {
             finish()
         }
 
+        /**
+         * 프로필 이미지 선택
+         */
         binding.profileImage.setOnClickListener {
             ProfileImageSelectorView { uri ->
                 profileImage = uri
@@ -105,41 +132,84 @@ class SignUpActivity : AppCompatActivity() {
             }.show(supportFragmentManager, "SelectImage")
         }
 
-        val primaryButtonTextColor = ContextCompat.getColor(this, R.color.text_default_inverse)
-        val primaryButtonBackgroundColor =
-            ContextCompat.getColor(this, R.color.surface_accent_primary)
-        val disabledButtonTextColor = ContextCompat.getColor(this, R.color.text_default_inverse)
-        val disabledButtonBackgroundColor =
-            ContextCompat.getColor(this, R.color.surface_default_base)
-
-        binding.textEditorUsername.doOnTextChanged { _, _, _, count ->
-            if (count == 0) {
+        /**
+         * 버튼 활성화 여부를 변경합니다
+         */
+        vm.username.observe(this) {
+            if (it.isNullOrBlank() || it.length > 10) {
                 binding.nextButton.isEnabled = false
-                binding.nextButton.setTextColor(disabledButtonTextColor)
-                binding.nextButton.setBackgroundColor(disabledButtonBackgroundColor)
+                binding.nextButton.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.surface_default_base
+                    )
+                )
             } else {
-                if (count > 10) {
-                    binding.usernameLengthChecker.setTextColor(
-                        resources.getColor(
-                            R.color.system_error_primary,
-                            null
-                        )
+                binding.nextButton.isEnabled = true
+                binding.nextButton.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.surface_accent_primary
                     )
-                    binding.nextButton.isEnabled = false
-                    binding.nextButton.setTextColor(disabledButtonTextColor)
-                    binding.nextButton.setBackgroundColor(disabledButtonBackgroundColor)
-                } else {
-                    binding.usernameLengthChecker.setTextColor(
-                        resources.getColor(
-                            R.color.text_default_tertiary,
-                            null
-                        )
+                )
+            }
+
+            if (it.length > 10) {
+                binding.usernameLengthChecker.setTextColor(
+                    resources.getColor(
+                        R.color.system_error_primary,
+                        null
                     )
-                    binding.nextButton.isEnabled = true
-                    binding.nextButton.setTextColor(primaryButtonTextColor)
-                    binding.nextButton.setBackgroundColor(primaryButtonBackgroundColor)
-                }
+                )
+            } else {
+                binding.usernameLengthChecker.setTextColor(
+                    resources.getColor(
+                        R.color.text_default_tertiary,
+                        null
+                    )
+                )
             }
         }
+
+        /**
+         * 닉네임 입력기 값 변경을 감지합니다
+         */
+        binding.textEditorUsername.doOnTextChanged { text, _, _, _ ->
+            vm.setUsername(text.toString())
+        }
+
+        /**
+         * 닉네임 입력기 백그라운드를 설정하고, focus시 stroke를 추가합니다
+         */
+        binding.textEditorUsername.setOnFocusChangeListener { _, hasFocus ->
+            val drawable = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = 8f * resources.displayMetrics.density
+                if (hasFocus) {
+                    setStroke(
+                        1 * resources.displayMetrics.density.toInt(),
+                        ContextCompat.getColor(this@SignUpActivity, R.color.border_default_tertiary)
+                    )
+                } else {
+                    setStroke(
+                        0,
+                        ContextCompat.getColor(this@SignUpActivity, R.color.border_default_tertiary)
+                    ) // 포커스 없을 때 stroke 제거
+                }
+                setColor(
+                    ContextCompat.getColor(
+                        this@SignUpActivity,
+                        R.color.surface_default_primary
+                    )
+                )
+            }
+            binding.textEditorUsername.background = drawable
+        }
+        binding.textEditorUsername.background = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = 8f * resources.displayMetrics.density
+            setColor(ContextCompat.getColor(this@SignUpActivity, R.color.surface_default_primary))
+        }
+
     }
 }

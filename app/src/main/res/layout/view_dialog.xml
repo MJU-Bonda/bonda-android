@@ -38,8 +38,6 @@
                 android:layout_height="wrap_content"
                 android:minWidth="128dp"
                 android:minHeight="46dp"
-                android:textAppearance="@style/Body1"
-                android:textColor="@color/text_default_secondary"
                 app:layout_constraintEnd_toStartOf="@id/button_confirm"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

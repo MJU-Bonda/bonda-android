@@ -11,50 +11,72 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_navigation_previous_24dp"
+        app:navigationIconTint="@color/border_accent_primary" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:text="@string/signup_title"
         android:textAppearance="@style/Headline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profile_image"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/surface_default_primary"
-        android:scaleType="centerCrop"
-        android:foreground="@drawable/ic_avatar_foreground"
-        android:foregroundTint="#D9D8D7"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.CircleImage" />
+        app:layout_constraintTop_toBottomOf="@id/title">
 
-<!--    <ImageButton-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:backgroundTint="@color/white"-->
-<!--        android:contentDescription="카메라 버튼"-->
-<!--        android:background="@drawable/ic_avatar_button_background"-->
-<!--        android:foreground="@drawable/ic_description_camera_24dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/profile_image"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/profile_image" />-->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_image"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_margin="4dp"
+            android:background="@color/surface_default_primary"
+            android:foreground="@drawable/ic_avatar_foreground"
+            android:foregroundTint="#D9D8D7"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.CircleImage" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:backgroundTint="@color/white"
+            app:cardCornerRadius="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:strokeColor="@color/border_default_tertiary"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="카메라 버튼"
+                android:scaleType="center"
+                android:src="@drawable/ic_description_camera_24dp"
+                app:tint="@color/border_default_secondary" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/text_editor_username"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/surface_default_primary"
+        android:layout_marginTop="40dp"
         android:hint="@string/signup_username_text_editor_hint"
         android:importantForAutofill="no"
         android:inputType="text"
@@ -64,13 +86,14 @@
         android:textColorHint="@color/text_default_tertiary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_image" />
+        app:layout_constraintTop_toBottomOf="@id/constraint_layout" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/username_length_checker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/signup_username_length_checker"
         android:textAppearance="@style/Caption2"
         android:textColor="@color/text_default_tertiary"

@@ -99,8 +99,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
         android:text="@string/get_book_detail"
-        android:textAppearance="@style/Body7"
-        android:textColor="@color/border_accent_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

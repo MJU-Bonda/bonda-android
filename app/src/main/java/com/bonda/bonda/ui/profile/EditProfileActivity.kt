@@ -1,21 +1,20 @@
 package com.bonda.bonda.ui.profile
 
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil3.load
 import com.bonda.bonda.R
-import com.bonda.bonda.databinding.ActivityEditProfileBinding
+import com.bonda.bonda.databinding.ActivitySignUpBinding
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.util.AccessTokenProvider
 import com.bonda.bonda.util.TAG
@@ -29,14 +28,15 @@ class EditProfileActivity : AppCompatActivity() {
 
     private val memberService = ApiClient.memberService
 
-    lateinit var binding: ActivityEditProfileBinding
+    lateinit var binding: ActivitySignUpBinding
     private var profileImage: Uri? = null
+    private val vm: EditProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        binding = ActivityEditProfileBinding.inflate(layoutInflater)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
@@ -46,23 +46,29 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         /**
-         * 기본 이미지로 설정해야되나
-         * 일단 서버에서 현재 프로필 이미지를 불러오도록 해놨는데
+         * 현재 사용자 정보를 반영합니다
          */
-        val vm = ViewModelProvider(this)[EditProfileViewModel::class.java]
         vm.profileImage.observe(this) {
             if (!it.isNullOrBlank()) {
                 binding.profileImage.load(it)
                 binding.profileImage.foreground = null
             }
         }
+        vm.currentUsername.observe(this) { binding.textEditorUsername.setText(it) }
 
+
+        /**
+         * 액션바 셋업
+         */
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
+        /**
+         * 프로필 변경 버튼 클릭
+         */
         binding.nextButton.setOnClickListener {
             lifecycleScope.launch {
                 try {
@@ -94,6 +100,9 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * 프로필 이미지 아이콘 클릭
+         */
         binding.profileImage.setOnClickListener {
             ProfileImageSelectorView { uri ->
                 profileImage = uri
@@ -102,46 +111,89 @@ class EditProfileActivity : AppCompatActivity() {
             }.show(supportFragmentManager, "SelectImage")
         }
 
-        val primaryButtonTextColor = ContextCompat.getColor(this, R.color.text_default_inverse)
-        val primaryButtonBackgroundColor =
-            ContextCompat.getColor(this, R.color.surface_accent_primary)
-        val disabledButtonTextColor = ContextCompat.getColor(this, R.color.text_default_inverse)
-        val disabledButtonBackgroundColor =
-            ContextCompat.getColor(this, R.color.surface_default_base)
-
-        binding.textEditorUsername.doOnTextChanged { _, _, _, count ->
-            if (count == 0) {
+        /**
+         * 버튼 활성화 여부를 변경합니다
+         */
+        vm.newUsername.observe(this) {
+            if (it.isNullOrBlank() || it.length > 10) {
                 binding.nextButton.isEnabled = false
-                binding.nextButton.setTextColor(disabledButtonTextColor)
-                binding.nextButton.setBackgroundColor(disabledButtonBackgroundColor)
+                binding.nextButton.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.surface_default_base
+                    )
+                )
             } else {
-                if (count > 10) {
-                    binding.usernameLengthChecker.setTextColor(
-                        resources.getColor(
-                            R.color.system_error_primary,
-                            null
-                        )
+                binding.nextButton.isEnabled = true
+                binding.nextButton.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.surface_accent_primary
                     )
-                    binding.nextButton.isEnabled = false
-                    binding.nextButton.setTextColor(disabledButtonTextColor)
-                    binding.nextButton.setBackgroundColor(disabledButtonBackgroundColor)
-                } else {
-                    binding.usernameLengthChecker.setTextColor(
-                        resources.getColor(
-                            R.color.text_default_tertiary,
-                            null
-                        )
+                )
+            }
+
+            if (it.length > 10) {
+                binding.usernameLengthChecker.setTextColor(
+                    resources.getColor(
+                        R.color.system_error_primary,
+                        null
                     )
-                    binding.nextButton.isEnabled = true
-                    binding.nextButton.setTextColor(primaryButtonTextColor)
-                    binding.nextButton.setBackgroundColor(primaryButtonBackgroundColor)
-                }
+                )
+            } else {
+                binding.usernameLengthChecker.setTextColor(
+                    resources.getColor(
+                        R.color.text_default_tertiary,
+                        null
+                    )
+                )
             }
         }
-    }
 
-    fun uriToBase64(uri: Uri): String {
-        val bytes = contentResolver.openInputStream(uri)!!.use { it.readBytes() }
-        return Base64.encodeToString(bytes, Base64.NO_WRAP)
+        /**
+         * 닉네임 입력기 백그라운드를 설정하고, focus시 stroke를 추가합니다
+         */
+        binding.textEditorUsername.setOnFocusChangeListener { _, hasFocus ->
+            val drawable = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = 8f * resources.displayMetrics.density
+                if (hasFocus) {
+                    setStroke(
+                        1 * resources.displayMetrics.density.toInt(),
+                        ContextCompat.getColor(
+                            this@EditProfileActivity,
+                            R.color.border_default_tertiary
+                        )
+                    )
+                } else {
+                    setStroke(
+                        0,
+                        ContextCompat.getColor(
+                            this@EditProfileActivity,
+                            R.color.border_default_tertiary
+                        )
+                    ) // 포커스 없을 때 stroke 제거
+                }
+                setColor(
+                    ContextCompat.getColor(
+                        this@EditProfileActivity,
+                        R.color.surface_default_primary
+                    )
+                )
+            }
+            binding.textEditorUsername.background = drawable
+        }
+
+        binding.textEditorUsername.background = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = 8f * resources.displayMetrics.density
+            setColor(
+                ContextCompat.getColor(
+                    this@EditProfileActivity,
+                    R.color.surface_default_primary
+                )
+            )
+        }
+
     }
 }

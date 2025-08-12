@@ -3,22 +3,25 @@
     <style name="Theme.Bonda.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:dialogCornerRadius">8dp</item>
     </style>
+
     <style name="Theme.Bonda.ProfileImageSelectorDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.55</item>
     </style>
+
     <style name="Theme.Bonda.BottomSheetDialog" parent="Theme.Material3.Light.BottomSheetDialog">
         <!-- 좌우 패딩 0 -->
         <item name="bottomSheetStyle">@style/Widget.Bonda.BottomSheet</item>
         <!-- 네비바 색 지정 -->
         <item name="android:navigationBarColor">@android:color/white</item>
     </style>
+
     <style name="Widget.Bonda.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
         <!-- 화면 가로 100% -->
         <item name="android:layout_width">match_parent</item>
         <!-- 모서리 라운드 -->
-<!--        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.RoundedTop12dp</item>-->
+        <!--        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.RoundedTop12dp</item>-->
     </style>
 
 
@@ -29,6 +32,7 @@
         <item name="android:paddingStart">0dp</item>
         <item name="android:paddingEnd">0dp</item>
     </style>
+
     <style name="ShapeAppearance.Bonda.SearchBar" parent="ShapeAppearance.Material3.SmallComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
@@ -38,39 +42,40 @@
     <style name="Theme.Bonda" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/ic_launcher_background</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
-<!--        <item name="windowSplashScreenBackground">@color/surface_accent_primary</item>-->
-<!--        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>-->
+        <!--        <item name="windowSplashScreenBackground">@color/surface_accent_primary</item>-->
+        <!--        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>-->
     </style>
-    
+
     <!-- Buttons -->
     <style name="Widget.Bonda.Button.Primary" parent="Widget.Material3.Button">
         <item name="android:backgroundTint">@color/surface_accent_primary</item>
+        <item name="android:enabled">true</item>
+        <item name="android:textAppearance">@style/Body1</item>
         <item name="android:textColor">@color/text_default_inverse</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
         <item name="cornerRadius">8dp</item>
     </style>
 
     <style name="Widget.Bonda.Button.Secondary" parent="Widget.Material3.Button">
         <item name="android:backgroundTint">@color/surface_default_primary</item>
-        <item name="android:textColor">@color/text_default_inverse</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:enabled">true</item>
+        <item name="android:textAppearance">@style/Body1</item>
+        <item name="android:textColor">@color/text_default_secondary</item>
         <item name="cornerRadius">8dp</item>
     </style>
 
     <style name="Widget.Bonda.Button.Disabled" parent="Widget.Material3.Button">
         <item name="android:backgroundTint">@color/surface_default_base</item>
         <item name="android:enabled">false</item>
+        <item name="android:textAppearance">@style/Body1</item>
         <item name="android:textColor">@color/text_default_inverse</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
         <item name="cornerRadius">8dp</item>
     </style>
 
     <style name="Widget.Bonda.Button.Outlined" parent="Widget.Material3.Button">
         <item name="android:backgroundTint">#0000</item>
         <item name="cornerRadius">8dp</item>
+        <item name="android:textAppearance">@style/Body7</item>
+        <item name="android:textColor">@color/border_accent_primary</item>
         <item name="strokeColor">@color/border_accent_primary</item>
         <item name="strokeWidth">1dp</item>
     </style>
@@ -82,7 +87,7 @@
         <item name="strokeColor">@color/border_default_tertiary</item>
         <item name="strokeWidth">1dp</item>
     </style>
-    
+
     <!-- Badge -->
     <style name="Widget.Bonda.Badge.Category" parent="Theme.Bonda">
         <item name="android:checkable">false</item>
