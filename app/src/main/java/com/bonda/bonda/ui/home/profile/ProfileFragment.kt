@@ -15,6 +15,8 @@ import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.ui.profile.recent.RecentActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import com.bonda.bonda.util.BONDA_NOTICE_URL
+import com.bonda.bonda.util.BONDA_TERMS_OF_POLICY_URL
 
 class ProfileFragment : Fragment() {
 
@@ -72,20 +74,18 @@ class ProfileFragment : Fragment() {
          * 공지사항 버튼 클릭 시 웹 브라우저를 통해 공지사항 페이지를 표시합니다.
          */
         binding.buttonNotice.setOnClickListener {
-            val url = "https://hulking-papaya-a80.notion.site/BONDA-2308b15a2d1d80e1a0a6d7e04c07f2b7"
             val builder = CustomTabsIntent.Builder()
             val customTabsIntent = builder.build()
-            customTabsIntent.launchUrl(requireContext(), url.toUri())
+            customTabsIntent.launchUrl(requireContext(), BONDA_NOTICE_URL.toUri())
         }
 
         /**
          * 이용약관 버튼 클릭 시 웹 브라우저를 통해 이용약관 페이지를 표시합니다.
          */
         binding.buttonPolicy.setOnClickListener {
-            val url = "https://hulking-papaya-a80.notion.site/BONDA-1f88b15a2d1d8085a4d1c6fa47e1dfc7"
             val builder = CustomTabsIntent.Builder()
             val customTabsIntent = builder.build()
-            customTabsIntent.launchUrl(requireContext(), url.toUri())
+            customTabsIntent.launchUrl(requireContext(), BONDA_TERMS_OF_POLICY_URL.toUri())
         }
     }
 
