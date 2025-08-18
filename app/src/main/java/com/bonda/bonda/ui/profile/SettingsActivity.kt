@@ -50,20 +50,27 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(Intent(this, EditProfileActivity::class.java))
         }
 
+        /**
+         * 로그아웃 dialog 표시
+         */
         binding.buttonLogout.setOnClickListener {
             DialogView.newInstance(
                 requestKey = "logout",
                 message = "로그아웃하시겠습니까?",
-                confirmText = "로그아웃",
-                cancelText = "취소"
+                confirmText = "네",
+                cancelText = "아니요"
             ).show(supportFragmentManager, "logout_dialog")
         }
 
+        /**
+         * 회원탈퇴 dialog 표시
+         */
         binding.buttonWithdrawal.setOnClickListener {
             DialogView.newInstance(
                 requestKey = "withdrawal",
-                message = "정말 탈퇴하시겠습니까?",
-                confirmText = "탈퇴",
+                message = "Bonda를 떠나기 전, 확인해 주세요.",
+                message2 = "탈퇴하시면 계정과 저장된 콘텐츠, 작성한 기록이 모두 삭제되며, 다시 복구할 수 없습니다.",
+                confirmText = "탈퇴하기",
                 cancelText = "취소"
             ).show(supportFragmentManager, "withdrawal_dialog")
         }
@@ -84,6 +91,9 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 로그아웃 api 요청 로직
+     */
     private fun performLogout() {
         lifecycleScope.launch {
             try {
@@ -114,6 +124,9 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 회원탈퇴 api 요청 로직
+     */
     private fun performWithdrawal() {
         lifecycleScope.launch {
             try {
@@ -136,4 +149,5 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
     }
+
 }

@@ -11,8 +11,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import coil3.load
+import com.bonda.bonda.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivitySignUpBinding
 import com.bonda.bonda.network.ApiClient
@@ -84,18 +86,21 @@ class EditProfileActivity : AppCompatActivity() {
                         )
                     }
 
-                    val response = memberService.updateProfile(
+                    memberService.updateProfile(
                         AccessTokenProvider.getAccessToken()!!
                             .toRequestBody("text/plain".toMediaType()),
                         binding.textEditorUsername.text.toString()
                             .toRequestBody("text/plain".toMediaType()),
                         binaryImage,
                     )
-                    Log.d(TAG, response.toString())
 
+                    /**
+                     * profile 데이터를 다시 불러오도록 신호 전달
+                     */
+                    AppEvents.profileUpdated.emit(Unit)
                     finish()
                 } catch (e: Exception) {
-                    Log.d(TAG, "문제가 발생했습니다: ${e.message}")
+                    Log.e(TAG, "문제가 발생했습니다: ${e.message}")
                 }
             }
         }
@@ -148,6 +153,13 @@ class EditProfileActivity : AppCompatActivity() {
                     )
                 )
             }
+        }
+
+        /**
+         * 닉네임 입력기 값 변경을 감지합니다
+         */
+        binding.textEditorUsername.doOnTextChanged { text, _, _, _ ->
+            vm.setUsername(text.toString())
         }
 
         /**
