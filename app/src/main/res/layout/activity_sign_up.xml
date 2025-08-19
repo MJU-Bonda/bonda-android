@@ -13,7 +13,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_navigation_previous_24dp"
-        app:navigationIconTint="@color/border_accent_primary" />
+        app:navigationIconTint="@color/border_accent_primary"
+        app:title="프로필 수정"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/Title2"
+        app:titleTextColor="@color/text_accent_primary" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
