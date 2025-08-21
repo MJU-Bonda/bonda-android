@@ -13,7 +13,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityOnboardingBinding
 import com.bonda.bonda.ui.home.HomeActivity
-import com.google.android.material.tabs.TabLayoutMediator
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -68,19 +67,6 @@ class OnboardingActivity : AppCompatActivity() {
             override fun createFragment(pos: Int) = pages[pos]
         }
 
-//        TabLayoutMediator(binding.pageIndicator, binding.viewPager) { tab, _ ->
-//            tab.setIcon(R.drawable.indicator_dot_unselected)
-//        }.attach()
-//        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-//            override fun onPageSelected(position: Int) {
-//                for(i in 0 until binding.pageIndicator.tabCount) {
-//                    val tab = binding.pageIndicator.getTabAt(i)
-//                    tab?.setIcon(
-//                        if (i == position) R.drawable.indicator_dot_selected else R.drawable.indicator_dot_unselected
-//                    )
-//                }
-//            }
-//        })
         /**
          * 탭 인디케이터 표시
          */
@@ -115,4 +101,5 @@ class OnboardingActivity : AppCompatActivity() {
             }
         })
     }
+
 }

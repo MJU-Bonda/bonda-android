@@ -19,6 +19,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import coil3.load
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleDetailBinding
@@ -167,7 +168,9 @@ class ArticleActivity : AppCompatActivity() {
             }
         }
 
-        // 도서 목록 binding 1
+        /**
+         * 도서 카드 목록 도서 데이터 바인딩
+         */
         vm.books.observe(this) { books ->
             val fragments = books.mapIndexed { index, book ->
                 BookCardFragment.newInstance(
@@ -187,7 +190,19 @@ class ArticleActivity : AppCompatActivity() {
             }
         }
 
-        // 도서 목록 binding 2
+        /**
+         * 도서 카드 목록 탭 인디케이터
+         */
+        vm.books.observe(this) { binding.booksTabIndicator.setCount(it.size) }
+        binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                binding.booksTabIndicator.select(position)
+            }
+        })
+
+        /**
+         * 그리드 컨테이너 도서 목록 바인딩
+         */
         vm.books.observe(this) { books ->
             binding.booksGridContainer.removeAllViews()
 
@@ -219,7 +234,9 @@ class ArticleActivity : AppCompatActivity() {
             }
         }
 
-        // 다른 articles 목록 binding
+        /**
+         * 다른 아티클 목록 바인딩
+         */
         vm.articles.observe(this) { list ->
             binding.articlesContainer.removeAllViews()
 
@@ -234,7 +251,6 @@ class ArticleActivity : AppCompatActivity() {
 
                 itemBinding.root.id = View.generateViewId()
 
-                // view-model binding
                 itemBinding.articleImage.load(article.coverImage)
                 itemBinding.articleTitle.text = article.title.replace("\\n", " ")
 
@@ -256,7 +272,6 @@ class ArticleActivity : AppCompatActivity() {
                         else -> R.color.text_accent_primary
                     }
 
-                    // Chip 에 적용
                     itemBinding.articleCategory.root.chipBackgroundColor =
                         ColorStateList.valueOf(
                             ContextCompat.getColor(this, bgColorRes)
@@ -266,9 +281,10 @@ class ArticleActivity : AppCompatActivity() {
                     )
                 }
 
-                // set layout constraint
+                /**
+                 * layout constraint parameters를 설정합니다
+                 */
                 val params = itemBinding.root.layoutParams as ConstraintLayout.LayoutParams
-
                 if (lastAddedViewId != null) {
                     params.topToBottom = lastAddedViewId!!
                 } else {
@@ -277,7 +293,9 @@ class ArticleActivity : AppCompatActivity() {
 
                 itemBinding.root.layoutParams = params
 
-                // start article detail activity
+                /**
+                 * 클릭 시 새로운 아티클 상세보기 activity를 실행합니다
+                 */
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(this, ArticleActivity::class.java)
                     intent.putExtra("article_detail_id", article.id)
@@ -285,7 +303,6 @@ class ArticleActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
 
-                // apply
                 binding.articlesContainer.addView(itemBinding.root)
                 lastAddedViewId = itemBinding.root.id
             }

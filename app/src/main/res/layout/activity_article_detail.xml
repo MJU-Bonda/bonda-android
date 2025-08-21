@@ -100,6 +100,7 @@
                         android:src="@drawable/ic_action_bookmark_empty_24dp"
                         app:tint="@color/white" />
                 </com.google.android.material.appbar.MaterialToolbar>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -127,12 +128,21 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.bonda.bonda.util.TabIndicatorView
+                android:id="@+id/books_tab_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
+                app:dividerColor="@color/border_default_tertiary"
                 app:dividerThickness="4dp" />
 
             <TextView
@@ -183,7 +193,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="64dp" />
+
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <include
