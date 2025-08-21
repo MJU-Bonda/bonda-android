@@ -2,7 +2,9 @@ package com.bonda.bonda.ui.profile
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import android.view.Window
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.bonda.bonda.R
@@ -16,12 +18,14 @@ class DialogView : DialogFragment() {
     companion object {
         private const val ARG_REQUEST_KEY = "ARG_REQUEST_KEY"
         private const val ARG_MESSAGE = "ARG_MESSAGE"
+        private const val ARG_MESSAGE2 = "ARG_MESSAGE2"
         private const val ARG_CONFIRM = "ARG_CONFIRM"
         private const val ARG_CANCEL = "ARG_CANCEL"
 
         fun newInstance(
             requestKey: String,
             message: String,
+            message2: String = "",
             confirmText: String = "확인",
             cancelText: String = "취소"
         ): DialogView {
@@ -29,6 +33,7 @@ class DialogView : DialogFragment() {
                 arguments = Bundle().apply {
                     putString(ARG_REQUEST_KEY, requestKey)
                     putString(ARG_MESSAGE, message)
+                    putString(ARG_MESSAGE2, message2)
                     putString(ARG_CONFIRM, confirmText)
                     putString(ARG_CANCEL, cancelText)
                 }
@@ -39,12 +44,22 @@ class DialogView : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = ViewDialogBinding.inflate(layoutInflater)
 
-        val reqKey     = requireArguments().getString(ARG_REQUEST_KEY)!!
+        val reqKey = requireArguments().getString(ARG_REQUEST_KEY)!!
         val message = requireArguments().getString(ARG_MESSAGE)
+        val message2 = requireArguments().getString(ARG_MESSAGE2)
         val confirmText = requireArguments().getString(ARG_CONFIRM)
         val cancelText = requireArguments().getString(ARG_CANCEL)
 
         binding.text.text = message
+
+        if (!message2.isNullOrBlank()) {
+            binding.text.setTextAppearance(R.style.Title3)
+            binding.text2.visibility = View.VISIBLE
+            binding.text2.text = message2
+            binding.text2.setTextAppearance(R.style.Body3)
+            binding.text2.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_default_secondary))
+        }
+
         binding.buttonConfirm.text = confirmText
         binding.buttonCancel.text = cancelText
 

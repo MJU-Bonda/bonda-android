@@ -22,6 +22,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/Body3"
+            android:textColor="@color/text_default_primary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/button_group"
             android:layout_width="0dp"
@@ -29,7 +41,7 @@
             android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text">
+            app:layout_constraintTop_toBottomOf="@id/text2">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_cancel"
@@ -38,8 +50,6 @@
                 android:layout_height="wrap_content"
                 android:minWidth="128dp"
                 android:minHeight="46dp"
-                android:textAppearance="@style/Body1"
-                android:textColor="@color/text_default_secondary"
                 app:layout_constraintEnd_toStartOf="@id/button_confirm"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,11 +62,12 @@
                 android:layout_marginStart="8dp"
                 android:minWidth="128dp"
                 android:minHeight="46dp"
-                android:textAppearance="@style/Body1"
-                android:textColor="@color/text_default_inverse"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/button_cancel"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.card.MaterialCardView>

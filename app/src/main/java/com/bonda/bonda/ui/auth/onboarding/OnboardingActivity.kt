@@ -31,6 +31,9 @@ class OnboardingActivity : AppCompatActivity() {
             insets
         }
 
+        /**
+         * 온보딩 페이지 인스턴스
+         */
         val pages = listOf(
             OnboardingFragment.newInstance(
                 R.string.onboarding1_heading1,
@@ -59,41 +62,37 @@ class OnboardingActivity : AppCompatActivity() {
             )
         )
 
-        binding.viewPager.adapter = object: FragmentStateAdapter(this) {
+        binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = pages.size
             override fun createFragment(pos: Int) = pages[pos]
         }
 
-        // TODO: Tab Indicator 추가
-//        TabLayoutMediator(binding.tabIndicator, binding.viewPager) { tab, position ->
-//
-//        }.attach()
-
+        /**
+         * 탭 인디케이터 표시
+         */
+        binding.pageIndicator.setCount(pages.size)
         binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (position != pages.lastIndex) {
-                    binding.nextButton.text = getText(R.string.onboarding_next_button)
-                } else {
-                    binding.nextButton.text = getText(R.string.onboarding_next_button_finished)
-                }
+                binding.pageIndicator.select(position)
             }
         })
 
+        /**
+         * 시작하기(다음) 버튼 클릭 시
+         */
         binding.nextButton.setOnClickListener {
             if (binding.viewPager.currentItem != pages.lastIndex) {
                 binding.viewPager.currentItem++
             } else {
-                startActivity(
-                    Intent(this, HomeActivity::class.java)
-                )
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
                 finish()
             }
         }
 
-        binding.closeButton.setOnClickListener {
-            finish()
-        }
-
+        /**
+         * navigation 뒤로가기 버튼 클릭 시
+         */
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (binding.viewPager.currentItem > 0) {
@@ -102,4 +101,5 @@ class OnboardingActivity : AppCompatActivity() {
             }
         })
     }
+
 }

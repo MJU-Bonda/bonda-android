@@ -32,6 +32,7 @@
             android:padding="12dp"
             android:src="@drawable/ic_action_bookmark_empty_24dp"
             app:tint="@color/border_accent_primary" />
+
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.core.widget.NestedScrollView
@@ -69,6 +70,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:contentDescription="@string/book_image_description" />
+
                 </com.google.android.material.card.MaterialCardView>
 
                 <include
@@ -85,8 +87,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
+                    android:textAppearance="@style/Title1"
+                    android:textColor="@color/text_default_primary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/book_category" />
@@ -107,7 +109,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
-
                     android:textAppearance="@style/Caption2"
                     android:textColor="@color/text_default_tertiary"
                     app:layout_constraintStart_toEndOf="@id/book_author_header"
@@ -118,7 +119,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_book_publisher"
-
                     android:textAppearance="@style/Caption2"
                     android:textColor="@color/text_default_tertiary"
                     app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +128,6 @@
                     android:id="@+id/book_publisher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:textAppearance="@style/Caption2"
                     android:textColor="@color/text_default_tertiary"
                     app:layout_constraintStart_toStartOf="@id/author"
@@ -139,7 +138,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_book_book_size"
-
                     android:textAppearance="@style/Caption2"
                     android:textColor="@color/text_default_tertiary"
                     app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +147,6 @@
                     android:id="@+id/book_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:textAppearance="@style/Caption2"
                     android:textColor="@color/text_default_tertiary"
                     app:layout_constraintStart_toStartOf="@id/author"
@@ -160,7 +157,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_book_page_length"
-
                     android:textAppearance="@style/Caption2"
                     android:textColor="@color/text_default_tertiary"
                     app:layout_constraintStart_toStartOf="parent"
@@ -170,7 +166,6 @@
                     android:id="@+id/book_page_length"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:textAppearance="@style/Caption2"
                     android:textColor="@color/text_default_tertiary"
                     app:layout_constraintStart_toStartOf="@id/author"
@@ -232,6 +227,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/body" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -245,5 +241,7 @@
                 app:layout_constraintTop_toBottomOf="@id/layout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

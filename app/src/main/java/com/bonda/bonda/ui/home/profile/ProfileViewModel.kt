@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bonda.bonda.AppEvents
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
@@ -35,6 +36,14 @@ class ProfileViewModel : ViewModel() {
      * init
      */
     init {
+        loadProfile()
+        observeProfileUpdatedEvent()
+    }
+
+    /**
+     * 프로필 로드
+     */
+    private fun loadProfile() {
         viewModelScope.launch {
             try {
                 val res = memberService.getProfile().unwrapOrThrow()
@@ -44,11 +53,21 @@ class ProfileViewModel : ViewModel() {
                     _profileImage.value = res.profileImage.toString()
                 _savedBookCount.value = res.savedBookCount
                 _collectedBadgeCount.value = res.badgeCount
-
-                Log.d(TAG, res.toString())
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             }
         }
     }
+
+    /**
+     * 재로드 신호 관찰
+     */
+    private fun observeProfileUpdatedEvent() {
+        viewModelScope.launch {
+            AppEvents.profileUpdated.collect {
+                loadProfile()
+            }
+        }
+    }
+
 }

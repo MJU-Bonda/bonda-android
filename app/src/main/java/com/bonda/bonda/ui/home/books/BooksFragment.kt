@@ -146,13 +146,15 @@ class BooksFragment : Fragment() {
         vm.mostLovedBooks.observe(viewLifecycleOwner) { list ->
             binding.mostLovedBooksContainer.removeAllViews()
 
-            list.forEach { book ->
+            list.forEachIndexed { index, book ->
                 val itemBinding = ViewBookHorizontalBinding.inflate(
                     layoutInflater,
                     binding.mostLovedBooksContainer,
                     false
                 )
 
+                itemBinding.tvIdx.text = (index + 1).toString()
+                itemBinding.tvIdx.visibility = View.VISIBLE
                 itemBinding.coverImage.load(book.coverImage)
                 itemBinding.title.text = book.title
                 itemBinding.author.text = book.author

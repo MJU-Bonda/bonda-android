@@ -26,19 +26,18 @@
         android:textColor="#191919"
         android:textSize="16sp"
         app:cornerRadius="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/materialTextView5"
+        app:layout_constraintBottom_toTopOf="@+id/tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/materialTextView5"
+        android:id="@+id/tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="36dp"
         android:layout_marginBottom="72dp"
-        android:text="시작할 경우, 본다의 서비스 이용약관 및 개인정보 보호정책에 동의하게 됩니다."
         android:textColor="@color/text_default_tertiary"
-        android:textSize="12sp"
+        android:textAppearance="@style/Caption2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

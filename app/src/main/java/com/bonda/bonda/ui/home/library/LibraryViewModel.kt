@@ -9,11 +9,15 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.bonda.bonda.model.SortOrder
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.article.SavedArticlesResponse
 import com.bonda.bonda.network.model.book.SavedBooksResponse
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 class LibraryViewModel : ViewModel() {
@@ -30,6 +34,31 @@ class LibraryViewModel : ViewModel() {
     private val _savedArticleCount = MutableLiveData<Int>()
     val savedBookCount: LiveData<Int> = _savedBookCount
     val savedArticleCount: LiveData<Int> = _savedArticleCount
+
+    /**
+     * 정렬 기준 관리
+     */
+    private val _bookSortOrder = MutableStateFlow(SortOrder.RECENT.code)
+    private val _articleSortOrder = MutableStateFlow(SortOrder.RECENT.code)
+
+    val bookSortOrder = _bookSortOrder.asStateFlow()
+    val articleSortOrder = _articleSortOrder.asStateFlow()
+
+    fun toggleBookSortOrder() {
+        if (_bookSortOrder.value == SortOrder.RECENT.code) {
+            _bookSortOrder.value = SortOrder.TITLE.code
+        } else {
+            _bookSortOrder.value = SortOrder.RECENT.code
+        }
+    }
+
+    fun toggleArticleSortOrder() {
+        if (_articleSortOrder.value == SortOrder.RECENT.code) {
+            _articleSortOrder.value = SortOrder.TITLE.code
+        } else {
+            _articleSortOrder.value = SortOrder.RECENT.code
+        }
+    }
 
     /**
      * 저장한 도서와 아티클 갯수를 불러옵니다.
@@ -49,17 +78,33 @@ class LibraryViewModel : ViewModel() {
      * 저장한 도서를 페이지네이션합니다.
      */
     val savedBooksFlow: Flow<PagingData<SavedBooksResponse.Book>> =
-        Pager(
-            config = PagingConfig(pageSize = 24, prefetchDistance = 2, enablePlaceholders = false),
-            pagingSourceFactory = { SavedBooksPagingSource(bookService) }
-        ).flow.cachedIn(viewModelScope)
+        bookSortOrder.flatMapLatest { orderBy ->
+            Pager(
+                config = PagingConfig(
+                    pageSize = 24,
+                    prefetchDistance = 2,
+                    enablePlaceholders = false
+                ),
+                pagingSourceFactory = { SavedBooksPagingSource(bookService, orderBy) }
+            ).flow
+        }.cachedIn(viewModelScope)
+
 
     /**
      * 저장한 아티클을 페이지네이션합니다.
      */
     val savedArticlesFlow: Flow<PagingData<SavedArticlesResponse.Article>> =
-        Pager(
-            config = PagingConfig(pageSize = 24, prefetchDistance = 2, enablePlaceholders = false),
-            pagingSourceFactory = { SavedArticlesPagingSource(articleService) }
-        ).flow.cachedIn(viewModelScope)
+        articleSortOrder.flatMapLatest { orderBy ->
+
+            Pager(
+                config = PagingConfig(
+                    pageSize = 24,
+                    prefetchDistance = 2,
+                    enablePlaceholders = false
+                ),
+                pagingSourceFactory = { SavedArticlesPagingSource(articleService, orderBy) }
+            ).flow
+        }.cachedIn(viewModelScope)
+
+
 }

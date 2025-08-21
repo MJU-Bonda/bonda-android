@@ -103,7 +103,7 @@ fun AppCompatActivity.showSnackbar(
                     ContextCompat.getColorStateList(context, R.color.system_error_secondary)
             }
             binding.icon.apply {
-                setImageResource(R.drawable.ic_notification_check_24dp)
+                setImageResource(R.drawable.ic_notification_incomplete_24dp)
                 imageTintList =
                     ContextCompat.getColorStateList(context, R.color.system_error_primary)
             }
@@ -141,4 +141,5 @@ fun AppCompatActivity.showSnackbar(
             }
             .start()
     }, 2500)
+
 }

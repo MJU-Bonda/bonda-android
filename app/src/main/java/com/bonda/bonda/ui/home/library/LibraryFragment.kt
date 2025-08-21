@@ -42,6 +42,13 @@ class LibraryFragment : Fragment() {
                 else -> ""
             }
         }.attach()
+
+        val initialTab = arguments?.getString("initialTab")
+        if (initialTab == "article") {
+            binding.viewPager.setCurrentItem(1, false)
+            arguments?.remove("initialTab") // 사용 후 제거
+        }
+
     }
 
     override fun onDestroyView() {
