@@ -71,11 +71,7 @@ class BookCardFragment : Fragment(R.layout.fragment_book_card) {
         val author = args.getString(ARG_AUTHOR)!!
         val body = args.getString(ARG_BODY)!!
 
-        binding.index.text = buildString {
-            append("0")
-            append((index + 1))
-            append(" / 04")
-        }
+        binding.index.text = "%02d".format(index + 1)
         binding.coverImage.load(coverImage)
         binding.category.root.text = category
         binding.title.text = title

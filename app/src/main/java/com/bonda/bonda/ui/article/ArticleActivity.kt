@@ -130,6 +130,7 @@ class ArticleActivity : AppCompatActivity() {
                                     val intent =
                                         Intent(this@ArticleActivity, HomeActivity::class.java)
                                     intent.putExtra("navDest", "library")
+                                    intent.putExtra("initialTab", "article")
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                                     startActivity(intent)
                                 },

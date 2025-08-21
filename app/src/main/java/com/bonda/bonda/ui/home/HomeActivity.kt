@@ -7,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityHomeBinding
-import com.bonda.bonda.ui.home.library.LibraryFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity : AppCompatActivity() {
@@ -39,14 +39,29 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if(intent.getStringExtra("navDest") == "library") {
-            openLibraryFragment()
+
+        if (intent?.getStringExtra("navDest") == "library") {
+            val bundle = Bundle().apply {
+                putString("initialTab", intent.getStringExtra("initialTab"))
+            }
+
+            val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
+            val navOptions = NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setPopUpTo(R.id.navigation_library, false)
+                .build()
+
+            navController.navigate(
+                R.id.navigation_library,
+                bundle,
+                navOptions
+            )
+
+
+            intent.removeExtra("navDest")
+            intent.removeExtra("initialTab")
         }
     }
 
-    private fun openLibraryFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.nav_host_fragment_activity_main, LibraryFragment())
-            .commitAllowingStateLoss()
-    }
 }
