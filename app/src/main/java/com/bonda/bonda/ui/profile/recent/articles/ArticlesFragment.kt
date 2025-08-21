@@ -5,10 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bonda.bonda.databinding.FragmentRecentActivityBinding
 import com.bonda.bonda.ui.article.ArticleActivity
@@ -17,6 +16,7 @@ class ArticlesFragment : Fragment() {
 
     private var _binding: FragmentRecentActivityBinding? = null
     private val binding get() = _binding!!
+    private val vm: ArticlesViewModel by viewModels()
 
     private val adapter by lazy {
         ArticleAdapter { article ->
@@ -41,7 +41,6 @@ class ArticlesFragment : Fragment() {
         binding.container.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.container.adapter = adapter
 
-        val vm = ViewModelProvider(this) [ArticlesViewModel::class.java]
         vm.getArticles()
 
         vm.isLoading.observe(viewLifecycleOwner) { binding.progressIndicator.isVisible = it }

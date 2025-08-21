@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bonda.bonda.databinding.FragmentRecentActivityBinding
 import com.bonda.bonda.ui.book.BookActivity
@@ -16,6 +16,7 @@ class BooksFragment : Fragment() {
 
     private var _binding: FragmentRecentActivityBinding? = null
     private val binding get() = _binding!!
+    private val vm: BooksViewModel by viewModels()
 
     private val adapter by lazy {
         BookAdapter { book ->
@@ -40,7 +41,6 @@ class BooksFragment : Fragment() {
         binding.container.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.container.adapter = adapter
 
-        val vm = ViewModelProvider(this) [BooksViewModel::class.java]
         vm.getBooks()
 
         vm.isLoading.observe(viewLifecycleOwner) { binding.progressIndicator.isVisible = it }

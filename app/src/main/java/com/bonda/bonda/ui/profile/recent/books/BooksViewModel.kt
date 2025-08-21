@@ -10,9 +10,11 @@ import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 
 class BooksViewModel : ViewModel() {
-
+    /**
+     * pagination을 구현하지 않고 최대 로드 길이를 256으로 설정합니다
+     */
     companion object {
-        private const val PAGE_SIZE = 24
+        private const val PAGE_SIZE = 256
     }
 
     private val bookService = ApiClient.bookService
@@ -62,12 +64,5 @@ class BooksViewModel : ViewModel() {
                 _isLoading.value = false
             }
         }
-    }
-
-    fun getNextPage() {
-        if (_hasNextPage.value != true) return
-
-        page++
-        getBooks()
     }
 }
