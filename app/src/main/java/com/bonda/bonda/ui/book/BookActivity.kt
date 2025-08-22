@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import coil3.load
+import com.bonda.bonda.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityBookDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
@@ -88,6 +89,8 @@ class BookActivity : AppCompatActivity() {
                                 },
                                 type = SnackbarType.SAVE
                             )
+
+                        AppEvents.profileUpdated.emit(Unit)
 
                         /**
                          * 새로운 뱃지 획득시

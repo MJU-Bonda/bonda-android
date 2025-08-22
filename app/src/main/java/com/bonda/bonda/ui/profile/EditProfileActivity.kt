@@ -37,7 +37,6 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -46,6 +45,8 @@ class EditProfileActivity : AppCompatActivity() {
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        binding.nextButton.text = "저장"
 
         /**
          * 현재 사용자 정보를 반영합니다
@@ -57,7 +58,6 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
         vm.currentUsername.observe(this) { binding.textEditorUsername.setText(it) }
-
 
         /**
          * 액션바 셋업

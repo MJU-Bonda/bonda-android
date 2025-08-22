@@ -1,6 +1,5 @@
 package com.bonda.bonda.network.model.article
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable

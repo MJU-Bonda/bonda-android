@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import coil3.load
+import com.bonda.bonda.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
@@ -43,17 +44,43 @@ class ArticleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityArticleDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val articleId = intent.getLongExtra("article_detail_id", 0)
-        vm.getArticleData(articleId)
-
+        /**
+         * display inset을 전달합니다
+         */
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        /**
+         * activity 실행 시 전달받은 article id를 받아옵니다
+         */
+        val articleId = intent.getLongExtra("article_detail_id", 0)
+        vm.getArticleData(articleId)
+
+        /**
+         * 만약 뱃지를 받았다면 스낵바를 호출합니다
+         */
+        vm.hasNewBadge.observe(this) { hasNewBadge ->
+            if (hasNewBadge) {
+                showSnackbar(
+                    message = "새로운 뱃지를 획득했습니다!",
+                    buttonText = "확인하기",
+                    onButtonClick = {
+                        val intent = Intent(
+                            this@ArticleActivity,
+                            MyActivityActivity::class.java
+                        )
+                        startActivity(intent)
+                    },
+                    type = SnackbarType.BADGE
+                )
+                lifecycleScope.launch { AppEvents.profileUpdated.emit(Unit) }
+            }
         }
 
         /**
@@ -141,7 +168,7 @@ class ArticleActivity : AppCompatActivity() {
                         /**
                          * 새로운 뱃지 획득시
                          */
-                        if (hasNewBadge)
+                        if (hasNewBadge) {
                             showSnackbar(
                                 message = "새로운 뱃지를 획득했습니다!",
                                 buttonText = "확인하기",
@@ -154,7 +181,8 @@ class ArticleActivity : AppCompatActivity() {
                                 },
                                 type = SnackbarType.BADGE
                             )
-
+                            AppEvents.profileUpdated.emit(Unit)
+                        }
                     } catch (e: Exception) {
                         /**
                          * 오류 발생시
@@ -194,7 +222,7 @@ class ArticleActivity : AppCompatActivity() {
          * 도서 카드 목록 탭 인디케이터
          */
         vm.books.observe(this) { binding.booksTabIndicator.setCount(it.size) }
-        binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.booksTabIndicator.select(position)
             }

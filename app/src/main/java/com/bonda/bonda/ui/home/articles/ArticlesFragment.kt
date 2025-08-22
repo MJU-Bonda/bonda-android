@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil3.load
+import com.bonda.bonda.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeArticlesBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
@@ -119,21 +120,22 @@ class ArticlesFragment : Fragment() {
                             if (!article.isSaved)
                                 (requireActivity() as AppCompatActivity)
                                     .showSnackbar(
-                                    message = "아티클 저장이 완료되었습니다!",
-                                    buttonText = "서재로 이동",
-                                    onButtonClick = {
-                                        val intent = Intent(requireContext(), HomeActivity::class.java)
-                                        intent.putExtra("navDest", "library")
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                                        startActivity(intent)
-                                    },
-                                    type = SnackbarType.SAVE
-                                )
+                                        message = "아티클 저장이 완료되었습니다!",
+                                        buttonText = "서재로 이동",
+                                        onButtonClick = {
+                                            val intent =
+                                                Intent(requireContext(), HomeActivity::class.java)
+                                            intent.putExtra("navDest", "library")
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                            startActivity(intent)
+                                        },
+                                        type = SnackbarType.SAVE
+                                    )
 
                             /**
                              * 새로운 뱃지 획득시
                              */
-                            if (hasNewBadge)
+                            if (hasNewBadge) {
                                 (requireActivity() as AppCompatActivity)
                                     .showSnackbar(
                                         message = "새로운 뱃지를 획득했습니다!",
@@ -147,6 +149,8 @@ class ArticlesFragment : Fragment() {
                                         },
                                         type = SnackbarType.BADGE
                                     )
+                                AppEvents.profileUpdated.emit(Unit)
+                            }
                         } catch (e: Exception) {
                             /**
                              * 오류 발생시
