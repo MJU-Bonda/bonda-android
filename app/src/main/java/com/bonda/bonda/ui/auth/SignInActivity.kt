@@ -173,13 +173,11 @@ class SignInActivity : AppCompatActivity() {
         }
 
         if (isNewUser) {
-            val intent =
-                Intent(context, SignUpActivity::class.java)
+            val intent = Intent(context, SignUpActivity::class.java)
             startActivity(intent)
             finish()
         } else {
-            val intent =
-                Intent(context, HomeActivity::class.java)
+            val intent = Intent(context, HomeActivity::class.java)
             startActivity(intent)
             finish()
         }

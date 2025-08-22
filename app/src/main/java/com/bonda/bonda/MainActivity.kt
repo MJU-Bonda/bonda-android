@@ -20,27 +20,25 @@ import com.bonda.bonda.ui.auth.PermissionRequestActivity
 import com.bonda.bonda.ui.auth.SignUpActivity
 import com.bonda.bonda.util.PREF_KEY_PERMISSION_REQUIRED
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
-import com.bonda.bonda.util.SnackbarType
-import com.bonda.bonda.util.showSnackbar
 
 class MainActivity : AppCompatActivity() {
 
-    var initFinished = false
+    private var initFinished = false
     private val authService = ApiClient.authService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { !initFinished }
-
         super.onCreate(savedInstanceState)
 
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
-        // 앱 권한 검사
+        /**
+         * 최초 1회 실행 시에만 권한요청을 수행합니다
+         */
         if (prefs.getBoolean(PREF_KEY_PERMISSION_REQUIRED, true)) {
-            startActivity(
-                Intent(this, PermissionRequestActivity::class.java)
-            )
+            val intent = Intent(this, PermissionRequestActivity::class.java)
+            startActivity(intent)
 
             initFinished = true
             finish()
@@ -49,10 +47,8 @@ class MainActivity : AppCompatActivity() {
 
             if (refreshToken == null) {
                 Log.d(TAG, "로그인이 필요한 서비스입니다")
-
-                startActivity(
-                    Intent(this, SignInActivity::class.java)
-                )
+                val intent = Intent(this, SignInActivity::class.java)
+                startActivity(intent)
 
                 initFinished = true
                 finish()
@@ -62,47 +58,35 @@ class MainActivity : AppCompatActivity() {
                         val response = authService.reissueAccessToken(ReissueRequest(refreshToken))
                             .unwrapOrThrow()
 
-                        Log.d(TAG, "access token reissue 완료")
-
                         val accessToken = response.accessToken
                         AccessTokenProvider.setAccessToken(accessToken)
 
-                        Log.d(TAG, "new token: $accessToken")
-
                         val signupRequired = prefs.getBoolean(PREF_KEY_SIGNUP_REQUIRED, false)
 
+                        /**
+                         * 회원가입이 필요하면 회원가입 페이지로 이동하고, 그렇지 않으면 메인 페이지로 이동합니다.
+                         */
                         if (signupRequired) {
-                            startActivity(
-                                Intent(this@MainActivity, SignUpActivity::class.java)
-                            )
-
-                            Log.d(TAG, "회원가입이 필요한 서비스입니다")
+                            val intent = Intent(this@MainActivity, SignUpActivity::class.java)
+                            startActivity(intent)
 
                             initFinished = true
                             finish()
                         } else {
-                            startActivity(
-                                Intent(this@MainActivity, HomeActivity::class.java)
-                            )
-
-                            Log.d(TAG, "로그인 완료")
+                            val intent = Intent(this@MainActivity, HomeActivity::class.java)
+                            startActivity(intent)
 
                             initFinished = true
                             finish()
                         }
                     } catch (e: Exception) {
-                        Log.e(TAG, "access token reissue 중 문제가 발생했습니다")
-
                         prefs.edit() {
                             remove(PREF_KEY_REFRESH_TOKEN)
                             remove(PREF_KEY_SIGNUP_REQUIRED)
                         }
 
-                        startActivity(
-                            Intent(this@MainActivity, SignInActivity::class.java)
-                        )
-
-                        Log.d(TAG, "로그아웃 됨")
+                        val intent = Intent(this@MainActivity, SignInActivity::class.java)
+                        startActivity(intent)
 
                         initFinished = true
                         finish()
@@ -111,4 +95,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }
