@@ -38,25 +38,25 @@ class LibraryViewModel : ViewModel() {
     /**
      * 정렬 기준 관리
      */
-    private val _bookSortOrder = MutableStateFlow(SortOrder.RECENT.code)
-    private val _articleSortOrder = MutableStateFlow(SortOrder.RECENT.code)
+    private val _bookSortOrder = MutableStateFlow(SortOrder.RECENTLY_SAVED.code)
+    private val _articleSortOrder = MutableStateFlow(SortOrder.RECENTLY_SAVED.code)
 
     val bookSortOrder = _bookSortOrder.asStateFlow()
     val articleSortOrder = _articleSortOrder.asStateFlow()
 
     fun toggleBookSortOrder() {
-        if (_bookSortOrder.value == SortOrder.RECENT.code) {
+        if (_bookSortOrder.value == SortOrder.RECENTLY_SAVED.code) {
             _bookSortOrder.value = SortOrder.TITLE.code
         } else {
-            _bookSortOrder.value = SortOrder.RECENT.code
+            _bookSortOrder.value = SortOrder.RECENTLY_SAVED.code
         }
     }
 
     fun toggleArticleSortOrder() {
-        if (_articleSortOrder.value == SortOrder.RECENT.code) {
+        if (_articleSortOrder.value == SortOrder.RECENTLY_SAVED.code) {
             _articleSortOrder.value = SortOrder.TITLE.code
         } else {
-            _articleSortOrder.value = SortOrder.RECENT.code
+            _articleSortOrder.value = SortOrder.RECENTLY_SAVED.code
         }
     }
 

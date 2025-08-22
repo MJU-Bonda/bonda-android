@@ -16,7 +16,7 @@ enum class BookCategory(
     PHOTO_BOOK("PHOTO_BOOK", "사진집", R.drawable.ic_category_photobook_24dp),
     ART_BOOK("ART_BOOK", "아트북", R.drawable.ic_category_artbook_24dp),
     ILLUSTRATION("ILLUSTRATION", "일러스트북", R.drawable.ic_category_illustrationbook_24dp),
-    MAGAZINE("MAGAZINE", "메거진", R.drawable.ic_category_magazine_24dp);
+    MAGAZINE("MAGAZINE", "매거진", R.drawable.ic_category_magazine_24dp);
 
     companion object {
         val BUSINESS_CATEGORIES: List<BookCategory> = entries.filter { it != ALL }

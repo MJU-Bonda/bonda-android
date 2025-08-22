@@ -26,7 +26,8 @@
                 android:contentDescription="검색"
                 android:focusable="true"
                 android:padding="12dp"
-                android:src="@drawable/ic_action_search_24dp" />
+                android:src="@drawable/ic_action_search_24dp"
+                app:tint="@color/border_accent_primary" />
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

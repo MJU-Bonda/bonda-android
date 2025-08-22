@@ -7,13 +7,14 @@ import com.bonda.bonda.network.service.BookService
 
 class BooksPagingSource(
     private val service: BookService,
-    private val category: String
+    private val category: String,
+    private val orderBy: String
 ) : PagingSource<Int, BooksByCategoryResponse.Book>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BooksByCategoryResponse.Book> {
         val page = params.key?: 0
         return try {
-            val resp = service.getBooksByCategory(page = page, size = params.loadSize, category = category)
+            val resp = service.getBooksByCategory(page = page, size = params.loadSize, orderBy = orderBy, category = category)
             val data = resp.data.bookList
             LoadResult.Page(
                 data = data,

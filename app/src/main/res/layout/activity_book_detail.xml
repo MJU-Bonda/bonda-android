@@ -183,11 +183,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/book_page_length_header" />
 
-                <include
+                <com.google.android.material.chip.Chip
                     android:id="@+id/book_theme"
-                    layout="@layout/view_chip_book_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checkable="false"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:textAppearance="@style/Caption1"
+                    android:textColor="@color/text_default_tertiary"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipCornerRadius="16dp"
+                    app:chipMinTouchTargetSize="0dp"
+                    app:chipStrokeColor="@color/border_default_tertiary"
                     android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/book_theme_header" />

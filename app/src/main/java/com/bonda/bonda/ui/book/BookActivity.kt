@@ -38,19 +38,17 @@ class BookActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityBookDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val bookId = intent.getLongExtra("book_detail_id", 0)
-        vm.getBookDetail(bookId)
-        Log.d("DEBUG", "started_book_detail_activity_id : $bookId")
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val bookId = intent.getLongExtra("book_detail_id", 0)
+        vm.getBookDetail(bookId)
 
         /**
          * toolbar binding
@@ -133,10 +131,10 @@ class BookActivity : AppCompatActivity() {
         vm.pageLength.observe(this) { binding.bookPageLength.text = it.toString() }
         vm.theme.observe(this) { theme ->
             if (theme.isNullOrBlank()) {
-                binding.bookTheme.root.visibility = View.GONE
+                binding.bookTheme.visibility = View.GONE
                 binding.bookThemeHeader.visibility = View.GONE
             } else {
-                binding.bookTheme.root.text = theme.toBookTheme().label
+                binding.bookTheme.text = theme.toBookTheme().label
             }
         }
 

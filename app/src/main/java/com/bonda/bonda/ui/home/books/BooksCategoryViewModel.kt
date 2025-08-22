@@ -11,11 +11,13 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.bonda.bonda.model.BookCategory
+import com.bonda.bonda.model.SortOrder
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.book.BooksByCategoryResponse
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
@@ -31,6 +33,7 @@ class BooksCategoryViewModel : ViewModel() {
     private val _categories = MutableLiveData(BookCategory.entries.map { it.code })
     private val _selectedCategory = MutableLiveData(BookCategory.ALL.code)
     private val _totalBookCount = MutableLiveData(0)
+    private val _orderBy = MutableLiveData(SortOrder.POPULARITY.code)
 
     /**
      * 관찰용 live data
@@ -38,23 +41,28 @@ class BooksCategoryViewModel : ViewModel() {
     val categories: LiveData<List<String>> = _categories
     val selectedCategory: LiveData<String> = _selectedCategory
     val totalBookCount: LiveData<Int> = _totalBookCount
+    val orderBy: LiveData<String> = _orderBy
 
     /**
      * 도서 목록 페이지네이션
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     val booksFlow: Flow<PagingData<BooksByCategoryResponse.Book>> =
-        selectedCategory.asFlow()
-            .flatMapLatest { category ->
-                Pager(
-                    config = PagingConfig(
-                        pageSize = 24,
-                        prefetchDistance = 2,
-                        enablePlaceholders = false
-                    ),
-                    pagingSourceFactory = { BooksPagingSource(bookService, category) }
-                ).flow
-            }.cachedIn(viewModelScope)
+        combine(
+            selectedCategory.asFlow(),
+            orderBy.asFlow()
+        ) { category, orderBy ->
+            Pair(category, orderBy)
+        }.flatMapLatest { (category, orderBy) ->
+            Pager(
+                config = PagingConfig(
+                    pageSize = 24,
+                    prefetchDistance = 2,
+                    enablePlaceholders = false
+                ),
+                pagingSourceFactory = { BooksPagingSource(bookService, category, orderBy) }
+            ).flow
+        }.cachedIn(viewModelScope)
 
     /**
      * 카테고리 변경 및 총 도서 갯수 로드
@@ -73,6 +81,17 @@ class BooksCategoryViewModel : ViewModel() {
                 Log.e(TAG, e.message.toString())
             }
         }
+    }
+
+    /**
+     * 정렬 기준을 토글합니다
+     */
+    fun toggleSortOrder() {
+        if (_orderBy.value == SortOrder.POPULARITY.code)
+            _orderBy.value = SortOrder.RECENT.code
+        else
+            _orderBy.value = SortOrder.POPULARITY.code
+
     }
 
 }
