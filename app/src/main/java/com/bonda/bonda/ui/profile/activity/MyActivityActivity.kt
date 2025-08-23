@@ -23,17 +23,18 @@ import kotlinx.coroutines.launch
 class MyActivityActivity : AppCompatActivity() {
 
     private val memberService = ApiClient.memberService
-
     private lateinit var binding: ActivityMyActivityBinding
     private val vm: MyActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityMyActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /**
+         * 디스플레이 인셋 적용
+         */
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -47,6 +48,13 @@ class MyActivityActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener {
             finish()
+        }
+
+        /**
+         * 뱃지 이미지 데이터 바인딩
+         */
+        badgeViewBinds.forEachIndexed { index, badgeView ->
+            badgeView.badgeImage.setImageResource(badgeDisabledImages[index])
         }
 
         /**
@@ -120,9 +128,13 @@ class MyActivityActivity : AppCompatActivity() {
         }
 
         /**
-         * 획득한 뱃지 list binding
+         * 획득한 뱃지 갯수 binding
          */
         vm.collectedBadgeCount.observe(this) { binding.tvBadgeCount.text = "${it}개" }
+
+        /**
+         * 획득한 뱃지 list binding
+         */
         vm.collectedBadgeList.observe(this) { badgeList ->
             if (badgeList.isEmpty()) return@observe
 
@@ -162,7 +174,6 @@ class MyActivityActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     /**
