@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/surface_default_tertiary"
-            app:layout_scrollFlags="scroll|enterAlways"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:logo="@drawable/ic_toolbar_logo">
 
             <ImageButton
@@ -28,20 +28,40 @@
                 android:padding="12dp"
                 android:src="@drawable/ic_action_search_24dp"
                 app:tint="@color/border_accent_primary" />
+
         </com.google.android.material.appbar.MaterialToolbar>
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_default_secondary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/articles_container"
-            android:layout_width="match_parent"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="30dp"
-            android:paddingBottom="30dp" />
-    </androidx.core.widget.NestedScrollView>
+            android:background="@color/surface_default_tertiary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorColor="@color/border_accent_primary"
+            app:tabMode="auto"
+            app:tabRippleColor="@color/surface_accent_primary"
+            app:tabSelectedTextColor="@color/text_default_primary"
+            app:tabTextAppearance="@style/Title2"
+            app:tabTextColor="@color/text_default_tertiary" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tab_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -34,15 +34,15 @@ class ArticlesViewModel : ViewModel() {
     val articles: LiveData<List<Article>> = _articles
 
     /**
-     * 데이터 로드 및 바인딩
+     * 카테고리별 아티클을 불러옵니다
      */
-    init {
+    fun getArticlesByCategory(category: String) {
         viewModelScope.launch {
             try {
                 val response = articleService.getArticles(
                     page = 0,
                     size = 10,
-                    articleCategory = "ALL"
+                    articleCategory = category
                 ).unwrapOrThrow()
 
                 Log.d(TAG, response.toString())
