@@ -183,6 +183,8 @@ class ArticleActivity : AppCompatActivity() {
                             )
                             AppEvents.profileUpdated.emit(Unit)
                         }
+
+                        AppEvents.homeArticlesUpdated.emit(Unit)
                     } catch (e: Exception) {
                         /**
                          * 오류 발생시

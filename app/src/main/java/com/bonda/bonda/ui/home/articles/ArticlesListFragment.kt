@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil3.load
 import com.bonda.bonda.AppEvents
@@ -30,7 +30,7 @@ class ArticlesListFragment : Fragment() {
 
     private var _binding: FragmentHomeArticlesListBinding? = null
     private val binding get() = _binding!!
-    private val vm: ArticlesViewModel by viewModels()
+    private val vm: ArticlesViewModel by activityViewModels()
 
     companion object {
         private const val ARG_CATEGORY = "arg_category"
@@ -58,11 +58,6 @@ class ArticlesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         /**
-         * arguments를 받아서 해당 카테고리에 맞는 아티클을 로드합니다
-         */
-        arguments?.getString(ARG_CATEGORY)?.let { vm.getArticlesByCategory(it) }
-
-        /**
          * 아티클 데이터 바인딩
          */
         vm.articles.observe(viewLifecycleOwner) { list ->
@@ -71,6 +66,14 @@ class ArticlesListFragment : Fragment() {
             var lastAddedViewId: Int? = null
 
             list.forEach { article ->
+                /**
+                 * 필터에 맞는 아티클만 바인딩합니다
+                 */
+                arguments?.getString(ARG_CATEGORY)?.let {
+                    if (it != ArticleCategory.ALL.code && article.category != it)
+                        return@forEach
+                }
+
                 val itemBinding = ViewArticleBinding.inflate(
                     layoutInflater,
                     binding.articlesContainer,
