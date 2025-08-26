@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"
         android:maxSdkVersion="33"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -47,6 +48,7 @@
         <activity android:name=".ui.search.SearchActivity" />
         <activity android:name=".ui.profile.recent.RecentActivity" />
         <activity android:name=".ui.profile.activity.MyActivityActivity" />
+        <activity android:name=".ui.offline.OfflineActivity" />
 
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

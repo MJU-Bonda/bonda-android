@@ -6,6 +6,11 @@ package com.bonda.bonda.util
 const val TAG = "BONDA_DEBUG"
 
 /**
+ * intent extras
+ */
+const val ERROR_CALLBACK_ACTIVITY = "error_callback_activity"
+
+/**
  * SharedPreferences Key
  */
 const val PREFS_NAME = "Prefs"

@@ -35,7 +35,6 @@ import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.ui.components.SnackbarType
 import com.bonda.bonda.util.TAG
 import com.bonda.bonda.ui.components.showSnackbar
-import com.bonda.bonda.util.logError
 import kotlinx.coroutines.launch
 
 class ArticleActivity : AppCompatActivity() {
@@ -115,7 +114,7 @@ class ArticleActivity : AppCompatActivity() {
                         binding.articleImageGradient.isVisible = true
                     },
                     onError = { _, result ->
-                        result.throwable.logError()
+                        Log.e(TAG, "ArticleActivity::coverImage", result.throwable)
                         vm.setErrorState(true)
                     }
                 )
@@ -206,7 +205,7 @@ class ArticleActivity : AppCompatActivity() {
                             message = "저장에 실패했어요. 다시 시도해 주세요.",
                             type = SnackbarType.ERROR
                         )
-                        e.logError()
+                        Log.e(TAG, "ArticleActivity.kt::bookmarkButton", e)
                     }
                 }
             }

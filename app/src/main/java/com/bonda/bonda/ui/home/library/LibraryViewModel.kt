@@ -14,6 +14,7 @@ import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.article.SavedArticlesResponse
 import com.bonda.bonda.network.model.book.SavedBooksResponse
 import com.bonda.bonda.util.TAG
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -77,6 +78,7 @@ class LibraryViewModel : ViewModel() {
     /**
      * 저장한 도서를 페이지네이션합니다.
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     val savedBooksFlow: Flow<PagingData<SavedBooksResponse.Book>> =
         bookSortOrder.flatMapLatest { orderBy ->
             Pager(
@@ -93,6 +95,7 @@ class LibraryViewModel : ViewModel() {
     /**
      * 저장한 아티클을 페이지네이션합니다.
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     val savedArticlesFlow: Flow<PagingData<SavedArticlesResponse.Article>> =
         articleSortOrder.flatMapLatest { orderBy ->
 
