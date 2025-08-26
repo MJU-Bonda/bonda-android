@@ -9,6 +9,6 @@ class BondaApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         KakaoSdk.init(this, BuildConfig.kakaoAppKey)
-        ApiClient.init(AccessTokenProvider)
+        ApiClient.init(this, AccessTokenProvider)
     }
 }

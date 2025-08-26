@@ -1,5 +1,6 @@
 package com.bonda.bonda.network
 
+import android.content.Context
 import com.bonda.bonda.network.service.ArticleService
 import com.bonda.bonda.network.service.AuthService
 import com.bonda.bonda.network.service.BookService
@@ -29,11 +30,16 @@ object ApiClient {
     lateinit var searchService: SearchService
         private set
 
-    fun init(accessTokenProvider: AccessTokenProvider) {
+    fun init(context: Context, accessTokenProvider: AccessTokenProvider) {
         val json = Json {
             ignoreUnknownKeys = true
             explicitNulls = false
         }
+
+        /**
+         * 토큰 자동 재발급 
+         */
+        val tokenAuthenticator = TokenAuthenticator(context, accessTokenProvider)
 
         val authInterceptor = Interceptor { chain ->
             val reqBuilder = chain.request().newBuilder()
@@ -48,6 +54,7 @@ object ApiClient {
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
+            .authenticator(tokenAuthenticator)
             .build()
 
         retrofit = Retrofit.Builder()
