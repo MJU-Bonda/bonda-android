@@ -13,7 +13,7 @@ import com.bonda.bonda.model.SortOrder
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.article.SavedArticlesResponse
 import com.bonda.bonda.network.model.book.SavedBooksResponse
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

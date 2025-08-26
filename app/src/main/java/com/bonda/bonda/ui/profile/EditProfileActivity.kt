@@ -19,7 +19,7 @@ import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivitySignUpBinding
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.model.AccessTokenProvider
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

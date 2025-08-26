@@ -18,7 +18,7 @@ import com.bonda.bonda.databinding.ViewRecentArticleBinding
 import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.book.BookActivity
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 
 class SearchResultFragment : Fragment() {
     companion object {

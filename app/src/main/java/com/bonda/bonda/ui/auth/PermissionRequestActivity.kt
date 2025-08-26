@@ -13,8 +13,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.bonda.bonda.MainActivity
-import com.bonda.bonda.util.PREFS_NAME
-import com.bonda.bonda.util.PREF_KEY_PERMISSION_REQUIRED
+import com.bonda.bonda.model.PREFS_NAME
+import com.bonda.bonda.model.PREF_KEY_PERMISSION_REQUIRED
 import androidx.core.content.edit
 import com.bonda.bonda.databinding.ActivityPermissionRequestBinding
 

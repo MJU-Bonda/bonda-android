@@ -7,7 +7,10 @@
     android:textColor="@color/text_default_tertiary"
     app:chipBackgroundColor="@color/surface_default_tertiary"
     app:chipCornerRadius="20dp"
+    app:chipMinHeight="40dp"
     app:chipStrokeColor="@color/border_default_tertiary"
     app:chipStrokeWidth="1dp"
     app:closeIconEnabled="true"
-    app:closeIconTint="@color/border_default_secondary" />
+    app:closeIconTint="@color/border_default_secondary"
+    app:textEndPadding="12dp"
+    app:textStartPadding="12dp" />

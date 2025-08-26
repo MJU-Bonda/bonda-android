@@ -28,7 +28,7 @@ import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.ui.components.SnackbarType
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 import com.bonda.bonda.ui.components.showSnackbar
 import kotlinx.coroutines.launch
 

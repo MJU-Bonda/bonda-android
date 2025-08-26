@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 
 class ArticleViewModel : ViewModel() {

@@ -8,9 +8,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.PREFS_NAME
-import com.bonda.bonda.util.PREF_KEY_SEARCH_HISTORY_ACTIVATED
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.PREFS_NAME
+import com.bonda.bonda.model.PREF_KEY_SEARCH_HISTORY_ACTIVATED
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
 
@@ -23,7 +23,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     private val prefs = application.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    private var isLoading = false
     private val _isSearchHistoryEmpty = MutableLiveData<Boolean>()
     private val _isHistoryActivated = MutableLiveData<Boolean>()
     private val _searchHistory = MutableLiveData<List<String>>()
@@ -35,7 +35,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val _booksSearchResultCount = MutableLiveData<Int>(0)
     private val _articlesSearchResultCount = MutableLiveData<Int>(0)
 
-    val isLoading: LiveData<Boolean> = _isLoading
     val isSearchHistoryEmpty: LiveData<Boolean> = _isSearchHistoryEmpty
     val isHistoryActivated: LiveData<Boolean> = _isHistoryActivated
     val searchHistory: LiveData<List<String>> = _searchHistory
@@ -141,7 +140,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
      * 특정 검색어 삭제
      */
     fun removeSearchHistory(keyword: String) {
-        if (_isLoading.value == true) return
+        if (isLoading) return
 
         viewModelScope.launch {
             try {
@@ -163,7 +162,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private fun loadSearchHistory() {
         viewModelScope.launch {
             try {
-                _isLoading.value = true
+                isLoading = true
 
                 val response = searchService.getSearchHistory().unwrapOrThrow()
 
@@ -172,7 +171,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             } finally {
-                _isLoading.value = false
+                isLoading = false
             }
         }
     }
@@ -182,7 +181,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
      * 검색 기록 저장 설정
      */
     fun setIsHistoryActivated() {
-        if (_isLoading.value == true) return
+        if (isLoading) return
 
         viewModelScope.launch {
             try {
@@ -201,10 +200,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
      * 모든 검색 기록 삭제
      */
     fun removeAllSearchHistory() {
-        if (_isLoading.value == true) return
+        if (isLoading) return
 
         viewModelScope.launch {
-            _isLoading.value = true
+            isLoading = true
 
             try {
                 searchService.deleteAllSearchHistory().unwrapOrThrow()
@@ -213,7 +212,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             } finally {
-                _isLoading.value = false
+                isLoading = false
             }
         }
     }
@@ -224,7 +223,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
      */
     private fun loadRecommendedKeyword() {
         viewModelScope.launch {
-            _isLoading.value = true
+            isLoading = true
 
             try {
                 val response = searchService.getRecommendedKeyword().unwrapOrThrow()
@@ -232,7 +231,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             } catch (e: Exception) {
                 Log.e(TAG, e.message.toString())
             } finally {
-                _isLoading.value = false
+                isLoading = false
             }
         }
     }

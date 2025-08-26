@@ -1,4 +1,4 @@
-package com.bonda.bonda.util
+package com.bonda.bonda.model
 
 /**
  * Log Tag

@@ -20,7 +20,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.ui.home.HomeActivity
-import com.bonda.bonda.util.*
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
@@ -28,6 +27,12 @@ import androidx.core.net.toUri
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivitySignInBinding
 import com.bonda.bonda.model.AccessTokenProvider
+import com.bonda.bonda.model.BONDA_PRIVACY_POLICY_URL
+import com.bonda.bonda.model.BONDA_TERMS_OF_POLICY_URL
+import com.bonda.bonda.model.PREFS_NAME
+import com.bonda.bonda.model.PREF_KEY_REFRESH_TOKEN
+import com.bonda.bonda.model.PREF_KEY_SIGNUP_REQUIRED
+import com.bonda.bonda.model.TAG
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.auth.LoginRequest
 

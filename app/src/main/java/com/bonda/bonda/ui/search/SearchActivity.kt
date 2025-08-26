@@ -14,11 +14,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bonda.bonda.databinding.ActivitySearchBinding
 import com.bonda.bonda.databinding.ViewChipSearchHistoryBinding
-import com.bonda.bonda.databinding.ViewChipSearchRecommendBinding
 import com.bonda.bonda.ui.profile.DialogView
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -154,7 +152,7 @@ class SearchActivity : AppCompatActivity() {
             binding.todayKeywordsChipGroup.removeAllViews()
 
             keywords.forEach { keyword ->
-                val chipBinding = ViewChipSearchRecommendBinding.inflate(
+                val chipBinding = ViewChipSearchHistoryBinding.inflate(
                     layoutInflater,
                     binding.todayKeywordsChipGroup,
                     false
@@ -162,6 +160,7 @@ class SearchActivity : AppCompatActivity() {
 
                 chipBinding.root.apply {
                     text = keyword
+                    setCloseIconVisible(false)
                     setOnClickListener {
                         binding.searchBar.setText(keyword)
                         binding.searchBar.setSelection(keyword.length)

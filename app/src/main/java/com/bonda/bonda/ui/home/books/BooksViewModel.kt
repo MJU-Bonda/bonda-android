@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.model.BookCategory
 import com.bonda.bonda.model.BookTheme
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 
 class BooksViewModel : ViewModel() {

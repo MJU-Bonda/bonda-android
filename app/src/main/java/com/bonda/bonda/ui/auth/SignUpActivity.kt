@@ -23,10 +23,10 @@ import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.ui.auth.onboarding.OnboardingActivity
 import com.bonda.bonda.ui.profile.ProfileImageSelectorView
 import com.bonda.bonda.model.AccessTokenProvider
-import com.bonda.bonda.util.PREFS_NAME
-import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
-import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.PREFS_NAME
+import com.bonda.bonda.model.PREF_KEY_REFRESH_TOKEN
+import com.bonda.bonda.model.PREF_KEY_SIGNUP_REQUIRED
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

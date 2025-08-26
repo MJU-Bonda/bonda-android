@@ -16,10 +16,10 @@ import com.bonda.bonda.databinding.ActivitySettingsBinding
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.auth.LogoutRequest
 import com.bonda.bonda.model.AccessTokenProvider
-import com.bonda.bonda.util.PREFS_NAME
-import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
-import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.PREFS_NAME
+import com.bonda.bonda.model.PREF_KEY_REFRESH_TOKEN
+import com.bonda.bonda.model.PREF_KEY_SIGNUP_REQUIRED
+import com.bonda.bonda.model.TAG
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.launch
 

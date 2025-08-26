@@ -1,10 +1,10 @@
-package com.bonda.bonda.util
+package com.bonda.bonda.model
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 
-object NetworkUtils {
+object NetworkStatus {
     /**
      * 네트워크가 정상적으로 연결되어있는지 검사하고 네트워크가 연결되어있으면 ture를 반환합니다
      */

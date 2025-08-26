@@ -8,9 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.auth.SignInActivity
 import com.bonda.bonda.model.AccessTokenProvider
-import com.bonda.bonda.util.PREFS_NAME
-import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.PREFS_NAME
+import com.bonda.bonda.model.PREF_KEY_REFRESH_TOKEN
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -19,10 +19,10 @@ import com.bonda.bonda.network.model.auth.ReissueRequest
 import com.bonda.bonda.ui.auth.PermissionRequestActivity
 import com.bonda.bonda.ui.auth.SignUpActivity
 import com.bonda.bonda.ui.offline.OfflineActivity
-import com.bonda.bonda.util.ERROR_CALLBACK_ACTIVITY
-import com.bonda.bonda.util.NetworkUtils
-import com.bonda.bonda.util.PREF_KEY_PERMISSION_REQUIRED
-import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
+import com.bonda.bonda.model.ERROR_CALLBACK_ACTIVITY
+import com.bonda.bonda.model.NetworkStatus
+import com.bonda.bonda.model.PREF_KEY_PERMISSION_REQUIRED
+import com.bonda.bonda.model.PREF_KEY_SIGNUP_REQUIRED
 
 class MainActivity : AppCompatActivity() {
 
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 /**
                  * 네트워크 연결이 되어있는경우
                  */
-                if(NetworkUtils.isNetworkAvailable(this)) {
+                if(NetworkStatus.isNetworkAvailable(this)) {
                     lifecycleScope.launch {
                         try {
                             /**

@@ -7,8 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bonda.bonda.MainActivity
 import com.bonda.bonda.databinding.LayoutErrorNetworkBinding
-import com.bonda.bonda.util.ERROR_CALLBACK_ACTIVITY
-import com.bonda.bonda.util.NetworkUtils
+import com.bonda.bonda.model.ERROR_CALLBACK_ACTIVITY
+import com.bonda.bonda.model.NetworkStatus
 
 class OfflineActivity : AppCompatActivity() {
 
@@ -26,7 +26,7 @@ class OfflineActivity : AppCompatActivity() {
          * 재시도 버튼 클릭 시 네트워크 연결이 정상적인지 확인하고, 네트워크 연결이 정상적이면 에러 activity 종료
          */
         binding.buttonRetry.setOnClickListener {
-            if (!NetworkUtils.isNetworkAvailable(this)) {
+            if (!NetworkStatus.isNetworkAvailable(this)) {
                 Toast.makeText(this, "인터넷 연결을 확인해주세요", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
