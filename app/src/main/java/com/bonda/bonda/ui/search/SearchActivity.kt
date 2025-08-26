@@ -42,8 +42,14 @@ class SearchActivity : AppCompatActivity() {
          */
         binding.searchResultViewpager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int = searchResultTabTitles.size
+
+            // 이 부분을 수정합니다.
             override fun createFragment(position: Int): Fragment =
-                SearchResultFragment.newInstance(searchResultTabTitles[position])
+                when (searchResultTabTitles[position]) {
+                    "도서" -> SearchResultBookFragment.newInstance()
+                    "아티클" -> SearchResultArticleFragment.newInstance()
+                    else -> SearchResultAllFragment.newInstance() // "전체" 또는 기본값
+                }
         }
         TabLayoutMediator(
             binding.searchResultTablayout,

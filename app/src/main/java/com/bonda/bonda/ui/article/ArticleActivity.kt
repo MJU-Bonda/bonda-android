@@ -34,6 +34,7 @@ import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.ui.components.SnackbarType
 import com.bonda.bonda.model.TAG
+import com.bonda.bonda.model.setCategoryStyle
 import com.bonda.bonda.ui.components.showSnackbar
 import kotlinx.coroutines.launch
 
@@ -108,7 +109,7 @@ class ArticleActivity : AppCompatActivity() {
         vm.subTitle.observe(this) { binding.subtitleTv.text = it }
         vm.body.observe(this) { binding.articleBody.text = it }
         vm.coverImage.observe(this) { imageUrl ->
-            binding.articleImage.load(imageUrl){
+            binding.articleImage.load(imageUrl) {
                 listener(
                     onSuccess = { _, _ ->
                         binding.articleImageGradient.isVisible = true
@@ -120,30 +121,7 @@ class ArticleActivity : AppCompatActivity() {
                 )
             }
         }
-
-        vm.category.observe(this) {
-            val category = it.toArticleCategory()
-
-            binding.categoryChip.root.text = category.label
-
-            val bgColorRes = when (category) {
-                ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.surface_context_writer
-                ArticleCategory.BOOKSTORE -> R.color.surface_context_store
-                ArticleCategory.THEME -> R.color.surface_context_theme
-                else -> R.color.surface_default_primary
-            }
-            val textColorRes = when (category) {
-                ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.text_context_writer
-                ArticleCategory.BOOKSTORE -> R.color.text_context_store
-                ArticleCategory.THEME -> R.color.text_context_theme
-                else -> R.color.text_accent_primary
-            }
-
-            // Chip 에 적용
-            binding.categoryChip.root.chipBackgroundColor =
-                ColorStateList.valueOf(ContextCompat.getColor(this, bgColorRes))
-            binding.categoryChip.root.setTextColor(ContextCompat.getColor(this, textColorRes))
-        }
+        vm.category.observe(this) { binding.categoryChip.root.setCategoryStyle(it) }
 
         /**
          * 북마크 버튼 binding

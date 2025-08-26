@@ -82,7 +82,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/header1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/header1">
@@ -90,33 +90,40 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/button_clear_history"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:text="전체삭제"
                 android:textAppearance="@style/Caption1"
                 android:textColor="@color/text_default_tertiary"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/divider1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:paddingHorizontal="12dp"
                 android:text="|"
                 android:textAppearance="@style/Caption1"
                 android:textColor="@color/text_default_tertiary"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/button_clear_history"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/button_toggle_save_history"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
                 android:text="자동저장 끄기"
                 android:textAppearance="@style/Caption1"
                 android:textColor="@color/text_default_tertiary"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/divider1"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
