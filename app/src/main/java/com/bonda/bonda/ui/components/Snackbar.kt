@@ -1,4 +1,4 @@
-package com.bonda.bonda.util
+package com.bonda.bonda.ui.components
 
 import android.animation.LayoutTransition
 import android.graphics.Paint

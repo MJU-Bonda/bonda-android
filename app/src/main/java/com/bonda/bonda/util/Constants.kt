@@ -1,7 +1,13 @@
 package com.bonda.bonda.util
 
-const val TAG = "DEBUG"
+/**
+ * Log Tag
+ */
+const val TAG = "BONDA_DEBUG"
 
+/**
+ * SharedPreferences Key
+ */
 const val PREFS_NAME = "Prefs"
 const val PREF_KEY_REFRESH_TOKEN = "refreshToken"
 const val PREF_KEY_SIGNUP_REQUIRED = "isNewUser"

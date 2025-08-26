@@ -14,16 +14,16 @@ import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import coil3.load
-import com.bonda.bonda.AppEvents
+import com.bonda.bonda.model.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivitySignUpBinding
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.AccessTokenProvider
+import com.bonda.bonda.model.AccessTokenProvider
 import com.bonda.bonda.util.TAG
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class EditProfileActivity : AppCompatActivity() {
@@ -78,7 +78,7 @@ class EditProfileActivity : AppCompatActivity() {
                         val bytes =
                             this@EditProfileActivity.contentResolver.openInputStream(uri)!!
                                 .use { it.readBytes() }
-                        val rb = RequestBody.create("image/*".toMediaType(), bytes)
+                        val rb = bytes.toRequestBody("image/*".toMediaTypeOrNull())
                         MultipartBody.Part.createFormData(
                             name = "profileImage",
                             filename = "profile.jpg",

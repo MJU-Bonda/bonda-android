@@ -1,4 +1,4 @@
-package com.bonda.bonda.util
+package com.bonda.bonda.ui.components
 
 import android.content.Context
 import android.util.AttributeSet

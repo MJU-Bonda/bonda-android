@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.auth.SignInActivity
-import com.bonda.bonda.util.AccessTokenProvider
+import com.bonda.bonda.model.AccessTokenProvider
 import com.bonda.bonda.util.PREFS_NAME
 import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
 import com.bonda.bonda.util.TAG
@@ -45,16 +45,25 @@ class MainActivity : AppCompatActivity() {
         } else {
             val refreshToken = prefs.getString(PREF_KEY_REFRESH_TOKEN, null)
 
+            /**
+             * 로그인이 되어있지 않은 경우
+             */
             if (refreshToken == null) {
                 Log.d(TAG, "로그인이 필요한 서비스입니다")
                 val intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
-
                 initFinished = true
                 finish()
+
+                /**
+                 * 로그인이 되어있는 경우
+                 */
             } else {
                 lifecycleScope.launch {
                     try {
+                        /**
+                         * accessToken 재발급
+                         */
                         val response = authService.reissueAccessToken(ReissueRequest(refreshToken))
                             .unwrapOrThrow()
 
@@ -80,6 +89,9 @@ class MainActivity : AppCompatActivity() {
                             finish()
                         }
                     } catch (e: Exception) {
+                        /**
+                         * 문제 발생 시 로그아웃 후 로그인 페이지로 이동합니다
+                         */
                         prefs.edit() {
                             remove(PREF_KEY_REFRESH_TOKEN)
                             remove(PREF_KEY_SIGNUP_REQUIRED)
@@ -87,7 +99,6 @@ class MainActivity : AppCompatActivity() {
 
                         val intent = Intent(this@MainActivity, SignInActivity::class.java)
                         startActivity(intent)
-
                         initFinished = true
                         finish()
                     }

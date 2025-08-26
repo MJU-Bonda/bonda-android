@@ -15,11 +15,12 @@ import com.bonda.bonda.MainActivity
 import com.bonda.bonda.databinding.ActivitySettingsBinding
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.auth.LogoutRequest
-import com.bonda.bonda.util.AccessTokenProvider
+import com.bonda.bonda.model.AccessTokenProvider
 import com.bonda.bonda.util.PREFS_NAME
 import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
 import com.bonda.bonda.util.PREF_KEY_SIGNUP_REQUIRED
 import com.bonda.bonda.util.TAG
+import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
@@ -97,6 +98,9 @@ class SettingsActivity : AppCompatActivity() {
     private fun performLogout() {
         lifecycleScope.launch {
             try {
+                UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+                    Log.d(TAG, "$tokenInfo, $error")
+                }
                 val res = authService.logout(
                     LogoutRequest(
                         AccessTokenProvider.getAccessToken()!!,

@@ -10,6 +10,3 @@ enum class ArticleCategory(val code: String, val label: String) {
         val BUSINESS_CATEGORIES: List<ArticleCategory> = entries.filter { it != ALL }
     }
 }
-
-fun String.toArticleCategory(): ArticleCategory =
-    ArticleCategory.entries.find { it.code == this } ?: ArticleCategory.ALL

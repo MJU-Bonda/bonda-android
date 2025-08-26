@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.util.TAG
+import com.bonda.bonda.util.logError
 import kotlinx.coroutines.launch
 
 class ArticleViewModel : ViewModel() {
@@ -103,8 +104,8 @@ class ArticleViewModel : ViewModel() {
 
                 _isError.value = false
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
-
+                Log.e(TAG, "ArticleViewModel.kt::getArticleData()", e)
+                e.logError()
                 _isError.value = true
             }
         }

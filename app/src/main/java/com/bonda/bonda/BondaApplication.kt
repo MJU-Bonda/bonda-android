@@ -2,7 +2,7 @@ package com.bonda.bonda
 
 import android.app.Application
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.AccessTokenProvider
+import com.bonda.bonda.model.AccessTokenProvider
 import com.kakao.sdk.common.KakaoSdk
 
 class BondaApplication : Application() {

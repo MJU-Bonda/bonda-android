@@ -21,7 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import coil3.load
-import com.bonda.bonda.AppEvents
+import com.bonda.bonda.model.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
@@ -32,9 +32,10 @@ import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.ui.book.BookActivity
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
-import com.bonda.bonda.util.SnackbarType
+import com.bonda.bonda.ui.components.SnackbarType
 import com.bonda.bonda.util.TAG
-import com.bonda.bonda.util.showSnackbar
+import com.bonda.bonda.ui.components.showSnackbar
+import com.bonda.bonda.util.logError
 import kotlinx.coroutines.launch
 
 class ArticleActivity : AppCompatActivity() {
@@ -114,7 +115,7 @@ class ArticleActivity : AppCompatActivity() {
                         binding.articleImageGradient.isVisible = true
                     },
                     onError = { _, result ->
-                        Log.e(TAG, "ArticleActivity.kt::onCreate()", result.throwable)
+                        result.throwable.logError()
                         vm.setErrorState(true)
                     }
                 )
@@ -205,6 +206,7 @@ class ArticleActivity : AppCompatActivity() {
                             message = "저장에 실패했어요. 다시 시도해 주세요.",
                             type = SnackbarType.ERROR
                         )
+                        e.logError()
                     }
                 }
             }
@@ -268,7 +270,6 @@ class ArticleActivity : AppCompatActivity() {
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(this, BookActivity::class.java)
                     intent.putExtra("book_detail_id", book.id)
-                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
                     startActivity(intent)
                 }
 
@@ -341,7 +342,6 @@ class ArticleActivity : AppCompatActivity() {
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(this, ArticleActivity::class.java)
                     intent.putExtra("article_detail_id", article.id)
-                    Log.d("DEBUG", "start_article_detail_activity_id : ${article.id}")
                     startActivity(intent)
                 }
 

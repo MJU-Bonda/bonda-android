@@ -9,13 +9,10 @@ import android.view.ViewGroup
 import android.widget.GridLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import coil3.load
-import coil3.request.ImageRequest
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentSearchResultAllBinding
-import com.bonda.bonda.databinding.ViewArticleBinding
 import com.bonda.bonda.databinding.ViewBookVerticalBinding
 import com.bonda.bonda.databinding.ViewRecentArticleBinding
 import com.bonda.bonda.model.toArticleCategory

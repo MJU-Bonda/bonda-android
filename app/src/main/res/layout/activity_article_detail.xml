@@ -133,7 +133,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.bonda.bonda.util.TabIndicatorView
+            <com.bonda.bonda.ui.components.TabIndicatorView
                 android:id="@+id/books_tab_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

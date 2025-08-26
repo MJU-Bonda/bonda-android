@@ -1,4 +1,4 @@
-package com.bonda.bonda
+package com.bonda.bonda.model
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 

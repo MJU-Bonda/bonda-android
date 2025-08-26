@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import com.bonda.bonda.network.model.auth.ReissueRequest
-import com.bonda.bonda.util.AccessTokenProvider
+import com.bonda.bonda.model.AccessTokenProvider
 import com.bonda.bonda.util.PREFS_NAME
 import com.bonda.bonda.util.PREF_KEY_REFRESH_TOKEN
 import com.bonda.bonda.util.TAG

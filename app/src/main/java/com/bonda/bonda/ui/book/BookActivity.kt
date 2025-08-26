@@ -12,10 +12,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import coil3.load
-import com.bonda.bonda.AppEvents
+import com.bonda.bonda.model.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityBookDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
@@ -26,9 +27,9 @@ import com.bonda.bonda.model.toBookTheme
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
-import com.bonda.bonda.util.SnackbarType
+import com.bonda.bonda.ui.components.SnackbarType
 import com.bonda.bonda.util.TAG
-import com.bonda.bonda.util.showSnackbar
+import com.bonda.bonda.ui.components.showSnackbar
 import kotlinx.coroutines.launch
 
 class BookActivity : AppCompatActivity() {
@@ -63,7 +64,7 @@ class BookActivity : AppCompatActivity() {
          * 에러 페이지 처리
          */
         binding.errorNetwork.buttonRetry.setOnClickListener { vm.getBookDetail(bookId) }
-        vm.isError.observe(this) { binding.errorNetwork.root.visibility = View.VISIBLE }
+        vm.isError.observe(this) { binding.errorNetwork.root.isVisible = it }
 
         /**
          * 도서 북마크 버튼 처리

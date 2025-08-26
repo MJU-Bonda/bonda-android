@@ -6,7 +6,7 @@ import com.bonda.bonda.network.service.AuthService
 import com.bonda.bonda.network.service.BookService
 import com.bonda.bonda.network.service.MemberService
 import com.bonda.bonda.network.service.SearchService
-import com.bonda.bonda.util.AccessTokenProvider
+import com.bonda.bonda.model.AccessTokenProvider
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor

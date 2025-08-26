@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil3.load
-import com.bonda.bonda.AppEvents
+import com.bonda.bonda.model.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeArticlesListBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
@@ -22,8 +22,8 @@ import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
-import com.bonda.bonda.util.SnackbarType
-import com.bonda.bonda.util.showSnackbar
+import com.bonda.bonda.ui.components.SnackbarType
+import com.bonda.bonda.ui.components.showSnackbar
 import kotlinx.coroutines.launch
 
 class ArticlesListFragment : Fragment() {
