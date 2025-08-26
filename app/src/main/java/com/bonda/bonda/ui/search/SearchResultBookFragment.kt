@@ -38,6 +38,12 @@ class SearchResultBookFragment : Fragment() {
         setupRecyclerView()
 
         /**
+         * 정렬 토글 버튼 클릭 리스너
+         */
+        binding.btSort.setOnClickListener { vm.toggleSortOrderAndSearch() }
+        vm.sortOrder.observe(viewLifecycleOwner) { binding.tvSortIndicator.text = it.label }
+
+        /**
          * 도서 검색 결과 개수 바인딩
          */
         vm.booksSearchResultCount.observe(viewLifecycleOwner) { count ->
@@ -48,7 +54,7 @@ class SearchResultBookFragment : Fragment() {
          * 도서 검색 결과 바인딩
          */
         vm.booksSearchResult.observe(viewLifecycleOwner) { books ->
-            bookAdapter.submitList(books)
+            bookAdapter.submitList(books.toList())
 
             val keyword = vm.searchKeyword
             if (books.isEmpty() && keyword.isNotEmpty()) {

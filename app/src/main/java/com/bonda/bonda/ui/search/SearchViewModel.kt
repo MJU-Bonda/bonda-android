@@ -13,6 +13,7 @@ import com.bonda.bonda.model.PREF_KEY_SEARCH_HISTORY_ACTIVATED
 import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
+import com.bonda.bonda.model.SortOrder
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -47,6 +48,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     val booksSearchResultCount: LiveData<Int> = _booksSearchResultCount
     val articlesSearchResultCount: LiveData<Int> = _articlesSearchResultCount
 
+    private val _sortOrder = MutableLiveData(SortOrder.NEWEST)
+    val sortOrder: LiveData<SortOrder> = _sortOrder
+
     init {
         _isHistoryActivated.value = prefs.getBoolean(PREF_KEY_SEARCH_HISTORY_ACTIVATED, false)
         loadSearchHistory()
@@ -54,18 +58,40 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /**
-     * 검색 기능 연결
+     * 현재 검색 결과를 초기화하고 새로운 검색을 수행합니다
+     * @param keyword 검색어
+     * @param clearPreviousResults 이전 검색 결과를 지울지 여부
      */
-    fun search(keyword: String) {
-        // 검색 페이지네이션 초기화
+    fun search(keyword: String, clearPreviousResults: Boolean = true) {
+        if (clearPreviousResults) {
+            clearSearch()
+        }
         bookPage = 0
         articlePage = 0
-        // 검색 수행
+
         searchKeyword = keyword
         searchBooks(keyword)
         searchArticles(keyword)
-        // 검색 기록 다시 로드
-        loadSearchHistory()
+
+        if (clearPreviousResults) {
+            loadSearchHistory()
+        }
+    }
+
+    /**
+     * 정렬 기준을 토글한 뒤, 검색을 다시 수행합니다. 검색어가 없으면 실행되지 않습니다.
+     */
+    fun toggleSortOrderAndSearch() {
+        if (searchKeyword.isBlank()) return
+
+        val newSortOrder = if (_sortOrder.value == SortOrder.NEWEST) {
+            SortOrder.POPULARITY
+        } else {
+            SortOrder.NEWEST
+        }
+        _sortOrder.value = newSortOrder
+
+        search(searchKeyword, clearPreviousResults = false)
     }
 
     /**
@@ -75,7 +101,11 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             try {
                 val res = searchService
-                    .searchBooks(page = bookPage, word = keyword)
+                    .searchBooks(
+                        page = bookPage,
+                        word = keyword,
+                        orderBy = _sortOrder.value?.code ?: SortOrder.NEWEST.code
+                    )
                     .unwrapOrThrow()
 
                 val current = _booksSearchResult.value.orEmpty()
@@ -89,7 +119,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                     )
                 }
 
-                val updated = current + newBooks
+                val updated = if (bookPage == 0) newBooks else current + newBooks
 
                 _booksSearchResult.value = updated
                 _booksHasNextPage.value = res.hasNextPage
@@ -116,7 +146,11 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             try {
                 val res = searchService
-                    .searchArticles(page = articlePage, word = keyword)
+                    .searchArticles(
+                        page = articlePage,
+                        word = keyword,
+                        orderBy = _sortOrder.value?.code ?: SortOrder.NEWEST.code
+                    )
                     .unwrapOrThrow()
 
                 val current = _articlesSearchResult.value.orEmpty()
@@ -256,6 +290,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         _articlesSearchResult.value = emptyList()
         _booksHasNextPage.value = false
         _articlesHasNextPage.value = false
+        _booksSearchResultCount.value = 0
+        _articlesSearchResultCount.value = 0
     }
 
 }

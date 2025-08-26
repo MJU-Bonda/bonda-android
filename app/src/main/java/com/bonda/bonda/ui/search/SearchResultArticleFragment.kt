@@ -38,6 +38,12 @@ class SearchResultArticleFragment : Fragment() {
         setupRecyclerView()
 
         /**
+         * 정렬 토글 버튼 클릭 리스너
+         */
+        binding.btSort.setOnClickListener { vm.toggleSortOrderAndSearch() }
+        vm.sortOrder.observe(viewLifecycleOwner) { binding.tvSortIndicator.text = it.label }
+
+        /**
          * 아티클 검색 결과 개수 바인딩
          */
         vm.articlesSearchResultCount.observe(viewLifecycleOwner) { count ->
@@ -48,7 +54,7 @@ class SearchResultArticleFragment : Fragment() {
          * 아티클 검색 결과 바인딩
          */
         vm.articlesSearchResult.observe(viewLifecycleOwner) { articles ->
-            articleAdapter.submitList(articles)
+            articleAdapter.submitList(articles.toList())
 
             val keyword = vm.searchKeyword
             if (articles.isEmpty() && keyword.isNotEmpty()) {

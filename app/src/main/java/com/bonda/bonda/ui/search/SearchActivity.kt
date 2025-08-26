@@ -91,11 +91,12 @@ class SearchActivity : AppCompatActivity() {
             if (isSearchAction) {
                 val query = binding.searchBar.text.toString().trim()
                 if (query.isNotEmpty()) {
-                    vm.clearSearch()
                     vm.search(query)
                     binding.searchResult.visibility = View.VISIBLE
 
-                    // 키보드 숨기기
+                    /**
+                     * 화면의 키보드를 숨깁니다
+                     */
                     (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                         .hideSoftInputFromWindow(binding.searchBar.windowToken, 0)
                 }
