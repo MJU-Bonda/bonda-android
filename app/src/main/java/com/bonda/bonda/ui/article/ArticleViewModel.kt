@@ -132,4 +132,11 @@ class ArticleViewModel : ViewModel() {
         }
     }
 
+    /**
+     * 에러상태 토글
+     */
+    fun setErrorState(isError: Boolean) {
+        _isError.value = isError
+    }
+
 }

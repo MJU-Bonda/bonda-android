@@ -45,13 +45,12 @@ class ArticlesFragment : Fragment() {
 
         vm.isLoading.observe(viewLifecycleOwner) { binding.progressIndicator.isVisible = it }
         vm.isEmpty.observe(viewLifecycleOwner) { binding.emptyArticleListText.isVisible = it }
-        vm.isError.observe(viewLifecycleOwner) { binding.errorCommon.root.isVisible= it }
+        vm.isError.observe(viewLifecycleOwner) { binding.errorNetwork.root.isVisible= it }
         vm.articles.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.container.isVisible = it.isNotEmpty()
         }
 
-        binding.errorCommon.buttonRetry.setOnClickListener { vm.getArticles() }
         binding.errorNetwork.buttonRetry.setOnClickListener { vm.getArticles() }
     }
 

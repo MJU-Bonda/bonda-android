@@ -27,6 +27,7 @@ import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.util.SnackbarType
+import com.bonda.bonda.util.TAG
 import com.bonda.bonda.util.showSnackbar
 import kotlinx.coroutines.launch
 
@@ -51,7 +52,7 @@ class BookActivity : AppCompatActivity() {
         vm.getBookDetail(bookId)
 
         /**
-         * toolbar binding
+         * 상단 앱바 처리
          */
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -59,7 +60,13 @@ class BookActivity : AppCompatActivity() {
         vm.title.observe(this) { binding.toolbar.title = it }
 
         /**
-         * bookmark button binding
+         * 에러 페이지 처리
+         */
+        binding.errorNetwork.buttonRetry.setOnClickListener { vm.getBookDetail(bookId) }
+        vm.isError.observe(this) { binding.errorNetwork.root.visibility = View.VISIBLE }
+
+        /**
+         * 도서 북마크 버튼 처리
          */
         vm.isSaved.observe(this) { isSaved ->
             binding.bookmarkButton.setImageResource(
@@ -114,13 +121,18 @@ class BookActivity : AppCompatActivity() {
                             message = "저장에 실패했어요. 다시 시도해 주세요.",
                             type = SnackbarType.ERROR
                         )
+                        Log.e(
+                            TAG,
+                            "BookActivity.kt::onCreate::binding.bookmarkButton.setOnClickListener",
+                            e
+                        )
                     }
                 }
             }
         }
 
         /**
-         * 도서 정보를 binding 합니다
+         * 도서 데이터 바인딩
          */
         vm.coverImage.observe(this) { binding.coverImage.load(it) }
         vm.category.observe(this) { binding.bookCategory.root.text = it.toBookCategory().label }
@@ -148,7 +160,7 @@ class BookActivity : AppCompatActivity() {
         }
 
         /**
-         * 연관된 article 목록 표시
+         * 연관된 아티클 목록 표시
          */
         vm.articles.observe(this) { articles ->
             binding.bookArticlesContainer.removeAllViews()
@@ -165,7 +177,6 @@ class BookActivity : AppCompatActivity() {
                         binding.bookArticlesContainer,
                         false
                     )
-
                     itemBinding.root.id = View.generateViewId()
 
                     itemBinding.articleImage.load(article.coverImage)
@@ -201,27 +212,27 @@ class BookActivity : AppCompatActivity() {
 
                     val params = itemBinding.root.layoutParams as ConstraintLayout.LayoutParams
 
-                    if (lastAddedViewId != null) {
+                    if (lastAddedViewId != null)
                         params.topToBottom = lastAddedViewId!!
-                    } else {
+                    else
                         params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                    }
 
                     itemBinding.root.layoutParams = params
 
-                    // start new article detail activity
+                    /**
+                     * 아티클 클릭 시 아티클 상세조회 액티비티를 시작합니다
+                     */
                     itemBinding.root.setOnClickListener {
                         val intent = Intent(this, ArticleActivity::class.java)
                         intent.putExtra("article_detail_id", article.id)
-                        Log.d("DEBUG", "start_article_detail_activity_id : ${article.id}")
                         startActivity(intent)
                     }
 
-                    // apply
                     binding.bookArticlesContainer.addView(itemBinding.root)
                     lastAddedViewId = itemBinding.root.id
                 }
             }
         }
     }
+
 }

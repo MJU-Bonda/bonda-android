@@ -33,6 +33,7 @@ import com.bonda.bonda.ui.book.BookActivity
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.util.SnackbarType
+import com.bonda.bonda.util.TAG
 import com.bonda.bonda.util.showSnackbar
 import kotlinx.coroutines.launch
 
@@ -94,11 +95,10 @@ class ArticleActivity : AppCompatActivity() {
          * 오류 페이지 처리
          */
         vm.isError.observe(this) {
-            binding.errorCommon.root.isVisible = it
+            binding.errorNetwork.root.isVisible = it
             binding.scrollView.isGone = it
         }
 
-        binding.errorCommon.buttonRetry.setOnClickListener { vm.getArticleData(articleId) }
         binding.errorNetwork.buttonRetry.setOnClickListener { vm.getArticleData(articleId) }
 
         /**
@@ -107,7 +107,19 @@ class ArticleActivity : AppCompatActivity() {
         vm.title.observe(this) { binding.titleTv.text = it.replace("\\n", "\n") }
         vm.subTitle.observe(this) { binding.subtitleTv.text = it }
         vm.body.observe(this) { binding.articleBody.text = it }
-        vm.coverImage.observe(this) { binding.articleImage.load(it) }
+        vm.coverImage.observe(this) { imageUrl ->
+            binding.articleImage.load(imageUrl){
+                listener(
+                    onSuccess = { _, _ ->
+                        binding.articleImageGradient.isVisible = true
+                    },
+                    onError = { _, result ->
+                        Log.e(TAG, "ArticleActivity.kt::onCreate()", result.throwable)
+                        vm.setErrorState(true)
+                    }
+                )
+            }
+        }
 
         vm.category.observe(this) {
             val category = it.toArticleCategory()

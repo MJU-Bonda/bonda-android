@@ -44,14 +44,13 @@ class BooksFragment : Fragment() {
         vm.getBooks()
 
         vm.isLoading.observe(viewLifecycleOwner) { binding.progressIndicator.isVisible = it }
-        vm.isError.observe(viewLifecycleOwner) { binding.errorCommon.root.isVisible = it }
+        vm.isError.observe(viewLifecycleOwner) { binding.errorNetwork.root.isVisible = it }
         vm.isEmpty.observe(viewLifecycleOwner) { binding.emptyBookListText.isVisible = it}
         vm.books.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.container.isVisible = it.isNotEmpty()
         }
 
-        binding.errorCommon.buttonRetry.setOnClickListener { vm.getBooks() }
         binding.errorNetwork.buttonRetry.setOnClickListener { vm.getBooks() }
     }
 
