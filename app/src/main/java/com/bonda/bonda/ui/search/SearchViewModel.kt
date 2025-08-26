@@ -62,7 +62,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         loadSearchHistory()
     }
 
-    fun searchBooks(keyword: String) {
+    /**
+     * 도서 검색 결과 로드
+     */
+    private fun searchBooks(keyword: String) {
         viewModelScope.launch {
             try {
                 val res = searchService
@@ -85,21 +88,25 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 _booksSearchResult.value = updated
                 _booksHasNextPage.value = res.hasNextPage
                 _booksSearchResultCount.value = res.total
-
-                Log.d(TAG, "도서 검색 결과 ${_booksSearchResult.value.toString()}")
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::searchBooks()", e)
             }
         }
     }
 
+    /**
+     * 도서 검색 결과 다음 페이지가 있으면 로드
+     */
     fun getNextBooks() {
         if (_booksHasNextPage.value != true) return
         bookPage++
         searchBooks(searchKeyword)
     }
 
-    fun searchArticles(keyword: String) {
+    /**
+     * 아티클 검색
+     */
+    private fun searchArticles(keyword: String) {
         viewModelScope.launch {
             try {
                 val res = searchService
@@ -121,20 +128,20 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 _articlesSearchResult.value = updated
                 _articlesHasNextPage.value = res.hasNextPage
                 _articlesSearchResultCount.value = res.total
-
-                Log.d(TAG, "아티클 검색 결과 ${_articlesSearchResult.value.toString()}")
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::searchArticles()", e)
             }
         }
     }
 
+    /**
+     * 아티클 다음 페이지가 있으면 로드
+     */
     fun getNextArticles() {
         if (_articlesHasNextPage.value != true) return
         articlePage++
         searchArticles(searchKeyword)
     }
-
 
     /**
      * 특정 검색어 삭제
@@ -217,7 +224,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-
     /**
      * 추천 검색어 로드
      */
@@ -245,4 +251,5 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         _booksHasNextPage.value = false
         _articlesHasNextPage.value = false
     }
+
 }

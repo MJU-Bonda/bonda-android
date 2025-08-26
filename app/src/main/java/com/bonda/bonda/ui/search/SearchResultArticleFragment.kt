@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bonda.bonda.databinding.FragmentSearchResultArticleBinding
 import com.bonda.bonda.ui.article.ArticleActivity
 
@@ -45,9 +46,31 @@ class SearchResultArticleFragment : Fragment() {
             intent.putExtra("article_detail_id", article.id)
             startActivity(intent)
         }
+
+        val gridLayoutManager = GridLayoutManager(requireContext(), 2)
+
         binding.rv.apply {
             adapter = articleAdapter
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = gridLayoutManager
+
+            /**
+             * 화면의 아래에 닿으면 다음 페이지를 로드합니다
+             */
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val lastVisibleItemPosition = gridLayoutManager.findLastCompletelyVisibleItemPosition()
+                    val totalItemCount = articleAdapter.itemCount
+
+                    /**
+                     * 마지막 아이템이 보이고, 다음 페이지가 존재하면 다음 페이지 로드
+                     */
+                    if (lastVisibleItemPosition == totalItemCount - 1 && vm.articlesHasNextPage.value == true) {
+                        vm.getNextArticles()
+                    }
+                }
+            })
         }
     }
 

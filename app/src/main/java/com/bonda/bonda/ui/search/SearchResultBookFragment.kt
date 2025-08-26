@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bonda.bonda.databinding.FragmentSearchResultBookBinding
 import com.bonda.bonda.ui.book.BookActivity
 
@@ -32,7 +33,9 @@ class SearchResultBookFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupRecyclerView()
 
-        // 도서 검색 결과 바인딩
+        /**
+         * 도서 검색 결과 바인딩
+         */
         vm.booksSearchResult.observe(viewLifecycleOwner) { books ->
             binding.tvNoResult.visibility = if (books.isEmpty()) View.VISIBLE else View.GONE
             bookAdapter.submitList(books)
@@ -45,9 +48,31 @@ class SearchResultBookFragment: Fragment() {
             intent.putExtra("book_detail_id", book.id)
             startActivity(intent)
         }
+
+        val gridLayoutManager = GridLayoutManager(requireContext(), 3)
+
         binding.rv.apply {
             adapter = bookAdapter
-            layoutManager = GridLayoutManager(requireContext(), 3)
+            layoutManager = gridLayoutManager
+
+            /**
+             * 화면의 아래까지 스크롤되면 다음 페이지를 로드합니다
+             */
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val lastVisibleItemPosition = gridLayoutManager.findLastCompletelyVisibleItemPosition()
+                    val totalItemCount = bookAdapter.itemCount
+
+                    /**
+                     * 다음 페이지가 있으면 로드
+                     */
+                    if (lastVisibleItemPosition == totalItemCount - 1 && vm.booksHasNextPage.value == true) {
+                        vm.getNextBooks()
+                    }
+                }
+            })
         }
     }
 
