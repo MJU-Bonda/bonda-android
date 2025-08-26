@@ -106,6 +106,28 @@ class SearchActivity : AppCompatActivity() {
         }
 
         /**
+         * 검색 결과가 표시되어있는 상태에서 검색바 클릭 시 검색 결과창을 닫습니다
+         */
+        binding.searchBar.setOnClickListener {
+            if (binding.searchResult.isVisible) {
+                binding.searchResult.visibility = View.GONE
+                vm.clearSearch()
+            }
+        }
+
+        /**
+         * 검색바의 clear text(x) 버튼 클릭 시 검색어를 지우고 결과 화면을 숨깁니다
+         */
+        binding.searchBarContainer.setEndIconOnClickListener {
+            binding.searchBar.text?.clear()
+
+            if (binding.searchResult.isVisible) {
+                binding.searchResult.visibility = View.GONE
+                vm.clearSearch()
+            }
+        }
+
+        /**
          * 자동 저장 토글
          */
         vm.isHistoryActivated.observe(this) { activated ->

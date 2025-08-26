@@ -19,7 +19,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val searchService = ApiClient.searchService
     private var bookPage = 0
     private var articlePage = 0
-    private var searchKeyword = ""
+    var searchKeyword = ""
+        private set
 
     private val prefs = application.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
@@ -30,10 +31,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val _recommendedKeyword = MutableLiveData<List<String>>()
     private val _booksSearchResult = MutableLiveData<List<Book>>(emptyList())
     private val _articlesSearchResult = MutableLiveData<List<Article>>(emptyList())
-    private val _booksHasNextPage = MutableLiveData<Boolean>(false)
-    private val _articlesHasNextPage = MutableLiveData<Boolean>(false)
-    private val _booksSearchResultCount = MutableLiveData<Int>(0)
-    private val _articlesSearchResultCount = MutableLiveData<Int>(0)
+    private val _booksHasNextPage = MutableLiveData(false)
+    private val _articlesHasNextPage = MutableLiveData(false)
+    private val _booksSearchResultCount = MutableLiveData(0)
+    private val _articlesSearchResultCount = MutableLiveData(0)
 
     val isSearchHistoryEmpty: LiveData<Boolean> = _isSearchHistoryEmpty
     val isHistoryActivated: LiveData<Boolean> = _isHistoryActivated
@@ -56,9 +57,14 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
      * 검색 기능 연결
      */
     fun search(keyword: String) {
+        // 검색 페이지네이션 초기화
+        bookPage = 0
+        articlePage = 0
+        // 검색 수행
         searchKeyword = keyword
         searchBooks(keyword)
         searchArticles(keyword)
+        // 검색 기록 다시 로드
         loadSearchHistory()
     }
 
@@ -157,7 +163,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                     ?.filterNot { it == keyword }
                 _isSearchHistoryEmpty.value = _searchHistory.value!!.isEmpty()
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::removeSearchHistory()", e)
             }
         }
     }
@@ -176,7 +182,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 _isSearchHistoryEmpty.value = response.recentSearchTermList.isEmpty()
                 _searchHistory.value = response.recentSearchTermList
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::loadSearchHistory()", e)
             } finally {
                 isLoading = false
             }
@@ -197,7 +203,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 prefs.edit() { putBoolean(PREF_KEY_SEARCH_HISTORY_ACTIVATED, response.isAutoSaved) }
                 _isHistoryActivated.value = response.isAutoSaved
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::setIsHistoryActivated()", e)
             }
         }
     }
@@ -217,7 +223,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 _isSearchHistoryEmpty.value = true
                 _searchHistory.value = emptyList()
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::removeAllSearchHistory()", e)
             } finally {
                 isLoading = false
             }
@@ -235,7 +241,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 val response = searchService.getRecommendedKeyword().unwrapOrThrow()
                 _recommendedKeyword.value = response.recommendKeywords
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::loadRecommendedKeyword()", e)
             } finally {
                 isLoading = false
             }

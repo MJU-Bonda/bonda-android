@@ -1,7 +1,11 @@
 package com.bonda.bonda.ui.search
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,19 +47,74 @@ class SearchResultAllFragment : Fragment() {
          * 도서 검색 결과 바인딩
          */
         vm.booksSearchResult.observe(viewLifecycleOwner) { books ->
-            binding.tvBooksNoResult.visibility = if (books.isEmpty()) View.VISIBLE else View.GONE
-            binding.btBookAll.visibility = if (books.isEmpty()) View.GONE else View.VISIBLE
             bookAdapter.submitList(books.take(6))
+
+            /**
+             * 도서 검색 결과가 없는 경우
+             */
+            val keyword = vm.searchKeyword
+            if (books.isEmpty() && keyword.isNotEmpty()) {
+                binding.tvBooksNoResult.visibility = View.VISIBLE
+
+                val boldKeyword = "'$keyword'"
+                val normalText = "에 대한\n도서 검색 결과가 없습니다"
+                val fullText = boldKeyword + normalText
+
+                val spannable = SpannableStringBuilder(fullText)
+                spannable.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    0,
+                    boldKeyword.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                binding.tvBooksNoResult.text = spannable
+
+                /**
+                 * 도서 검색 결과가 있는 경우
+                 */
+            } else {
+                binding.tvBooksNoResult.visibility = View.GONE
+            }
+
+            binding.btBookAll.visibility = if (books.isEmpty()) View.GONE else View.VISIBLE
         }
 
         /**
          * 아티클 검색 결과 바인딩
          */
         vm.articlesSearchResult.observe(viewLifecycleOwner) { articles ->
-            binding.tvArticlesNoResult.visibility =
-                if (articles.isEmpty()) View.VISIBLE else View.GONE
-            binding.btArticleAll.visibility = if (articles.isEmpty()) View.GONE else View.VISIBLE
             articleAdapter.submitList(articles.take(6))
+
+            /**
+             * 아티클 검색 결과가 없는 경우
+             */
+            val keyword = vm.searchKeyword
+            if (articles.isEmpty() && keyword.isNotEmpty()) {
+                binding.tvArticlesNoResult.visibility = View.VISIBLE
+
+                val boldKeyword = "'$keyword'"
+                val normalText = "에 대한\n아티클 검색 결과가 없습니다"
+                val fullText = boldKeyword + normalText
+
+                val spannable = SpannableStringBuilder(fullText)
+                spannable.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    0,
+                    boldKeyword.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                binding.tvArticlesNoResult.text = spannable
+
+                /**
+                 * 아티클 검색 결과가 있는 경우
+                 */
+            } else {
+                binding.tvArticlesNoResult.visibility = View.GONE
+            }
+
+            binding.btArticleAll.visibility = if (articles.isEmpty()) View.GONE else View.VISIBLE
         }
 
         /**

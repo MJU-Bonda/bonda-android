@@ -1,7 +1,11 @@
 package com.bonda.bonda.ui.search
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bonda.bonda.databinding.FragmentSearchResultArticleBinding
+import com.bonda.bonda.databinding.FragmentSearchResultBinding
 import com.bonda.bonda.ui.article.ArticleActivity
 
 class SearchResultArticleFragment : Fragment() {
@@ -18,7 +22,7 @@ class SearchResultArticleFragment : Fragment() {
         fun newInstance(): SearchResultArticleFragment = SearchResultArticleFragment()
     }
 
-    private var _binding: FragmentSearchResultArticleBinding? = null
+    private var _binding: FragmentSearchResultBinding? = null
     private val binding get() = _binding!!
     private val vm: SearchViewModel by activityViewModels()
     private lateinit var articleAdapter: ArticleAdapter
@@ -26,17 +30,46 @@ class SearchResultArticleFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchResultArticleBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupRecyclerView()
 
-        // 아티클 검색 결과 바인딩
+        /**
+         * 아티클 검색 결과 개수 바인딩
+         */
+        vm.articlesSearchResultCount.observe(viewLifecycleOwner) { count ->
+            binding.tvSearchResultCount.text = count.toString()
+        }
+
+        /**
+         * 아티클 검색 결과 바인딩
+         */
         vm.articlesSearchResult.observe(viewLifecycleOwner) { articles ->
-            binding.tvNoResult.visibility = if (articles.isEmpty()) View.VISIBLE else View.GONE
             articleAdapter.submitList(articles)
+
+            val keyword = vm.searchKeyword
+            if (articles.isEmpty() && keyword.isNotEmpty()) {
+                binding.noSearchResult.visibility = View.VISIBLE
+
+                val boldKeyword = "'$keyword'"
+                val normalText = "에 대한\n아티클 검색 결과가 없습니다"
+                val fullText = boldKeyword + normalText
+
+                val spannable = SpannableStringBuilder(fullText)
+                spannable.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    0,
+                    boldKeyword.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+
+                binding.tvNoResult.text = spannable
+            } else {
+                binding.noSearchResult.visibility = View.GONE
+            }
         }
     }
 
@@ -60,7 +93,8 @@ class SearchResultArticleFragment : Fragment() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
-                    val lastVisibleItemPosition = gridLayoutManager.findLastCompletelyVisibleItemPosition()
+                    val lastVisibleItemPosition =
+                        gridLayoutManager.findLastCompletelyVisibleItemPosition()
                     val totalItemCount = articleAdapter.itemCount
 
                     /**
