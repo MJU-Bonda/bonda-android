@@ -175,6 +175,7 @@ class ArticleActivity : AppCompatActivity() {
                         }
 
                         AppEvents.homeArticlesUpdated.emit(Unit)
+                        AppEvents.libraryUpdated.emit(Unit)
                     } catch (e: Exception) {
                         /**
                          * 오류 발생시

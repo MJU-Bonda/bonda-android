@@ -18,6 +18,7 @@ import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentHomeArticlesListBinding
 import com.bonda.bonda.databinding.ViewArticleBinding
 import com.bonda.bonda.model.ArticleCategory
+import com.bonda.bonda.model.setCategoryStyle
 import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.home.HomeActivity
@@ -85,37 +86,7 @@ class ArticlesListFragment : Fragment() {
                 itemBinding.articleImage.load(article.coverImage)
                 itemBinding.articleTitle.text = article.title.replace("\\n", "\n")
                 itemBinding.articleSubtitle.text = article.subTitle
-
-                article.category.also {
-                    val category = it.toArticleCategory()
-
-                    itemBinding.articleCategoryChip.root.text = category.label
-
-                    val bgColorRes = when (category) {
-                        ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.surface_context_writer
-                        ArticleCategory.BOOKSTORE -> R.color.surface_context_store
-                        ArticleCategory.THEME -> R.color.surface_context_theme
-                        else -> R.color.surface_default_primary
-                    }
-                    val textColorRes = when (category) {
-                        ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.text_context_writer
-                        ArticleCategory.BOOKSTORE -> R.color.text_context_store
-                        ArticleCategory.THEME -> R.color.text_context_theme
-                        else -> R.color.text_accent_primary
-                    }
-
-                    // Chip 에 적용
-                    itemBinding.articleCategoryChip.root.chipBackgroundColor =
-                        ColorStateList.valueOf(
-                            ContextCompat.getColor(requireContext(), bgColorRes)
-                        )
-                    itemBinding.articleCategoryChip.root.setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            textColorRes
-                        )
-                    )
-                }
+                itemBinding.articleCategoryChip.root.setCategoryStyle(article.category)
 
                 /**
                  * 북마크 버튼 binding
@@ -166,6 +137,8 @@ class ArticlesListFragment : Fragment() {
                                     )
                                 AppEvents.profileUpdated.emit(Unit)
                             }
+
+                            AppEvents.libraryUpdated.emit(Unit)
                         } catch (e: Exception) {
                             /**
                              * 오류 발생시

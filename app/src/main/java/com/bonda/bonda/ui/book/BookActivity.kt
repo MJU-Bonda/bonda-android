@@ -96,7 +96,11 @@ class BookActivity : AppCompatActivity() {
                                 type = SnackbarType.SAVE
                             )
 
+                        /**
+                         * 데이터 재로드 신호 전송
+                         */
                         AppEvents.profileUpdated.emit(Unit)
+                        AppEvents.libraryUpdated.emit(Unit)
 
                         /**
                          * 새로운 뱃지 획득시
