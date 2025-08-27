@@ -8,9 +8,8 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="19dp"
-        android:paddingHorizontal="19dp"
-        android:visibility="gone"
+        android:clipToPadding="false"
+        android:padding="24dp"
         app:spanCount="2" />
 
     <com.google.android.material.textview.MaterialTextView

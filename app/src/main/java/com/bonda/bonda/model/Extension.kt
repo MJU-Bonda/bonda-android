@@ -1,6 +1,7 @@
 package com.bonda.bonda.model
 
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import androidx.core.content.ContextCompat
 import com.bonda.bonda.R
 import com.google.android.material.chip.Chip
@@ -19,6 +20,13 @@ fun String.toBookTheme(): BookTheme =
 
 fun String.toSortOrder(): SortOrder =
     SortOrder.entries.find { it.code == this } ?: SortOrder.RECENTLY_SAVED
+
+/**
+ * dp를 px값으로 환산합니다
+ */
+fun Int.dpToPx(): Int {
+    return (this * Resources.getSystem().displayMetrics.density).toInt()
+}
 
 /**
  * article category chip color extension

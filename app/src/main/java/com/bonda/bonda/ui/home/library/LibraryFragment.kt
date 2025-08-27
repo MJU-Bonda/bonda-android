@@ -12,7 +12,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 class LibraryFragment : Fragment() {
 
     private var _binding: FragmentHomeLibraryBinding? = null
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -31,8 +30,11 @@ class LibraryFragment : Fragment() {
             private val tabs = listOf("도서", "아티클")
             override fun getItemCount() = tabs.size
             override fun createFragment(position: Int): Fragment {
-                return LibraryScrollerFragment.newInstance(position)
-            }
+                return when (position) {
+                    0 -> LibraryBooksFragment()
+                    1 -> LibraryArticlesFragment()
+                    else -> throw IllegalStateException("Invalid position $position")
+                }            }
         }
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, pos ->
@@ -42,13 +44,6 @@ class LibraryFragment : Fragment() {
                 else -> ""
             }
         }.attach()
-
-        val initialTab = arguments?.getString("initialTab")
-        if (initialTab == "article") {
-            binding.viewPager.setCurrentItem(1, false)
-            arguments?.remove("initialTab") // 사용 후 제거
-        }
-
     }
 
     override fun onDestroyView() {
