@@ -20,6 +20,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/image_holder"
+        style="@style/Widget.Bonda.Card.Enabled"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:cardBackgroundColor="@color/surface_default_secondary"

@@ -8,9 +8,8 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="19dp"
-        android:paddingHorizontal="19dp"
-        android:visibility="gone"
+        android:clipToPadding="false"
+        android:padding="24dp"
         app:spanCount="2" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -54,11 +53,6 @@
     <include
         android:id="@+id/error_network"
         layout="@layout/layout_error_network"
-        android:visibility="gone" />
-
-    <include
-        android:id="@+id/error_common"
-        layout="@layout/layout_error_common"
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

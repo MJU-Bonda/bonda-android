@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.member.GetCollectedBadgesResponse
 import com.bonda.bonda.network.model.member.GetMyActivityResponse
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 
 class MyActivityViewModel : ViewModel() {

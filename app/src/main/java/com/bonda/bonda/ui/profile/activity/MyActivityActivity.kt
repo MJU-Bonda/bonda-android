@@ -23,17 +23,18 @@ import kotlinx.coroutines.launch
 class MyActivityActivity : AppCompatActivity() {
 
     private val memberService = ApiClient.memberService
-
     private lateinit var binding: ActivityMyActivityBinding
     private val vm: MyActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityMyActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /**
+         * 디스플레이 인셋 적용
+         */
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -50,10 +51,17 @@ class MyActivityActivity : AppCompatActivity() {
         }
 
         /**
+         * 뱃지 이미지 데이터 바인딩
+         */
+        badgeViewBinds.forEachIndexed { index, badgeView ->
+            badgeView.badgeImage.setImageResource(badgeDisabledImages[index])
+        }
+
+        /**
          * 탐색한 도서 및 수집한 도서 count binding
          */
-        vm.viewedBookCount.observe(this) { binding.tvViewedBookCount.text = "지금까지 총 ${it}권을 탐색했고," }
-        vm.collectedBookCount.observe(this) { binding.tvSavedBookCount.text = "그중 ${it}권을 수집했어요." }
+        vm.viewedBookCount.observe(this) { binding.tvViewedBookCount.text = "${it}권" }
+        vm.collectedBookCount.observe(this) { binding.tvSavedBookCount.text = "${it}권" }
 
         /**
          * 수집한 도서 갯수 별 막대그래프 binding
@@ -120,9 +128,13 @@ class MyActivityActivity : AppCompatActivity() {
         }
 
         /**
+         * 획득한 뱃지 갯수 binding
+         */
+        vm.collectedBadgeCount.observe(this) { binding.tvBadgeCount.text = "${it}개" }
+
+        /**
          * 획득한 뱃지 list binding
          */
-        vm.collectedBadgeCount.observe(this) { binding.tvBadgeCount.text = "총 ${it}개의 뱃지를 획득했어요." }
         vm.collectedBadgeList.observe(this) { badgeList ->
             if (badgeList.isEmpty()) return@observe
 
@@ -162,7 +174,6 @@ class MyActivityActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     /**
@@ -232,4 +243,5 @@ class MyActivityActivity : AppCompatActivity() {
             R.drawable.badge_collect_6_detail
         )
     }
+
 }

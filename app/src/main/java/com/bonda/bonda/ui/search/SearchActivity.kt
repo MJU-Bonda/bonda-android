@@ -14,11 +14,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bonda.bonda.databinding.ActivitySearchBinding
 import com.bonda.bonda.databinding.ViewChipSearchHistoryBinding
-import com.bonda.bonda.databinding.ViewChipSearchRecommendBinding
 import com.bonda.bonda.ui.profile.DialogView
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -44,8 +42,14 @@ class SearchActivity : AppCompatActivity() {
          */
         binding.searchResultViewpager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int = searchResultTabTitles.size
+
+            // 이 부분을 수정합니다.
             override fun createFragment(position: Int): Fragment =
-                SearchResultFragment.newInstance(searchResultTabTitles[position])
+                when (searchResultTabTitles[position]) {
+                    "도서" -> SearchResultBookFragment.newInstance()
+                    "아티클" -> SearchResultArticleFragment.newInstance()
+                    else -> SearchResultAllFragment.newInstance() // "전체" 또는 기본값
+                }
         }
         TabLayoutMediator(
             binding.searchResultTablayout,
@@ -87,17 +91,40 @@ class SearchActivity : AppCompatActivity() {
             if (isSearchAction) {
                 val query = binding.searchBar.text.toString().trim()
                 if (query.isNotEmpty()) {
-                    vm.clearSearch()
                     vm.search(query)
                     binding.searchResult.visibility = View.VISIBLE
 
-                    // 키보드 숨기기
+                    /**
+                     * 화면의 키보드를 숨깁니다
+                     */
                     (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                         .hideSoftInputFromWindow(binding.searchBar.windowToken, 0)
                 }
                 true
             } else {
                 false
+            }
+        }
+
+        /**
+         * 검색 결과가 표시되어있는 상태에서 검색바 클릭 시 검색 결과창을 닫습니다
+         */
+        binding.searchBar.setOnClickListener {
+            if (binding.searchResult.isVisible) {
+                binding.searchResult.visibility = View.GONE
+                vm.clearSearch()
+            }
+        }
+
+        /**
+         * 검색바의 clear text(x) 버튼 클릭 시 검색어를 지우고 결과 화면을 숨깁니다
+         */
+        binding.searchBarContainer.setEndIconOnClickListener {
+            binding.searchBar.text?.clear()
+
+            if (binding.searchResult.isVisible) {
+                binding.searchResult.visibility = View.GONE
+                vm.clearSearch()
             }
         }
 
@@ -154,7 +181,7 @@ class SearchActivity : AppCompatActivity() {
             binding.todayKeywordsChipGroup.removeAllViews()
 
             keywords.forEach { keyword ->
-                val chipBinding = ViewChipSearchRecommendBinding.inflate(
+                val chipBinding = ViewChipSearchHistoryBinding.inflate(
                     layoutInflater,
                     binding.todayKeywordsChipGroup,
                     false
@@ -162,6 +189,7 @@ class SearchActivity : AppCompatActivity() {
 
                 chipBinding.root.apply {
                     text = keyword
+                    setCloseIconVisible(false)
                     setOnClickListener {
                         binding.searchBar.setText(keyword)
                         binding.searchBar.setSelection(keyword.length)

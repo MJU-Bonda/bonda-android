@@ -6,15 +6,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 
 class BookViewModel : ViewModel() {
-
+    /**
+     * 네트워크 인스턴스
+     */
     private val bookService = ApiClient.bookService
 
-    private val _isLoading = MutableLiveData(false)
-    private val _error = MutableLiveData(false)
+    private var isLoading = false
+
+    /**
+     * 라이브 데이터
+     */
+    private val _isError = MutableLiveData(false)
     private val _id = MutableLiveData<Long>()
     private val _isSaved = MutableLiveData<Boolean>()
     private val _coverImage = MutableLiveData<String>()
@@ -28,8 +34,10 @@ class BookViewModel : ViewModel() {
     private val _body = MutableLiveData<String>()
     private val _articles = MutableLiveData<List<Article>>()
 
-    val isLoading: LiveData<Boolean> = _isLoading
-    val error: LiveData<Boolean> = _error
+    /**
+     * 읽기 전용 데이터
+     */
+    val isError: LiveData<Boolean> = _isError
     val id: LiveData<Long> = _id
     val isSaved: LiveData<Boolean> = _isSaved
     val coverImage: LiveData<String> = _coverImage
@@ -43,6 +51,9 @@ class BookViewModel : ViewModel() {
     val body: LiveData<String> = _body
     val articles: LiveData<List<Article>> = _articles
 
+    /**
+     * 데이터 클래스
+     */
     data class Article(
         val id: Long,
         val coverImage: String,
@@ -50,8 +61,11 @@ class BookViewModel : ViewModel() {
         val title: String
     )
 
+    /**
+     * 도서 상세 정보를 조회합니다
+     */
     fun getBookDetail(bookId: Long) {
-        _isLoading.value = true
+        isLoading = true
 
         viewModelScope.launch {
             try {
@@ -76,10 +90,12 @@ class BookViewModel : ViewModel() {
                         title = article.title
                     )
                 }
+                _isError.value = false
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "BookViewModel.kt::getBookDetail", e)
+                _isError.value = true
             } finally {
-                _isLoading.value = false
+                isLoading = false
             }
         }
     }
@@ -88,19 +104,21 @@ class BookViewModel : ViewModel() {
      * 도서 북마크 여부를 토글합니다
      */
     suspend fun toggleSaveBook(bookId: Long): Boolean {
-        if (_isLoading.value == true)
-            return false
-        _isLoading.value = true
+        if (isLoading) return false
+        isLoading = true
 
         try {
             val res = bookService.toggleSaveBook(bookId).unwrapOrThrow().isNewBadge
             val current = _isSaved.value
             _isSaved.value = !current!!
-            _isLoading.value = false
+            _isError.value = false
             return res
         } catch (e: Exception) {
-            _isLoading.value = false
+            _isError.value = true
             throw e
+        } finally {
+            isLoading = false
         }
     }
+
 }

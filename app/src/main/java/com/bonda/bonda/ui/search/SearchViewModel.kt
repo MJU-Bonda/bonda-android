@@ -8,34 +8,35 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.PREFS_NAME
-import com.bonda.bonda.util.PREF_KEY_SEARCH_HISTORY_ACTIVATED
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.PREFS_NAME
+import com.bonda.bonda.model.PREF_KEY_SEARCH_HISTORY_ACTIVATED
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
+import com.bonda.bonda.model.SortOrder
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
     private val searchService = ApiClient.searchService
     private var bookPage = 0
     private var articlePage = 0
-    private var searchKeyword = ""
+    var searchKeyword = ""
+        private set
 
     private val prefs = application.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
-    private val _isLoading = MutableLiveData<Boolean>()
+    private var isLoading = false
     private val _isSearchHistoryEmpty = MutableLiveData<Boolean>()
     private val _isHistoryActivated = MutableLiveData<Boolean>()
     private val _searchHistory = MutableLiveData<List<String>>()
     private val _recommendedKeyword = MutableLiveData<List<String>>()
     private val _booksSearchResult = MutableLiveData<List<Book>>(emptyList())
     private val _articlesSearchResult = MutableLiveData<List<Article>>(emptyList())
-    private val _booksHasNextPage = MutableLiveData<Boolean>(false)
-    private val _articlesHasNextPage = MutableLiveData<Boolean>(false)
-    private val _booksSearchResultCount = MutableLiveData<Int>(0)
-    private val _articlesSearchResultCount = MutableLiveData<Int>(0)
+    private val _booksHasNextPage = MutableLiveData(false)
+    private val _articlesHasNextPage = MutableLiveData(false)
+    private val _booksSearchResultCount = MutableLiveData(0)
+    private val _articlesSearchResultCount = MutableLiveData(0)
 
-    val isLoading: LiveData<Boolean> = _isLoading
     val isSearchHistoryEmpty: LiveData<Boolean> = _isSearchHistoryEmpty
     val isHistoryActivated: LiveData<Boolean> = _isHistoryActivated
     val searchHistory: LiveData<List<String>> = _searchHistory
@@ -47,6 +48,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     val booksSearchResultCount: LiveData<Int> = _booksSearchResultCount
     val articlesSearchResultCount: LiveData<Int> = _articlesSearchResultCount
 
+    private val _sortOrder = MutableLiveData(SortOrder.NEWEST)
+    val sortOrder: LiveData<SortOrder> = _sortOrder
+
     init {
         _isHistoryActivated.value = prefs.getBoolean(PREF_KEY_SEARCH_HISTORY_ACTIVATED, false)
         loadSearchHistory()
@@ -54,20 +58,54 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /**
-     * 검색 기능 연결
+     * 현재 검색 결과를 초기화하고 새로운 검색을 수행합니다
+     * @param keyword 검색어
+     * @param clearPreviousResults 이전 검색 결과를 지울지 여부
      */
-    fun search(keyword: String) {
+    fun search(keyword: String, clearPreviousResults: Boolean = true) {
+        if (clearPreviousResults) {
+            clearSearch()
+        }
+        bookPage = 0
+        articlePage = 0
+
         searchKeyword = keyword
         searchBooks(keyword)
         searchArticles(keyword)
-        loadSearchHistory()
+
+        if (clearPreviousResults) {
+            loadSearchHistory()
+        }
     }
 
-    fun searchBooks(keyword: String) {
+    /**
+     * 정렬 기준을 토글한 뒤, 검색을 다시 수행합니다. 검색어가 없으면 실행되지 않습니다.
+     */
+    fun toggleSortOrderAndSearch() {
+        if (searchKeyword.isBlank()) return
+
+        val newSortOrder = if (_sortOrder.value == SortOrder.NEWEST) {
+            SortOrder.POPULARITY
+        } else {
+            SortOrder.NEWEST
+        }
+        _sortOrder.value = newSortOrder
+
+        search(searchKeyword, clearPreviousResults = false)
+    }
+
+    /**
+     * 도서 검색 결과 로드
+     */
+    private fun searchBooks(keyword: String) {
         viewModelScope.launch {
             try {
                 val res = searchService
-                    .searchBooks(page = bookPage, word = keyword)
+                    .searchBooks(
+                        page = bookPage,
+                        word = keyword,
+                        orderBy = _sortOrder.value?.code ?: SortOrder.NEWEST.code
+                    )
                     .unwrapOrThrow()
 
                 val current = _booksSearchResult.value.orEmpty()
@@ -81,30 +119,38 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                     )
                 }
 
-                val updated = current + newBooks
+                val updated = if (bookPage == 0) newBooks else current + newBooks
 
                 _booksSearchResult.value = updated
                 _booksHasNextPage.value = res.hasNextPage
                 _booksSearchResultCount.value = res.total
-
-                Log.d(TAG, "도서 검색 결과 ${_booksSearchResult.value.toString()}")
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::searchBooks()", e)
             }
         }
     }
 
+    /**
+     * 도서 검색 결과 다음 페이지가 있으면 로드
+     */
     fun getNextBooks() {
         if (_booksHasNextPage.value != true) return
         bookPage++
         searchBooks(searchKeyword)
     }
 
-    fun searchArticles(keyword: String) {
+    /**
+     * 아티클 검색
+     */
+    private fun searchArticles(keyword: String) {
         viewModelScope.launch {
             try {
                 val res = searchService
-                    .searchArticles(page = articlePage, word = keyword)
+                    .searchArticles(
+                        page = articlePage,
+                        word = keyword,
+                        orderBy = _sortOrder.value?.code ?: SortOrder.NEWEST.code
+                    )
                     .unwrapOrThrow()
 
                 val current = _articlesSearchResult.value.orEmpty()
@@ -122,26 +168,26 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 _articlesSearchResult.value = updated
                 _articlesHasNextPage.value = res.hasNextPage
                 _articlesSearchResultCount.value = res.total
-
-                Log.d(TAG, "아티클 검색 결과 ${_articlesSearchResult.value.toString()}")
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::searchArticles()", e)
             }
         }
     }
 
+    /**
+     * 아티클 다음 페이지가 있으면 로드
+     */
     fun getNextArticles() {
         if (_articlesHasNextPage.value != true) return
         articlePage++
         searchArticles(searchKeyword)
     }
 
-
     /**
      * 특정 검색어 삭제
      */
     fun removeSearchHistory(keyword: String) {
-        if (_isLoading.value == true) return
+        if (isLoading) return
 
         viewModelScope.launch {
             try {
@@ -151,7 +197,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                     ?.filterNot { it == keyword }
                 _isSearchHistoryEmpty.value = _searchHistory.value!!.isEmpty()
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::removeSearchHistory()", e)
             }
         }
     }
@@ -163,16 +209,16 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private fun loadSearchHistory() {
         viewModelScope.launch {
             try {
-                _isLoading.value = true
+                isLoading = true
 
                 val response = searchService.getSearchHistory().unwrapOrThrow()
 
                 _isSearchHistoryEmpty.value = response.recentSearchTermList.isEmpty()
                 _searchHistory.value = response.recentSearchTermList
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::loadSearchHistory()", e)
             } finally {
-                _isLoading.value = false
+                isLoading = false
             }
         }
     }
@@ -182,7 +228,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
      * 검색 기록 저장 설정
      */
     fun setIsHistoryActivated() {
-        if (_isLoading.value == true) return
+        if (isLoading) return
 
         viewModelScope.launch {
             try {
@@ -191,7 +237,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 prefs.edit() { putBoolean(PREF_KEY_SEARCH_HISTORY_ACTIVATED, response.isAutoSaved) }
                 _isHistoryActivated.value = response.isAutoSaved
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::setIsHistoryActivated()", e)
             }
         }
     }
@@ -201,38 +247,37 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
      * 모든 검색 기록 삭제
      */
     fun removeAllSearchHistory() {
-        if (_isLoading.value == true) return
+        if (isLoading) return
 
         viewModelScope.launch {
-            _isLoading.value = true
+            isLoading = true
 
             try {
                 searchService.deleteAllSearchHistory().unwrapOrThrow()
                 _isSearchHistoryEmpty.value = true
                 _searchHistory.value = emptyList()
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::removeAllSearchHistory()", e)
             } finally {
-                _isLoading.value = false
+                isLoading = false
             }
         }
     }
-
 
     /**
      * 추천 검색어 로드
      */
     private fun loadRecommendedKeyword() {
         viewModelScope.launch {
-            _isLoading.value = true
+            isLoading = true
 
             try {
                 val response = searchService.getRecommendedKeyword().unwrapOrThrow()
                 _recommendedKeyword.value = response.recommendKeywords
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "SearchViewModel.kt::loadRecommendedKeyword()", e)
             } finally {
-                _isLoading.value = false
+                isLoading = false
             }
         }
     }
@@ -245,5 +290,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         _articlesSearchResult.value = emptyList()
         _booksHasNextPage.value = false
         _articlesHasNextPage.value = false
+        _booksSearchResultCount.value = 0
+        _articlesSearchResultCount.value = 0
     }
+
 }

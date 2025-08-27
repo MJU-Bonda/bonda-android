@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import coil3.load
+import com.bonda.bonda.model.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleDetailBinding
 import com.bonda.bonda.databinding.ViewArticleMiniBinding
@@ -31,8 +32,10 @@ import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.ui.book.BookActivity
 import com.bonda.bonda.ui.home.HomeActivity
 import com.bonda.bonda.ui.profile.activity.MyActivityActivity
-import com.bonda.bonda.util.SnackbarType
-import com.bonda.bonda.util.showSnackbar
+import com.bonda.bonda.ui.components.SnackbarType
+import com.bonda.bonda.model.TAG
+import com.bonda.bonda.model.setCategoryStyle
+import com.bonda.bonda.ui.components.showSnackbar
 import kotlinx.coroutines.launch
 
 class ArticleActivity : AppCompatActivity() {
@@ -43,17 +46,43 @@ class ArticleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityArticleDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val articleId = intent.getLongExtra("article_detail_id", 0)
-        vm.getArticleData(articleId)
-
+        /**
+         * display inset을 전달합니다
+         */
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        /**
+         * activity 실행 시 전달받은 article id를 받아옵니다
+         */
+        val articleId = intent.getLongExtra("article_detail_id", 0)
+        vm.getArticleData(articleId)
+
+        /**
+         * 만약 뱃지를 받았다면 스낵바를 호출합니다
+         */
+        vm.hasNewBadge.observe(this) { hasNewBadge ->
+            if (hasNewBadge) {
+                showSnackbar(
+                    message = "새로운 뱃지를 획득했습니다!",
+                    buttonText = "확인하기",
+                    onButtonClick = {
+                        val intent = Intent(
+                            this@ArticleActivity,
+                            MyActivityActivity::class.java
+                        )
+                        startActivity(intent)
+                    },
+                    type = SnackbarType.BADGE
+                )
+                lifecycleScope.launch { AppEvents.profileUpdated.emit(Unit) }
+            }
         }
 
         /**
@@ -67,11 +96,10 @@ class ArticleActivity : AppCompatActivity() {
          * 오류 페이지 처리
          */
         vm.isError.observe(this) {
-            binding.errorCommon.root.isVisible = it
+            binding.errorNetwork.root.isVisible = it
             binding.scrollView.isGone = it
         }
 
-        binding.errorCommon.buttonRetry.setOnClickListener { vm.getArticleData(articleId) }
         binding.errorNetwork.buttonRetry.setOnClickListener { vm.getArticleData(articleId) }
 
         /**
@@ -80,31 +108,20 @@ class ArticleActivity : AppCompatActivity() {
         vm.title.observe(this) { binding.titleTv.text = it.replace("\\n", "\n") }
         vm.subTitle.observe(this) { binding.subtitleTv.text = it }
         vm.body.observe(this) { binding.articleBody.text = it }
-        vm.coverImage.observe(this) { binding.articleImage.load(it) }
-
-        vm.category.observe(this) {
-            val category = it.toArticleCategory()
-
-            binding.categoryChip.root.text = category.label
-
-            val bgColorRes = when (category) {
-                ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.surface_context_writer
-                ArticleCategory.BOOKSTORE -> R.color.surface_context_store
-                ArticleCategory.THEME -> R.color.surface_context_theme
-                else -> R.color.surface_default_primary
+        vm.coverImage.observe(this) { imageUrl ->
+            binding.articleImage.load(imageUrl) {
+                listener(
+                    onSuccess = { _, _ ->
+                        binding.articleImageGradient.isVisible = true
+                    },
+                    onError = { _, result ->
+                        Log.e(TAG, "ArticleActivity::coverImage", result.throwable)
+                        vm.setErrorState(true)
+                    }
+                )
             }
-            val textColorRes = when (category) {
-                ArticleCategory.AUTHOR_OR_PUBLISHER -> R.color.text_context_writer
-                ArticleCategory.BOOKSTORE -> R.color.text_context_store
-                ArticleCategory.THEME -> R.color.text_context_theme
-                else -> R.color.text_accent_primary
-            }
-
-            // Chip 에 적용
-            binding.categoryChip.root.chipBackgroundColor =
-                ColorStateList.valueOf(ContextCompat.getColor(this, bgColorRes))
-            binding.categoryChip.root.setTextColor(ContextCompat.getColor(this, textColorRes))
         }
+        vm.category.observe(this) { binding.categoryChip.root.setCategoryStyle(it) }
 
         /**
          * 북마크 버튼 binding
@@ -141,7 +158,7 @@ class ArticleActivity : AppCompatActivity() {
                         /**
                          * 새로운 뱃지 획득시
                          */
-                        if (hasNewBadge)
+                        if (hasNewBadge) {
                             showSnackbar(
                                 message = "새로운 뱃지를 획득했습니다!",
                                 buttonText = "확인하기",
@@ -154,7 +171,11 @@ class ArticleActivity : AppCompatActivity() {
                                 },
                                 type = SnackbarType.BADGE
                             )
+                            AppEvents.profileUpdated.emit(Unit)
+                        }
 
+                        AppEvents.homeArticlesUpdated.emit(Unit)
+                        AppEvents.libraryUpdated.emit(Unit)
                     } catch (e: Exception) {
                         /**
                          * 오류 발생시
@@ -163,6 +184,7 @@ class ArticleActivity : AppCompatActivity() {
                             message = "저장에 실패했어요. 다시 시도해 주세요.",
                             type = SnackbarType.ERROR
                         )
+                        Log.e(TAG, "ArticleActivity.kt::bookmarkButton", e)
                     }
                 }
             }
@@ -194,7 +216,7 @@ class ArticleActivity : AppCompatActivity() {
          * 도서 카드 목록 탭 인디케이터
          */
         vm.books.observe(this) { binding.booksTabIndicator.setCount(it.size) }
-        binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.booksTabIndicator.select(position)
             }
@@ -226,7 +248,6 @@ class ArticleActivity : AppCompatActivity() {
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(this, BookActivity::class.java)
                     intent.putExtra("book_detail_id", book.id)
-                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
                     startActivity(intent)
                 }
 
@@ -299,7 +320,6 @@ class ArticleActivity : AppCompatActivity() {
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(this, ArticleActivity::class.java)
                     intent.putExtra("article_detail_id", article.id)
-                    Log.d("DEBUG", "start_article_detail_activity_id : ${article.id}")
                     startActivity(intent)
                 }
 

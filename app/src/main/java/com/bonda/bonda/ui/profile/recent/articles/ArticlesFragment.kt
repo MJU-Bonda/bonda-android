@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bonda.bonda.databinding.FragmentRecentActivityBinding
+import com.bonda.bonda.model.dpToPx
 import com.bonda.bonda.ui.article.ArticleActivity
+import com.bonda.bonda.model.GridSpacingItemDecoration
 
 class ArticlesFragment : Fragment() {
 
@@ -41,17 +43,25 @@ class ArticlesFragment : Fragment() {
         binding.container.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.container.adapter = adapter
 
+        /**
+         * item 사이 gap을 추가합니다
+         */
+        val horizontalSpacing = 10.dpToPx()
+        val verticalSpacing = 16.dpToPx()
+        binding.container.addItemDecoration(
+            GridSpacingItemDecoration(2, horizontalSpacing, verticalSpacing)
+        )
+
         vm.getArticles()
 
         vm.isLoading.observe(viewLifecycleOwner) { binding.progressIndicator.isVisible = it }
         vm.isEmpty.observe(viewLifecycleOwner) { binding.emptyArticleListText.isVisible = it }
-        vm.isError.observe(viewLifecycleOwner) { binding.errorCommon.root.isVisible= it }
+        vm.isError.observe(viewLifecycleOwner) { binding.errorNetwork.root.isVisible = it }
         vm.articles.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.container.isVisible = it.isNotEmpty()
         }
 
-        binding.errorCommon.buttonRetry.setOnClickListener { vm.getArticles() }
         binding.errorNetwork.buttonRetry.setOnClickListener { vm.getArticles() }
     }
 

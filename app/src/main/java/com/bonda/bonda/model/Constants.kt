@@ -1,7 +1,18 @@
-package com.bonda.bonda.util
+package com.bonda.bonda.model
 
-const val TAG = "DEBUG"
+/**
+ * Log Tag
+ */
+const val TAG = "BONDA_DEBUG"
 
+/**
+ * intent extras
+ */
+const val ERROR_CALLBACK_ACTIVITY = "error_callback_activity"
+
+/**
+ * SharedPreferences Key
+ */
 const val PREFS_NAME = "Prefs"
 const val PREF_KEY_REFRESH_TOKEN = "refreshToken"
 const val PREF_KEY_SIGNUP_REQUIRED = "isNewUser"

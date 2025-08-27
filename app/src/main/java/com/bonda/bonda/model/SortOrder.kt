@@ -1,9 +1,9 @@
 package com.bonda.bonda.model
 
 enum class SortOrder(val code: String, val label: String) {
-    RECENT("recentlysaved", "최근담은순"),
-    TITLE("title", "제목")
+    RECENTLY_SAVED("recentlysaved", "최근담은순"),
+    TITLE("title", "제목"),
+    RECENT("recent", "최신순"),
+    NEWEST("newest", "최신순"),
+    POPULARITY("popularity", "인기순")
 }
-
-fun String.toSortOrder(): SortOrder =
-    SortOrder.entries.find { it.code == this } ?: SortOrder.RECENT

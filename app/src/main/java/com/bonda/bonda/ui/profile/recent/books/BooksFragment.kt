@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bonda.bonda.databinding.FragmentRecentActivityBinding
+import com.bonda.bonda.model.GridSpacingItemDecoration
+import com.bonda.bonda.model.dpToPx
 import com.bonda.bonda.ui.book.BookActivity
 
 class BooksFragment : Fragment() {
@@ -41,17 +43,25 @@ class BooksFragment : Fragment() {
         binding.container.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.container.adapter = adapter
 
+        /**
+         * item 사이 gap을 추가합니다
+         */
+        val horizontalSpacing = 10.dpToPx()
+        val verticalSpacing = 20.dpToPx()
+        binding.container.addItemDecoration(
+            GridSpacingItemDecoration(2, horizontalSpacing, verticalSpacing)
+        )
+
         vm.getBooks()
 
         vm.isLoading.observe(viewLifecycleOwner) { binding.progressIndicator.isVisible = it }
-        vm.isError.observe(viewLifecycleOwner) { binding.errorCommon.root.isVisible = it }
-        vm.isEmpty.observe(viewLifecycleOwner) { binding.emptyBookListText.isVisible = it}
+        vm.isError.observe(viewLifecycleOwner) { binding.errorNetwork.root.isVisible = it }
+        vm.isEmpty.observe(viewLifecycleOwner) { binding.emptyBookListText.isVisible = it }
         vm.books.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.container.isVisible = it.isNotEmpty()
         }
 
-        binding.errorCommon.buttonRetry.setOnClickListener { vm.getBooks() }
         binding.errorNetwork.buttonRetry.setOnClickListener { vm.getBooks() }
     }
 

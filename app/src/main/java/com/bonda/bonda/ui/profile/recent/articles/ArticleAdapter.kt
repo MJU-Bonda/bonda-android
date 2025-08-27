@@ -15,7 +15,6 @@ import com.bonda.bonda.model.toArticleCategory
 import com.google.android.material.chip.Chip
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
-import kotlin.coroutines.coroutineContext
 
 class ArticleAdapter(
     private val onClick: (Article) -> Unit

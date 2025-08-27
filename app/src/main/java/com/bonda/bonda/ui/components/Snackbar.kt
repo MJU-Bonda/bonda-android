@@ -1,5 +1,6 @@
-package com.bonda.bonda.util
+package com.bonda.bonda.ui.components
 
+import android.animation.LayoutTransition
 import android.graphics.Paint
 import android.view.Gravity
 import android.view.View
@@ -42,6 +43,12 @@ fun AppCompatActivity.showSnackbar(
                 bottomMargin = snackbarBottomMargin
             }
             root.addView(this, lp)
+
+            val transition = LayoutTransition()
+            transition.enableTransitionType(LayoutTransition.CHANGING)
+            transition.setAnimator(LayoutTransition.APPEARING, null)
+            transition.setAnimator(LayoutTransition.DISAPPEARING, null)
+            this.layoutTransition = transition
 
             ViewCompat.requestApplyInsets(this)
             ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
@@ -119,10 +126,26 @@ fun AppCompatActivity.showSnackbar(
         LinearLayout.LayoutParams.WRAP_CONTENT
     )
     childLp.topMargin = snackbarBottomMargin
-    container.addView(binding.root, childLp)
 
     /**
-     * animation
+     * 이미 표시중인 스낵바가 있는지 검사합니다
+     */
+    if (container.isEmpty()) {
+        container.addView(binding.root, childLp)
+        binding.root.startAnimation(
+            AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+        )
+    } else {
+        container.postDelayed({
+            container.addView(binding.root, childLp)
+            binding.root.startAnimation(
+                AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+            )
+        }, 1000L)
+    }
+
+    /**
+     * 애니메이션
      */
     binding.root.startAnimation(
         AnimationUtils.loadAnimation(this, android.R.anim.fade_in)

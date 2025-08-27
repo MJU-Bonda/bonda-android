@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 
 class ArticleViewModel : ViewModel() {
@@ -29,6 +29,7 @@ class ArticleViewModel : ViewModel() {
     private val _body = MutableLiveData<String>()
     private val _books = MutableLiveData<List<Book>>()
     private val _articles = MutableLiveData<List<Article>>()
+    private val _hasNewBadge = MutableLiveData(false)
 
     /**
      * 관찰용 live-data 선언
@@ -43,6 +44,7 @@ class ArticleViewModel : ViewModel() {
     val body: LiveData<String> = _body
     val books: LiveData<List<Book>> = _books
     val articles: LiveData<List<Article>> = _articles
+    val hasNewBadge: LiveData<Boolean> = _hasNewBadge
 
     /**
      * data class 선언
@@ -97,11 +99,11 @@ class ArticleViewModel : ViewModel() {
                         title = item.title
                     )
                 }
+                _hasNewBadge.value = response.isNewBadge
 
                 _isError.value = false
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
-
+                Log.e(TAG, "ArticleViewModel.kt::getArticleData()", e)
                 _isError.value = true
             }
         }
@@ -127,6 +129,13 @@ class ArticleViewModel : ViewModel() {
             isLoading = false
             throw e
         }
+    }
+
+    /**
+     * 에러상태 토글
+     */
+    fun setErrorState(isError: Boolean) {
+        _isError.value = isError
     }
 
 }

@@ -20,13 +20,19 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import com.bonda.bonda.ui.home.HomeActivity
-import com.bonda.bonda.util.*
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.launch
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivitySignInBinding
+import com.bonda.bonda.model.AccessTokenProvider
+import com.bonda.bonda.model.BONDA_PRIVACY_POLICY_URL
+import com.bonda.bonda.model.BONDA_TERMS_OF_POLICY_URL
+import com.bonda.bonda.model.PREFS_NAME
+import com.bonda.bonda.model.PREF_KEY_REFRESH_TOKEN
+import com.bonda.bonda.model.PREF_KEY_SIGNUP_REQUIRED
+import com.bonda.bonda.model.TAG
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.network.model.auth.LoginRequest
 
@@ -38,7 +44,6 @@ class SignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -52,9 +57,9 @@ class SignInActivity : AppCompatActivity() {
          * 카카오로 로그인 하기 버튼 로직
          */
         binding.signInButton.setOnClickListener {
-            var accessToken: String
-            var refreshToken: String
-            var isNewUser: Boolean
+            UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+                Log.d(TAG, "$tokenInfo, $error")
+            }
 
             /**
              * 카카오톡이 설치 되어 있는 경우
@@ -95,6 +100,7 @@ class SignInActivity : AppCompatActivity() {
              * 카카오톡이 설치되어있지 않은 경우 브라우저 로그인을 호출합니다
              */
             else {
+                Log.d(TAG, "로그인을 시도합니다")
                 UserApiClient.instance.loginWithKakaoAccount(this) { token, _ ->
                     if (token != null) {
                         lifecycleScope.launch {
@@ -173,13 +179,11 @@ class SignInActivity : AppCompatActivity() {
         }
 
         if (isNewUser) {
-            val intent =
-                Intent(context, SignUpActivity::class.java)
+            val intent = Intent(context, SignUpActivity::class.java)
             startActivity(intent)
             finish()
         } else {
-            val intent =
-                Intent(context, HomeActivity::class.java)
+            val intent = Intent(context, HomeActivity::class.java)
             startActivity(intent)
             finish()
         }

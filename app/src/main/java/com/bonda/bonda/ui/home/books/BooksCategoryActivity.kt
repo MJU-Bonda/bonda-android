@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bonda.bonda.databinding.ActivityBooksCategoryBinding
 import com.bonda.bonda.databinding.ViewChipBookCategoryFilterBinding
 import com.bonda.bonda.model.toBookCategory
+import com.bonda.bonda.model.toSortOrder
 import com.bonda.bonda.ui.book.BookActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -26,7 +27,6 @@ class BooksCategoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         binding = ActivityBooksCategoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -92,6 +92,11 @@ class BooksCategoryActivity : AppCompatActivity() {
 
         lifecycleScope.launch { vm.booksFlow.collectLatest { booksAdapter.submitData(it) } }
 
+        /**
+         * 정렬 기준을 변경합니다
+         */
+        binding.btSort.setOnClickListener { vm.toggleSortOrder() }
+        vm.orderBy.observe(this) {binding.textSortIndicator.text = it.toSortOrder().label}
     }
 
     override fun onSupportNavigateUp(): Boolean {

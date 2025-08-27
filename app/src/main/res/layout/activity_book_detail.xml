@@ -36,6 +36,7 @@
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -183,24 +184,32 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/book_page_length_header" />
 
-                <include
+                <com.google.android.material.chip.Chip
                     android:id="@+id/book_theme"
-                    layout="@layout/view_chip_book_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checkable="false"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:textAppearance="@style/Caption1"
+                    android:textColor="@color/text_default_tertiary"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipCornerRadius="16dp"
+                    app:chipMinTouchTargetSize="0dp"
+                    app:chipStrokeColor="@color/border_default_tertiary"
                     android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/book_theme_header" />
 
                 <TextView
                     android:id="@+id/book_body_header"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="48dp"
                     android:text="@string/book_body_header"
                     android:textAppearance="@style/Body1"
                     android:textColor="@color/text_default_primary"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/book_theme" />
 
@@ -217,14 +226,12 @@
 
                 <TextView
                     android:id="@+id/book_articles_header"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:lineSpacingMultiplier="1.2"
                     android:text="@string/book_articles_header"
-                    android:textAppearance="@style/Body5"
-                    android:textColor="@color/text_default_secondary"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textAppearance="@style/Title2"
+                    android:textColor="@color/text_default_primary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/body" />
 
@@ -243,5 +250,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/error_network"
+        layout="@layout/layout_error_network"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

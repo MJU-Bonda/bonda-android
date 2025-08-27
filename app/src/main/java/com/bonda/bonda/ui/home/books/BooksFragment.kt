@@ -2,7 +2,6 @@ package com.bonda.bonda.ui.home.books
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,7 +85,6 @@ class BooksFragment : Fragment() {
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(requireContext(), BookActivity::class.java)
                     intent.putExtra("book_detail_id", book.id)
-                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
                     startActivity(intent)
                 }
 
@@ -164,18 +162,17 @@ class BooksFragment : Fragment() {
                 itemBinding.root.setOnClickListener {
                     val intent = Intent(requireContext(), BookActivity::class.java)
                     intent.putExtra("book_detail_id", book.id)
-                    Log.d("DEBUG", "start_book_detail_activity_id : ${book.id}")
                     startActivity(intent)
                 }
 
                 binding.mostLovedBooksContainer.addView(itemBinding.root)
             }
         }
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

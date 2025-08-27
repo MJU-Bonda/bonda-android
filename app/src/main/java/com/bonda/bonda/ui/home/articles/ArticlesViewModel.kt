@@ -5,12 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bonda.bonda.model.AppEvents
+import com.bonda.bonda.model.ArticleCategory
 import com.bonda.bonda.network.ApiClient
-import com.bonda.bonda.util.TAG
+import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 
 class ArticlesViewModel : ViewModel() {
-
     /**
      * 네트워크 서비스 인스턴스 생성
      */
@@ -24,6 +25,7 @@ class ArticlesViewModel : ViewModel() {
     private val _category = MutableLiveData<String>()
     private val _hasNextPage = MutableLiveData<Boolean>()
     private val _articles = MutableLiveData<List<Article>>()
+    private val _isError = MutableLiveData(false)
 
     /**
      * read-only declaration
@@ -32,17 +34,26 @@ class ArticlesViewModel : ViewModel() {
     val category: LiveData<String> = _category
     val hasNextPage: LiveData<Boolean> = _hasNextPage
     val articles: LiveData<List<Article>> = _articles
+    val isError: LiveData<Boolean> = _isError
 
     /**
-     * 데이터 로드 및 바인딩
+     * init
      */
     init {
+        getArticles()
+        observeRefreshEvent()
+    }
+
+    /**
+     * 아티클 전체를 불러옵니다
+     */
+    private fun getArticles() {
         viewModelScope.launch {
             try {
                 val response = articleService.getArticles(
                     page = 0,
                     size = 10,
-                    articleCategory = "ALL"
+                    articleCategory = ArticleCategory.ALL.code
                 ).unwrapOrThrow()
 
                 Log.d(TAG, response.toString())
@@ -63,8 +74,10 @@ class ArticlesViewModel : ViewModel() {
                         subTitle = item.introduction
                     )
                 }
+                _isError.value = false
             } catch (e: Exception) {
                 Log.e(TAG, e.toString())
+                _isError.value = true
             }
         }
     }
@@ -83,10 +96,23 @@ class ArticlesViewModel : ViewModel() {
             }
 
             isLoading = false
+            _isError.value = false
             return res.isNewBadge
         } catch (e: Exception) {
             isLoading = false
+            _isError.value = true
             throw e
+        }
+    }
+
+    /**
+     * 재로드 신호 관찰
+     */
+    private fun observeRefreshEvent() {
+        viewModelScope.launch {
+            AppEvents.homeArticlesUpdated.collect {
+                getArticles()
+            }
         }
     }
 

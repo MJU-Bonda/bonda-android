@@ -51,24 +51,70 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_viewed_book_count"
+                    android:id="@+id/tv1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:text="지금까지 총 "
                     android:textAppearance="@style/Body8"
                     android:textColor="@color/text_accent_primary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textview1" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_saved_book_count"
+                    android:id="@+id/tv_viewed_book_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0권"
+                    android:textAppearance="@style/Body8"
+                    android:textColor="@color/text_accent_primary"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv1"
+                    app:layout_constraintStart_toEndOf="@id/tv1"
+                    app:layout_constraintTop_toTopOf="@id/tv1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="을 탐색했고,"
+                    android:textAppearance="@style/Body8"
+                    android:textColor="@color/text_accent_primary"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_viewed_book_count"
+                    app:layout_constraintStart_toEndOf="@id/tv_viewed_book_count"
+                    app:layout_constraintTop_toTopOf="@id/tv_viewed_book_count" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:text="그중 "
                     android:textAppearance="@style/Body8"
                     android:textColor="@color/text_accent_primary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_viewed_book_count" />
+                    app:layout_constraintTop_toBottomOf="@id/tv1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_saved_book_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0권"
+                    android:textAppearance="@style/Body8"
+                    android:textColor="@color/text_accent_primary"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv2"
+                    app:layout_constraintStart_toEndOf="@id/tv2"
+                    app:layout_constraintTop_toTopOf="@id/tv2" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="을 수집했어요."
+                    android:textAppearance="@style/Body8"
+                    android:textColor="@color/text_accent_primary"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_saved_book_count"
+                    app:layout_constraintStart_toEndOf="@id/tv_saved_book_count"
+                    app:layout_constraintTop_toTopOf="@id/tv_saved_book_count" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
@@ -78,7 +124,7 @@
                     app:cardCornerRadius="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_saved_book_count"
+                    app:layout_constraintTop_toBottomOf="@id/tv2"
                     app:strokeWidth="0dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -103,6 +149,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal" />
+
                         </com.google.android.material.card.MaterialCardView>
 
                         <com.google.android.flexbox.FlexboxLayout
@@ -119,7 +166,9 @@
                             app:layout_constraintTop_toBottomOf="@id/materialCardView" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </com.google.android.material.card.MaterialCardView>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -142,13 +191,38 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_badge_count"
+                    android:id="@+id/tv3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="총 "
                     android:textAppearance="@style/Body8"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/text_accent_primary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textview3" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_badge_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0개"
+                    android:textAppearance="@style/Body8"
+                    android:textColor="@color/text_accent_primary"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv3"
+                    app:layout_constraintStart_toEndOf="@id/tv3"
+                    app:layout_constraintTop_toTopOf="@id/tv3" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="의 뱃지를 획득했어요."
+                    android:textAppearance="@style/Body8"
+                    android:textColor="@color/text_accent_primary"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_badge_count"
+                    app:layout_constraintStart_toEndOf="@id/tv_badge_count"
+                    app:layout_constraintTop_toTopOf="@id/tv_badge_count" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -264,6 +338,7 @@
                     app:layout_constraintEnd_toEndOf="@id/constraintlayout1"
                     app:layout_constraintStart_toStartOf="@id/constraintlayout1"
                     app:layout_constraintTop_toTopOf="@id/constraintlayout1" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -369,6 +444,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/collect_badge2"
                         app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -379,8 +455,11 @@
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout3"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
                     app:layout_constraintTop_toTopOf="@id/constraintLayout3" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -401,5 +480,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

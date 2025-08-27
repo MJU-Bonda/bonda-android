@@ -72,12 +72,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="이런 저러한 이유로 인해 이런 권한이 필요합니다. 이런 저러한 이유로 인해 이런 권한이 필요합니다."
+                        android:text="다운로드 파일 저장 및 캐시 관리에 사용돼요."
                         android:textAppearance="@style/Body9"
                         android:textColor="@color/text_default_secondary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/materialTextView" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.textview.MaterialTextView
@@ -117,7 +119,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="이런 이유로 인해 이런 권한이 필요합니다."
+                        android:text="프로필 사진 촬영 및 이미지 업로드에 사용돼요."
                         android:textAppearance="@style/Body9"
                         android:textColor="@color/text_default_secondary"
                         app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="이것저것"
+                        android:text="이미지"
                         android:textAppearance="@style/Body6"
                         android:textColor="@color/text_default_secondary"
                         app:layout_constraintStart_toStartOf="parent"
@@ -138,14 +140,18 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="저러한 이유로 인해 이런 권한이 필요합니다."
+                        android:text="갤러리에서 프로필 사진을 업로드할 때 사용돼요."
                         android:textAppearance="@style/Body9"
                         android:textColor="@color/text_default_secondary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/materialTextView4" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton

@@ -33,9 +33,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
+                    android:id="@+id/article_image_gradient"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@drawable/overlay_gradient"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@id/article_image"
                     app:layout_constraintEnd_toEndOf="@id/article_image"
                     app:layout_constraintStart_toStartOf="@id/article_image"
@@ -131,7 +133,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.bonda.bonda.util.TabIndicatorView
+            <com.bonda.bonda.ui.components.TabIndicatorView
                 android:id="@+id/books_tab_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -201,11 +203,6 @@
     <include
         android:id="@+id/error_network"
         layout="@layout/layout_error_network"
-        android:visibility="gone" />
-
-    <include
-        android:id="@+id/error_common"
-        layout="@layout/layout_error_common"
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

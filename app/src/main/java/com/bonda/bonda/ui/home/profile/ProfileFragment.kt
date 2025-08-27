@@ -15,8 +15,8 @@ import com.bonda.bonda.ui.profile.activity.MyActivityActivity
 import com.bonda.bonda.ui.profile.recent.RecentActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
-import com.bonda.bonda.util.BONDA_NOTICE_URL
-import com.bonda.bonda.util.BONDA_TERMS_OF_POLICY_URL
+import com.bonda.bonda.model.BONDA_NOTICE_URL
+import com.bonda.bonda.model.BONDA_TERMS_OF_POLICY_URL
 
 class ProfileFragment : Fragment() {
 
