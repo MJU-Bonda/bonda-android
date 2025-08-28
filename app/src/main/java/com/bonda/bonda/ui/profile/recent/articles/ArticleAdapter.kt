@@ -33,7 +33,7 @@ class ArticleAdapter(
         private val categoryChip: Chip = view.findViewById(R.id.category)
 
         fun bind(article: Article) {
-            titleTv.text      = article.title.replace("\\n", "\n")
+            titleTv.text = article.title.replace("\\n", "\n")
             imageView.load(article.imageUrl)
             categoryChip.text = article.category
 

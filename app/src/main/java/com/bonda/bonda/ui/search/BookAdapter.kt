@@ -6,19 +6,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil3.load
-import com.bonda.bonda.databinding.ViewBookVerticalBinding
+import com.bonda.bonda.databinding.ViewRecentBookBinding
 
 class BookAdapter(private val onItemClicked: (Book) -> Unit) :
 
     ListAdapter<Book, BookAdapter.BookViewHolder>(BookDiffCallback) {
 
-    inner class BookViewHolder(private val binding: ViewBookVerticalBinding) :
+    inner class BookViewHolder(private val binding: ViewRecentBookBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(book: Book) {
-            binding.coverImage.load(book.imageUrl)
+            binding.image.load(book.imageUrl)
             binding.title.text = book.title
-            binding.author.text = book.subtitle
+            binding.subtitle.text = book.subtitle
             binding.category.root.text = book.category
             binding.root.setOnClickListener {
                 onItemClicked(book)
@@ -27,7 +27,7 @@ class BookAdapter(private val onItemClicked: (Book) -> Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
-        val binding = ViewBookVerticalBinding.inflate(
+        val binding = ViewRecentBookBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false

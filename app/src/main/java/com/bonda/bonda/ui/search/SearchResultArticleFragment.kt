@@ -14,6 +14,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bonda.bonda.databinding.FragmentSearchResultBinding
+import com.bonda.bonda.model.GridSpacingItemDecoration
+import com.bonda.bonda.model.dpToPx
 import com.bonda.bonda.ui.article.ArticleActivity
 
 class SearchResultArticleFragment : Fragment() {
@@ -88,9 +90,19 @@ class SearchResultArticleFragment : Fragment() {
 
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
 
+        /**
+         * item 사이 gap을 추가합니다
+         */
+        val horizontalSpacing = 10.dpToPx()
+        val verticalSpacing = 16.dpToPx()
+
         binding.rv.apply {
             adapter = articleAdapter
             layoutManager = gridLayoutManager
+
+            addItemDecoration(
+                GridSpacingItemDecoration(2, horizontalSpacing, verticalSpacing)
+            )
 
             /**
              * 화면의 아래에 닿으면 다음 페이지를 로드합니다

@@ -71,23 +71,19 @@ class OnboardingActivity : AppCompatActivity() {
          * 탭 인디케이터 표시
          */
         binding.pageIndicator.setCount(pages.size)
-        binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 binding.pageIndicator.select(position)
             }
         })
 
         /**
-         * 시작하기(다음) 버튼 클릭 시
+         * 시작하기 버튼 클릭 시 메인 페이지로 이동
          */
         binding.nextButton.setOnClickListener {
-            if (binding.viewPager.currentItem != pages.lastIndex) {
-                binding.viewPager.currentItem++
-            } else {
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         /**

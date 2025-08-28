@@ -14,6 +14,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bonda.bonda.databinding.FragmentSearchResultBinding
+import com.bonda.bonda.model.GridSpacingItemDecoration
+import com.bonda.bonda.model.dpToPx
 import com.bonda.bonda.ui.book.BookActivity
 
 class SearchResultBookFragment : Fragment() {
@@ -88,9 +90,19 @@ class SearchResultBookFragment : Fragment() {
 
         val gridLayoutManager = GridLayoutManager(requireContext(), 3)
 
+        /**
+         * item 사이 gap을 추가합니다
+         */
+        val horizontalSpacing = 12.dpToPx()
+        val verticalSpacing = 24.dpToPx()
+
         binding.rv.apply {
             adapter = bookAdapter
             layoutManager = gridLayoutManager
+
+            addItemDecoration(
+                GridSpacingItemDecoration(3, horizontalSpacing, verticalSpacing)
+            )
 
             /**
              * 화면의 아래까지 스크롤되면 다음 페이지를 로드합니다

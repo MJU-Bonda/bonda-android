@@ -48,8 +48,6 @@
                 style="@style/Widget.Bonda.Button.Secondary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:minWidth="128dp"
-                android:minHeight="46dp"
                 app:layout_constraintEnd_toStartOf="@id/button_confirm"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -60,8 +58,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:minWidth="128dp"
-                android:minHeight="46dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/button_cancel"
                 app:layout_constraintTop_toTopOf="parent" />

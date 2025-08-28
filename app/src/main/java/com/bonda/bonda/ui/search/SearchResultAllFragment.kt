@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentSearchResultAllBinding
+import com.bonda.bonda.model.GridSpacingItemDecoration
+import com.bonda.bonda.model.dpToPx
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.book.BookActivity
 
@@ -163,6 +165,9 @@ class SearchResultAllFragment : Fragment() {
         binding.gridBooks.apply {
             adapter = bookAdapter
             layoutManager = GridLayoutManager(requireContext(), 3)
+            addItemDecoration(
+                GridSpacingItemDecoration(3, 12.dpToPx(), 24.dpToPx())
+            )
         }
 
         /**
@@ -171,6 +176,9 @@ class SearchResultAllFragment : Fragment() {
         binding.gridArticles.apply {
             adapter = articleAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
+            addItemDecoration(
+                GridSpacingItemDecoration(2, 10.dpToPx(), 16.dpToPx())
+            )
         }
     }
 

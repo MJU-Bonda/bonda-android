@@ -69,4 +69,5 @@ class BooksFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

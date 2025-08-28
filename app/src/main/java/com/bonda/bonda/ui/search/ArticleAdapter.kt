@@ -44,8 +44,6 @@ class ArticleAdapter(private val onItemClicked: (Article) -> Unit) :
             return oldItem.id == newItem.id
         }
 
-
-
         override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
             return oldItem == newItem
         }

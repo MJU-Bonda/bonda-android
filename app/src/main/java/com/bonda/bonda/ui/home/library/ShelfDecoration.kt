@@ -55,7 +55,7 @@ class ShelfDecoration(
         }
 
         // 3. 그려진 선반 갯수가 최소 갯수보다 적을 경우, 빈 선반을 추가로 그립니다.
-        var lastShelfBottom = drawnShelves.lastOrNull() ?: parent.paddingTop - offsetPx
+        var lastShelfBottom = drawnShelves.lastOrNull() ?: (parent.paddingTop - offsetPx)
         var shelvesToDraw = minShelves - drawnShelves.size
 
         while (shelvesToDraw > 0) {
