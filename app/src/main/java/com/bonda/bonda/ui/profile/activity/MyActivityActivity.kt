@@ -143,8 +143,20 @@ class MyActivityActivity : AppCompatActivity() {
 
                 if (badgeList[index].isUnlocked) {
                     badgeView.badgeImage.setImageResource(badgeImages[index])
+                    badgeView.badgeTitle.setTextColor(
+                        ContextCompat.getColor(
+                            this@MyActivityActivity,
+                            R.color.text_accent_primary
+                        )
+                    )
                 } else {
                     badgeView.badgeImage.setImageResource(badgeDisabledImages[index])
+                    badgeView.badgeTitle.setTextColor(
+                        ContextCompat.getColor(
+                            this@MyActivityActivity,
+                            R.color.text_default_tertiary
+                        )
+                    )
                 }
 
                 badgeView.root.setOnClickListener {

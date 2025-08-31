@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -26,7 +27,9 @@ import com.bonda.bonda.model.PREFS_NAME
 import com.bonda.bonda.model.PREF_KEY_REFRESH_TOKEN
 import com.bonda.bonda.model.PREF_KEY_SIGNUP_REQUIRED
 import com.bonda.bonda.model.TAG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -111,6 +114,14 @@ class SignUpActivity : AppCompatActivity() {
                     finish()
                 } catch (e: Exception) {
                     Log.e(TAG, "SignUpActivity.kt::nextButton.setOnClickListener", e)
+
+                    withContext(Dispatchers.Main) {
+                        AlertDialog.Builder(this@SignUpActivity)
+                            .setTitle("문제가 발생했습니다")
+                            .setMessage("잠시 후 다시 시도해보세요")
+                            .setPositiveButton("확인", null)
+                            .show()
+                    }
                 }
             }
         }

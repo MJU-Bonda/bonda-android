@@ -101,6 +101,7 @@
                         android:padding="12dp"
                         android:src="@drawable/ic_action_bookmark_empty_24dp"
                         app:tint="@color/white" />
+
                 </com.google.android.material.appbar.MaterialToolbar>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -115,23 +116,11 @@
                 android:textAppearance="@style/Body5"
                 android:textColor="@color/text_default_secondary" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="60dp">
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/view_pager"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="2:3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginTop="60dp"/>
 
             <com.bonda.bonda.ui.components.TabIndicatorView
                 android:id="@+id/books_tab_indicator"
@@ -144,7 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
-                app:dividerColor="@color/border_default_tertiary"
+                app:dividerColor="@color/surface_default_primary"
                 app:dividerThickness="4dp" />
 
             <TextView

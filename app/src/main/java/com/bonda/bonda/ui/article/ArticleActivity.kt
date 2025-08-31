@@ -194,6 +194,8 @@ class ArticleActivity : AppCompatActivity() {
          * 도서 카드 목록 도서 데이터 바인딩
          */
         vm.books.observe(this) { books ->
+            val articleCategory = vm.category.value ?: return@observe
+
             val fragments = books.mapIndexed { index, book ->
                 BookCardFragment.newInstance(
                     index,
@@ -202,7 +204,8 @@ class ArticleActivity : AppCompatActivity() {
                     book.category,
                     book.title,
                     book.author,
-                    book.body
+                    book.body,
+                    articleCategory
                 )
             }
 
