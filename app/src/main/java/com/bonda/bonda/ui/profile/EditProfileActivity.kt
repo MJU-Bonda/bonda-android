@@ -20,6 +20,7 @@ import com.bonda.bonda.databinding.ActivitySignUpBinding
 import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.model.AccessTokenProvider
 import com.bonda.bonda.model.TAG
+import com.bonda.bonda.ui.home.profile.ProfileViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -32,7 +33,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySignUpBinding
     private var profileImage: Uri? = null
-    private val vm: EditProfileViewModel by viewModels()
+    private val vm: ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -40,13 +41,25 @@ class EditProfileActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.nextButton.text = "저장"
+
+        /**
+         * 액티비티 인셋 설정
+         */
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        binding.nextButton.text = "저장"
+        /**
+         * 액션바 구성 설정
+         */
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         /**
          * 현재 사용자 정보를 반영합니다
@@ -57,16 +70,7 @@ class EditProfileActivity : AppCompatActivity() {
                 binding.profileImage.foreground = null
             }
         }
-        vm.currentUsername.observe(this) { binding.textEditorUsername.setText(it) }
-
-        /**
-         * 액션바 셋업
-         */
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+        vm.username.observe(this) { binding.textEditorUsername.setText(it) }
 
         /**
          * 프로필 변경 버튼 클릭
@@ -100,7 +104,7 @@ class EditProfileActivity : AppCompatActivity() {
                     AppEvents.profileUpdated.emit(Unit)
                     finish()
                 } catch (e: Exception) {
-                    Log.e(TAG, "문제가 발생했습니다: ${e.message}")
+                    Log.e(TAG, "EditProfileActivity.kt::nextButton.setOnClickListener", e)
                 }
             }
         }
@@ -117,10 +121,15 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         /**
-         * 버튼 활성화 여부를 변경합니다
+         * 닉네임 입력기 값 변경을 감지하여 버튼 활성화 및 텍스트 색상을 변경합니다.
+         * 입력된 닉네임 텍스트 길이가 0인 경우 다음 버튼이 비활성화 됩니다.
+         * 입력된 닉네임 텍스트 길이가 10을 초과하면 다음 버튼이 비활성화되고, 글자 수 제한 텍스트 색상이 빨간색으로 표시됩니다.
          */
-        vm.newUsername.observe(this) {
-            if (it.isNullOrBlank() || it.length > 10) {
+        binding.textEditorUsername.doOnTextChanged { text, _, _, _ ->
+            val inputText = text.toString()
+            val isLengthExceeded = inputText.length > 10
+
+            if (isLengthExceeded || inputText.isBlank()) {
                 binding.nextButton.isEnabled = false
                 binding.nextButton.setBackgroundColor(
                     ContextCompat.getColor(
@@ -138,28 +147,15 @@ class EditProfileActivity : AppCompatActivity() {
                 )
             }
 
-            if (it.length > 10) {
+            if (isLengthExceeded) {
                 binding.usernameLengthChecker.setTextColor(
-                    resources.getColor(
-                        R.color.system_error_primary,
-                        null
-                    )
+                    ContextCompat.getColor(this, R.color.system_error_primary)
                 )
             } else {
                 binding.usernameLengthChecker.setTextColor(
-                    resources.getColor(
-                        R.color.text_default_tertiary,
-                        null
-                    )
+                    ContextCompat.getColor(this, R.color.text_default_tertiary)
                 )
             }
-        }
-
-        /**
-         * 닉네임 입력기 값 변경을 감지합니다
-         */
-        binding.textEditorUsername.doOnTextChanged { text, _, _, _ ->
-            vm.setUsername(text.toString())
         }
 
         /**
@@ -184,7 +180,7 @@ class EditProfileActivity : AppCompatActivity() {
                             this@EditProfileActivity,
                             R.color.border_default_tertiary
                         )
-                    ) // 포커스 없을 때 stroke 제거
+                    )
                 }
                 setColor(
                     ContextCompat.getColor(
@@ -195,7 +191,6 @@ class EditProfileActivity : AppCompatActivity() {
             }
             binding.textEditorUsername.background = drawable
         }
-
         binding.textEditorUsername.background = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             cornerRadius = 8f * resources.displayMetrics.density
@@ -207,5 +202,16 @@ class EditProfileActivity : AppCompatActivity() {
             )
         }
 
+        /**
+         * 초기 버튼 상태를 비활성화로 설정
+         */
+        binding.nextButton.isEnabled = false
+        binding.nextButton.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                R.color.surface_default_base
+            )
+        )
     }
+
 }
