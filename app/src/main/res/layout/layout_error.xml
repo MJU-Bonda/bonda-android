@@ -6,18 +6,19 @@
     android:background="@color/background_default_primary">
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/error_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="인터넷 연결이 원활하지 않습니다."
         android:textAppearance="@style/Body1"
         android:textColor="@color/text_default_primary"
-        app:layout_constraintBottom_toTopOf="@+id/materialTextView7"
+        app:layout_constraintBottom_toTopOf="@+id/error_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/materialTextView7"
+        android:id="@+id/error_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="네트워크 상태 확인 후 다시 시도해 주세요."
@@ -42,6 +43,6 @@
         app:chipStrokeWidth="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialTextView7" />
+        app:layout_constraintTop_toBottomOf="@+id/error_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

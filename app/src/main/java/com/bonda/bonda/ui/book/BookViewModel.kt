@@ -15,11 +15,12 @@ class BookViewModel : ViewModel() {
      */
     private val bookService = ApiClient.bookService
 
-    private var isLoading = false
+    private var isSaving = false
 
     /**
      * 라이브 데이터
      */
+    private val _isLoading = MutableLiveData(true)
     private val _isError = MutableLiveData(false)
     private val _id = MutableLiveData<Long>()
     private val _isSaved = MutableLiveData<Boolean>()
@@ -37,6 +38,7 @@ class BookViewModel : ViewModel() {
     /**
      * 읽기 전용 데이터
      */
+    val isLoading: LiveData<Boolean> = _isLoading
     val isError: LiveData<Boolean> = _isError
     val id: LiveData<Long> = _id
     val isSaved: LiveData<Boolean> = _isSaved
@@ -65,7 +67,8 @@ class BookViewModel : ViewModel() {
      * 도서 상세 정보를 조회합니다
      */
     fun getBookDetail(bookId: Long) {
-        isLoading = true
+        _isLoading.value = true
+        _isError.value = false
 
         viewModelScope.launch {
             try {
@@ -90,12 +93,11 @@ class BookViewModel : ViewModel() {
                         title = article.title
                     )
                 }
-                _isError.value = false
             } catch (e: Exception) {
                 Log.e(TAG, "BookViewModel.kt::getBookDetail", e)
                 _isError.value = true
             } finally {
-                isLoading = false
+                _isLoading.value = false
             }
         }
     }
@@ -104,8 +106,10 @@ class BookViewModel : ViewModel() {
      * 도서 북마크 여부를 토글합니다
      */
     suspend fun toggleSaveBook(bookId: Long): Boolean {
-        if (isLoading) return false
-        isLoading = true
+        if (isSaving)
+            return false
+
+        isSaving = true
 
         try {
             val res = bookService.toggleSaveBook(bookId).unwrapOrThrow().isNewBadge
@@ -117,7 +121,7 @@ class BookViewModel : ViewModel() {
             _isError.value = true
             throw e
         } finally {
-            isLoading = false
+            isSaving = false
         }
     }
 

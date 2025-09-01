@@ -1,197 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_default_primary">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scroll_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/article_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp"
+                android:contentDescription="아티클 이미지"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/article_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:contentDescription="아티클 이미지"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:id="@+id/article_image_gradient"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/overlay_gradient"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@id/article_image"
-                    app:layout_constraintEnd_toEndOf="@id/article_image"
-                    app:layout_constraintStart_toStartOf="@id/article_image"
-                    app:layout_constraintTop_toTopOf="@id/article_image" />
-
-                <TextView
-                    android:id="@+id/subtitle_tv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="32dp"
-                    android:textAppearance="@style/Body7"
-                    android:textColor="@color/text_default_tertiary"
-                    app:layout_constraintBottom_toBottomOf="@id/article_image"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/title_tv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:textAppearance="@style/Headline1"
-                    android:textColor="@color/text_default_inverse"
-                    app:layout_constraintBottom_toTopOf="@id/subtitle_tv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <include
-                    android:id="@+id/category_chip"
-                    layout="@layout/view_chip_article_category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toTopOf="@id/title_tv"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="0dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@android:color/transparent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:navigationIcon="@drawable/ic_navigation_previous_24dp"
-                    app:navigationIconTint="@color/white">
-
-                    <ImageButton
-                        android:id="@+id/bookmark_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="8dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:contentDescription="북마크"
-                        android:focusable="true"
-                        android:padding="12dp"
-                        android:src="@drawable/ic_action_bookmark_empty_24dp"
-                        app:tint="@color/white" />
-
-                </com.google.android.material.appbar.MaterialToolbar>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/overlay_gradient"
+                app:layout_constraintBottom_toBottomOf="@id/article_image"
+                app:layout_constraintEnd_toEndOf="@id/article_image"
+                app:layout_constraintStart_toStartOf="@id/article_image"
+                app:layout_constraintTop_toTopOf="@id/article_image" />
 
             <TextView
-                android:id="@+id/article_body"
-                android:layout_width="match_parent"
+                android:id="@+id/subtitle_tv"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="32dp"
-                android:lineSpacingMultiplier="1.2"
-                android:textAppearance="@style/Body5"
-                android:textColor="@color/text_default_secondary" />
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="32dp"
+                android:textAppearance="@style/Body7"
+                android:textColor="@color/text_default_tertiary"
+                app:layout_constraintBottom_toBottomOf="@id/article_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/title_tv"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"/>
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp"
+                android:textAppearance="@style/Headline1"
+                android:textColor="@color/text_default_inverse"
+                app:layout_constraintBottom_toTopOf="@id/subtitle_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <com.bonda.bonda.ui.components.TabIndicatorView
-                android:id="@+id/books_tab_indicator"
+            <include
+                android:id="@+id/category_chip"
+                layout="@layout/view_chip_article_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="24dp" />
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@id/title_tv"
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                app:dividerColor="@color/surface_default_primary"
-                app:dividerThickness="4dp" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/ic_navigation_previous_24dp"
+                app:navigationIconTint="@color/white">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="60dp"
-                android:text="@string/article_book_list"
-                android:textAppearance="@style/Body6"
-                android:textColor="@color/surface_graph_secondary" />
+                <ImageButton
+                    android:id="@+id/bookmark_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="북마크"
+                    android:focusable="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_action_bookmark_empty_24dp"
+                    app:tint="@color/white" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:text="@string/article_book_list_explain"
-                android:textAppearance="@style/Title2"
-                android:textColor="@color/text_default_primary" />
+            </com.google.android.material.appbar.MaterialToolbar>
 
-            <GridLayout
-                android:id="@+id/books_grid_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="16dp"
-                android:columnCount="2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="60dp"
-                android:text="@string/article_curation_list"
-                android:textAppearance="@style/Body6"
-                android:textColor="@color/surface_graph_secondary" />
+        <TextView
+            android:id="@+id/article_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="32dp"
+            android:lineSpacingMultiplier="1.2"
+            android:textAppearance="@style/Body5"
+            android:textColor="@color/text_default_secondary" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:text="@string/article_curation_list_explain"
-                android:textAppearance="@style/Title2"
-                android:textColor="@color/text_default_primary" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/articles_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="64dp" />
+        <com.bonda.bonda.ui.components.TabIndicatorView
+            android:id="@+id/books_tab_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp" />
 
-        </LinearLayout>
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            app:dividerColor="@color/surface_default_primary"
+            app:dividerThickness="4dp" />
 
-    </androidx.core.widget.NestedScrollView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="60dp"
+            android:text="@string/article_book_list"
+            android:textAppearance="@style/Body6"
+            android:textColor="@color/surface_graph_secondary" />
 
-    <include
-        android:id="@+id/error_network"
-        layout="@layout/layout_error_network"
-        android:visibility="gone" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:text="@string/article_book_list_explain"
+            android:textAppearance="@style/Title2"
+            android:textColor="@color/text_default_primary" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <GridLayout
+            android:id="@+id/books_grid_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:columnCount="2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="60dp"
+            android:text="@string/article_curation_list"
+            android:textAppearance="@style/Body6"
+            android:textColor="@color/surface_graph_secondary" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:text="@string/article_curation_list_explain"
+            android:textAppearance="@style/Title2"
+            android:textColor="@color/text_default_primary" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/articles_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="64dp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -16,25 +16,27 @@ class ArticlesViewModel : ViewModel() {
      * 네트워크 서비스 인스턴스 생성
      */
     private val articleService = ApiClient.articleService
-    private var isLoading = false
+    private var isSaving = false
 
     /**
      * live-data declaration
      */
+    private val _isLoading = MutableLiveData(true)
+    private val _isError = MutableLiveData(false)
     private val _page = MutableLiveData<Int>()
     private val _category = MutableLiveData<String>()
     private val _hasNextPage = MutableLiveData<Boolean>()
     private val _articles = MutableLiveData<List<Article>>()
-    private val _isError = MutableLiveData(false)
 
     /**
      * read-only declaration
      */
+    val isLoading: LiveData<Boolean> = _isLoading
+    val isError: LiveData<Boolean> = _isError
     val page: LiveData<Int> = _page
     val category: LiveData<String> = _category
     val hasNextPage: LiveData<Boolean> = _hasNextPage
     val articles: LiveData<List<Article>> = _articles
-    val isError: LiveData<Boolean> = _isError
 
     /**
      * init
@@ -50,13 +52,14 @@ class ArticlesViewModel : ViewModel() {
     private fun getArticles() {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
+                _isError.value = false
+
                 val response = articleService.getArticles(
                     page = 0,
                     size = 10,
                     articleCategory = ArticleCategory.ALL.code
                 ).unwrapOrThrow()
-
-                Log.d(TAG, response.toString())
 
                 /**
                  * 데이터 formatting
@@ -74,10 +77,11 @@ class ArticlesViewModel : ViewModel() {
                         subTitle = item.introduction
                     )
                 }
-                _isError.value = false
             } catch (e: Exception) {
-                Log.e(TAG, e.toString())
+                Log.e(TAG, "ArticlesViewModel.kt::getArticles()", e)
                 _isError.value = true
+            } finally {
+                _isLoading.value = false
             }
         }
     }
@@ -86,8 +90,10 @@ class ArticlesViewModel : ViewModel() {
      * 아티클 저장 여부를 토글합니다
      */
     suspend fun toggleSaved(articleId: Long): Boolean {
-        if (isLoading) return false
-        isLoading = true
+        if (isSaving)
+            return false
+
+        isSaving = true
 
         try {
             val res = articleService.saveArticle(articleId).unwrapOrThrow()
@@ -95,13 +101,13 @@ class ArticlesViewModel : ViewModel() {
                 if (it.id == articleId) it.copy(isSaved = !it.isSaved) else it
             }
 
-            isLoading = false
             _isError.value = false
             return res.isNewBadge
         } catch (e: Exception) {
-            isLoading = false
             _isError.value = true
             throw e
+        } finally {
+            isSaving = false
         }
     }
 
