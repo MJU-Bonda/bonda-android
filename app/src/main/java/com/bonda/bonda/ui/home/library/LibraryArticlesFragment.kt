@@ -114,4 +114,5 @@ class LibraryArticlesFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

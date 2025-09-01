@@ -42,8 +42,8 @@
     <style name="Theme.Bonda" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/ic_launcher_background</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
-        <!--        <item name="windowSplashScreenBackground">@color/surface_accent_primary</item>-->
-        <!--        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>-->
+        <item name="colorPrimary">@color/border_accent_primary</item>
+        <item name="colorOnPrimary">@color/text_default_inverse</item>
     </style>
 
     <!-- Buttons -->
