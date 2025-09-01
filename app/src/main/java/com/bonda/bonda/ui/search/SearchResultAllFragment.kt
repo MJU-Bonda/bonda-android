@@ -9,7 +9,6 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -19,8 +18,9 @@ import com.bonda.bonda.model.GridSpacingItemDecoration
 import com.bonda.bonda.model.dpToPx
 import com.bonda.bonda.ui.article.ArticleActivity
 import com.bonda.bonda.ui.book.BookActivity
+import com.bonda.bonda.ui.components.BaseFragment
 
-class SearchResultAllFragment : Fragment() {
+class SearchResultAllFragment : BaseFragment() {
 
     companion object {
         fun newInstance(): SearchResultAllFragment = SearchResultAllFragment()
@@ -37,13 +37,41 @@ class SearchResultAllFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSearchResultAllBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        /**
+         * BaseFragment가 자신의 레이아웃을 생성하도록 함
+         */
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        /**
+         * 컨텐츠 레이아웃을 inflate하고, BaseFragment의 content_frame에 추가합니다
+         */
+        _binding = FragmentSearchResultAllBinding.inflate(layoutInflater)
+        setBaseContent(binding.root)
+
         setupRecyclerViews()
+
+        /**
+         * 로딩 상태를 관찰합니다
+         */
+        vm.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            showLoadingView(isLoading)
+            binding.root.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+        }
+
+        /**
+         * 에러 상태를 관찰합니다
+         */
+        vm.isError.observe(viewLifecycleOwner) { isError ->
+            showErrorView(isError)
+            if (isError) {
+                binding.root.visibility = View.INVISIBLE
+            }
+        }
 
         /**
          * 도서 검색 결과 바인딩
@@ -135,6 +163,13 @@ class SearchResultAllFragment : Fragment() {
         val pager = requireActivity().findViewById<ViewPager2>(R.id.search_result_viewpager)
         binding.btBookAll.setOnClickListener { pager.currentItem = 1 }
         binding.btArticleAll.setOnClickListener { pager.currentItem = 2 }
+    }
+
+    /**
+     * 오류화면에서 재시도 버튼을 클릭했을 때
+     */
+    override fun onRetry() {
+        vm.search(vm.searchKeyword)
     }
 
     /**

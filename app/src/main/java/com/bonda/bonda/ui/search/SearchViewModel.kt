@@ -16,16 +16,30 @@ import androidx.core.content.edit
 import com.bonda.bonda.model.SortOrder
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
-
+    /**
+     * 네트워크 인스턴스를 생성합니다
+     */
     private val searchService = ApiClient.searchService
+
+    /**
+     * 페이지네이션용 내부 변수를 설정합니다
+     */
     private var bookPage = 0
     private var articlePage = 0
     var searchKeyword = ""
         private set
 
+    /**
+     * 검색기록 저장 여부를 로컬에서 불러옵니다
+     */
     private val prefs = application.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
-    private var isLoading = false
+    /**
+     * 라이브 데이터 선언
+     */
+    private var _isLoading = MutableLiveData(false)
+    private val _isError = MutableLiveData(false)
+    private val _sortOrder = MutableLiveData(SortOrder.NEWEST)
     private val _isSearchHistoryEmpty = MutableLiveData<Boolean>()
     private val _isHistoryActivated = MutableLiveData<Boolean>()
     private val _searchHistory = MutableLiveData<List<String>>()
@@ -37,6 +51,12 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val _booksSearchResultCount = MutableLiveData(0)
     private val _articlesSearchResultCount = MutableLiveData(0)
 
+    /**
+     * 읽기 전용 변수 선언
+     */
+    val isLoading: LiveData<Boolean> = _isLoading
+    val isError: LiveData<Boolean> = _isError
+    val sortOrder: LiveData<SortOrder> = _sortOrder
     val isSearchHistoryEmpty: LiveData<Boolean> = _isSearchHistoryEmpty
     val isHistoryActivated: LiveData<Boolean> = _isHistoryActivated
     val searchHistory: LiveData<List<String>> = _searchHistory
@@ -48,9 +68,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     val booksSearchResultCount: LiveData<Int> = _booksSearchResultCount
     val articlesSearchResultCount: LiveData<Int> = _articlesSearchResultCount
 
-    private val _sortOrder = MutableLiveData(SortOrder.NEWEST)
-    val sortOrder: LiveData<SortOrder> = _sortOrder
-
     init {
         _isHistoryActivated.value = prefs.getBoolean(PREF_KEY_SEARCH_HISTORY_ACTIVATED, false)
         loadSearchHistory()
@@ -58,28 +75,42 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     /**
-     * 현재 검색 결과를 초기화하고 새로운 검색을 수행합니다
-     * @param keyword 검색어
-     * @param clearPreviousResults 이전 검색 결과를 지울지 여부
+     * 검색을 수행합니다
      */
     fun search(keyword: String, clearPreviousResults: Boolean = true) {
-        if (clearPreviousResults) {
-            clearSearch()
-        }
-        bookPage = 0
-        articlePage = 0
+        if (_isLoading.value == true) return
 
-        searchKeyword = keyword
-        searchBooks(keyword)
-        searchArticles(keyword)
+        viewModelScope.launch {
+            if (clearPreviousResults) {
+                clearSearch()
+            }
+            bookPage = 0
+            articlePage = 0
+            searchKeyword = keyword
 
-        if (clearPreviousResults) {
-            loadSearchHistory()
+            _isLoading.value = true
+            _isError.value = false
+
+            try {
+                val bookJob = launch { searchBooksInternal(keyword) }
+                val articleJob = launch { searchArticlesInternal(keyword) }
+                bookJob.join()
+                articleJob.join()
+            } catch (e: Exception) {
+                Log.e(TAG, "SearchViewModel.kt::search()", e)
+                _isError.value = true
+            } finally {
+                _isLoading.value = false
+            }
+
+            if (clearPreviousResults) {
+                loadSearchHistory()
+            }
         }
     }
 
     /**
-     * 정렬 기준을 토글한 뒤, 검색을 다시 수행합니다. 검색어가 없으면 실행되지 않습니다.
+     * 검색 정렬 순서를 변경합니다
      */
     fun toggleSortOrderAndSearch() {
         if (searchKeyword.isBlank()) return
@@ -91,103 +122,115 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
         _sortOrder.value = newSortOrder
 
-        search(searchKeyword, clearPreviousResults = false)
+        search(searchKeyword, clearPreviousResults = true)
     }
 
     /**
-     * 도서 검색 결과 로드
+     * 도서 검색 결과를 로드합니다
      */
-    private fun searchBooks(keyword: String) {
-        viewModelScope.launch {
-            try {
-                val res = searchService
-                    .searchBooks(
-                        page = bookPage,
-                        word = keyword,
-                        orderBy = _sortOrder.value?.code ?: SortOrder.NEWEST.code
-                    )
-                    .unwrapOrThrow()
+    private suspend fun searchBooksInternal(keyword: String) {
+        try {
+            val res = searchService
+                .searchBooks(
+                    page = bookPage,
+                    word = keyword,
+                    orderBy = _sortOrder.value?.code ?: SortOrder.NEWEST.code
+                )
+                .unwrapOrThrow()
 
-                val current = _booksSearchResult.value.orEmpty()
-                val newBooks = res.bookList.map { book ->
-                    Book(
-                        id = book.id,
-                        imageUrl = book.imageUrl,
-                        category = book.category,
-                        title = book.title,
-                        subtitle = book.author
-                    )
-                }
-
-                val updated = if (bookPage == 0) newBooks else current + newBooks
-
-                _booksSearchResult.value = updated
-                _booksHasNextPage.value = res.hasNextPage
-                _booksSearchResultCount.value = res.total
-            } catch (e: Exception) {
-                Log.e(TAG, "SearchViewModel.kt::searchBooks()", e)
+            val current = _booksSearchResult.value.orEmpty()
+            val newBooks = res.bookList.map { book ->
+                Book(
+                    id = book.id,
+                    imageUrl = book.imageUrl,
+                    category = book.category,
+                    title = book.title,
+                    subtitle = book.author
+                )
             }
+
+            val updated = if (bookPage == 0) newBooks else current + newBooks
+
+            _booksSearchResult.postValue(updated)
+            _booksHasNextPage.postValue(res.hasNextPage)
+            _booksSearchResultCount.postValue(res.total)
+        } catch (e: Exception) {
+            Log.e(TAG, "SearchViewModel.kt::searchBooksInternal()", e)
+            _isError.postValue(true)
         }
     }
 
     /**
-     * 도서 검색 결과 다음 페이지가 있으면 로드
+     * 도서 검색 결과 다음 페이지가 존재하면 다음 페이지를 로드합니다
      */
     fun getNextBooks() {
-        if (_booksHasNextPage.value != true) return
+        if (_booksHasNextPage.value != true || _isLoading.value == true) return
         bookPage++
-        searchBooks(searchKeyword)
-    }
-
-    /**
-     * 아티클 검색
-     */
-    private fun searchArticles(keyword: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
-                val res = searchService
-                    .searchArticles(
-                        page = articlePage,
-                        word = keyword,
-                        orderBy = _sortOrder.value?.code ?: SortOrder.NEWEST.code
-                    )
-                    .unwrapOrThrow()
-
-                val current = _articlesSearchResult.value.orEmpty()
-                val newArticles = res.articleList.map { article ->
-                    Article(
-                        id = article.articleId,
-                        imageUrl = article.imageUrl,
-                        category = article.articleCategory,
-                        title = article.title
-                    )
-                }
-
-                val updated = current + newArticles
-
-                _articlesSearchResult.value = updated
-                _articlesHasNextPage.value = res.hasNextPage
-                _articlesSearchResultCount.value = res.total
-            } catch (e: Exception) {
-                Log.e(TAG, "SearchViewModel.kt::searchArticles()", e)
+                searchBooksInternal(searchKeyword)
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
     /**
-     * 아티클 다음 페이지가 있으면 로드
+     * 아티클 검색 결과를 로드합니다
      */
-    fun getNextArticles() {
-        if (_articlesHasNextPage.value != true) return
-        articlePage++
-        searchArticles(searchKeyword)
+    private suspend fun searchArticlesInternal(keyword: String) {
+        try {
+            val res = searchService
+                .searchArticles(
+                    page = articlePage,
+                    word = keyword,
+                    orderBy = _sortOrder.value?.code ?: SortOrder.NEWEST.code
+                )
+                .unwrapOrThrow()
+
+            val current = _articlesSearchResult.value.orEmpty()
+            val newArticles = res.articleList.map { article ->
+                Article(
+                    id = article.articleId,
+                    imageUrl = article.imageUrl,
+                    category = article.articleCategory,
+                    title = article.title
+                )
+            }
+
+            val updated = if (articlePage == 0) newArticles else current + newArticles
+
+            _articlesSearchResult.postValue(updated)
+            _articlesHasNextPage.postValue(res.hasNextPage)
+            _articlesSearchResultCount.postValue(res.total)
+        } catch (e: Exception) {
+            Log.e(TAG, "SearchViewModel.kt::searchArticlesInternal()", e)
+            _isError.postValue(true)
+        }
     }
 
     /**
-     * 특정 검색어 삭제
+     * 뉴스 검색 결과 다음 페이지가 존재하면 다음 페이지를 로드합니다
+     */
+    fun getNextArticles() {
+        if (_articlesHasNextPage.value != true || _isLoading.value == true) return
+        articlePage++
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                searchArticlesInternal(searchKeyword)
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    /**
+     * 검색 기록을 삭제합니다
      */
     fun removeSearchHistory(keyword: String) {
-        if (isLoading) return
+        if (_isLoading.value == true) return
 
         viewModelScope.launch {
             try {
@@ -202,14 +245,13 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-
     /**
-     * 검색 기록 불러오기
+     * 검색 기록을 로드합니다
      */
     private fun loadSearchHistory() {
         viewModelScope.launch {
             try {
-                isLoading = true
+                _isLoading.value = true
 
                 val response = searchService.getSearchHistory().unwrapOrThrow()
 
@@ -218,17 +260,16 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             } catch (e: Exception) {
                 Log.e(TAG, "SearchViewModel.kt::loadSearchHistory()", e)
             } finally {
-                isLoading = false
+                _isLoading.value = false
             }
         }
     }
 
-
     /**
-     * 검색 기록 저장 설정
+     * 검색 기록 활성화 여부를 요청합니다
      */
     fun setIsHistoryActivated() {
-        if (isLoading) return
+        if (_isLoading.value == true) return
 
         viewModelScope.launch {
             try {
@@ -242,15 +283,14 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-
     /**
-     * 모든 검색 기록 삭제
+     * 검색 기록 전체 삭제를 요청합니다
      */
     fun removeAllSearchHistory() {
-        if (isLoading) return
+        if (_isLoading.value == true) return
 
         viewModelScope.launch {
-            isLoading = true
+            _isLoading.value = true
 
             try {
                 searchService.deleteAllSearchHistory().unwrapOrThrow()
@@ -259,17 +299,17 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             } catch (e: Exception) {
                 Log.e(TAG, "SearchViewModel.kt::removeAllSearchHistory()", e)
             } finally {
-                isLoading = false
+                _isLoading.value = false
             }
         }
     }
 
     /**
-     * 추천 검색어 로드
+     * 오늘의 추천 키워드를 로드합니다
      */
     private fun loadRecommendedKeyword() {
         viewModelScope.launch {
-            isLoading = true
+            _isLoading.value = true
 
             try {
                 val response = searchService.getRecommendedKeyword().unwrapOrThrow()
@@ -277,13 +317,13 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             } catch (e: Exception) {
                 Log.e(TAG, "SearchViewModel.kt::loadRecommendedKeyword()", e)
             } finally {
-                isLoading = false
+                _isLoading.value = false
             }
         }
     }
 
     /**
-     * 검색 창 닫기
+     * 검색창을 닫습니다
      */
     fun clearSearch() {
         _booksSearchResult.value = emptyList()
