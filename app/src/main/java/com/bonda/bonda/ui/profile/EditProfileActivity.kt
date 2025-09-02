@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -23,9 +22,7 @@ import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.model.AccessTokenProvider
 import com.bonda.bonda.model.TAG
 import com.bonda.bonda.ui.home.profile.ProfileViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -109,14 +106,7 @@ class EditProfileActivity : AppCompatActivity() {
                     finish()
                 } catch (e: Exception) {
                     Log.e(TAG, "EditProfileActivity.kt::nextButton.setOnClickListener", e)
-
-                    withContext(Dispatchers.Main) {
-                        AlertDialog.Builder(this@EditProfileActivity)
-                            .setTitle("문제가 발생했습니다")
-                            .setMessage("잠시 후 다시 시도해보세요")
-                            .setPositiveButton("확인", null)
-                            .show()
-                    }
+                    Toast.makeText(this@EditProfileActivity, "인터넷 연결을 확인해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
         }
