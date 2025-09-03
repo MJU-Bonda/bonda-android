@@ -3,6 +3,7 @@ package com.bonda.bonda.ui.home
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,24 +53,25 @@ class HomeActivity : AppCompatActivity() {
         val destinationId = intent.getIntExtra("destination_id", 0)
         if (destinationId == 0) return
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-
-        val args = Bundle().apply {
-            if (intent.hasExtra("library_tab_position")) {
-                putInt("library_tab_position", intent.getIntExtra("library_tab_position", 0))
-            }
+        /**
+         * ViewModel에 탭 위치 요청
+         */
+        if (intent.hasExtra("library_tab_position")) {
+            val tabPosition = intent.getIntExtra("library_tab_position", 0)
+            homeViewModel.requestLibraryTab(tabPosition)
         }
 
-        /**
-         * BottomNavigationView의 상태 저장/복원을 위한 NavOptions 설정
-         */
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val navOptions = NavOptions.Builder()
             .setLaunchSingleTop(true)
             .setRestoreState(true)
             .setPopUpTo(navController.graph.startDestinationId, saveState = true, inclusive = false)
             .build()
 
-        navController.navigate(destinationId, args, navOptions)
+        /**
+         * 인자(args) 없이 화면만 이동
+         */
+        navController.navigate(destinationId, null, navOptions)
 
         /**
          * 소모한 extra 제거

@@ -3,10 +3,12 @@ package com.bonda.bonda.ui.home.library
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bonda.bonda.databinding.FragmentHomeLibraryBinding
 import com.bonda.bonda.ui.components.BaseFragment
+import com.bonda.bonda.ui.home.HomeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 class LibraryFragment : BaseFragment() {
@@ -14,6 +16,7 @@ class LibraryFragment : BaseFragment() {
     private var _binding: FragmentHomeLibraryBinding? = null
     private val binding get() = _binding!!
     private val vm: LibraryViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels() // Activity와 ViewModel 공유
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,13 +46,11 @@ class LibraryFragment : BaseFragment() {
 
         /**
          * argument로 tab position을 받고, 0이면 도서, 1이면 아티클로 이동
+         * 공유 ViewModel의 LiveData 관찰
          */
-        arguments?.let {
-            val tabPosition = it.getInt("library_tab_position", -1)
-            if (tabPosition != -1) {
-                binding.viewPager.setCurrentItem(tabPosition, false)
-                // 인자를 한 번만 사용하도록 사용 후 제거
-                it.remove("library_tab_position")
+        homeViewModel.navigateToLibraryTab.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { position ->
+                binding.viewPager.setCurrentItem(position, false)
             }
         }
 
