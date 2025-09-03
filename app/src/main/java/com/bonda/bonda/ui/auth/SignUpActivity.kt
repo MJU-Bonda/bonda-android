@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -39,17 +38,18 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
     private var profileImage: Uri? = null
-    private val vm: SignUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+
+        /**
+         * 액티비티 인셋 설정
+         */
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -94,31 +94,26 @@ class SignUpActivity : AppCompatActivity() {
                         )
                     }
 
-                    val res = memberService.updateProfile(
+                    memberService.updateProfile(
                         AccessTokenProvider.getAccessToken()!!
                             .toRequestBody("text/plain".toMediaType()),
                         binding.textEditorUsername.text.toString()
                             .toRequestBody("text/plain".toMediaType()),
                         binaryImage,
                     )
-                    Log.d(TAG, res.toString())
 
+                    /**
+                     * 로그인에 성공하면 signup required 를 false로 설정합니다
+                     */
+                    prefs.edit() { putBoolean(PREF_KEY_SIGNUP_REQUIRED, false) }
+                    val intent = Intent(this@SignUpActivity, OnboardingActivity::class.java)
+                    startActivity(intent)
                     finish()
                 } catch (e: Exception) {
-                    Log.d(TAG, "문제가 발생했습니다: ${e.message}")
+                    Log.e(TAG, "SignUpActivity.kt::nextButton.setOnClickListener", e)
+                    Toast.makeText(this@SignUpActivity, "인터넷 연결을 확인해주세요", Toast.LENGTH_SHORT).show()
                 }
             }
-
-            /**
-             * 로그인 성공하면 signup required 를 false로 설정합니다
-             */
-            prefs.edit() {
-                putBoolean(PREF_KEY_SIGNUP_REQUIRED, false)
-            }
-
-            val intent = Intent(this, OnboardingActivity::class.java)
-            startActivity(intent)
-            finish()
         }
 
         /**
@@ -133,10 +128,15 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         /**
-         * 버튼 활성화 여부를 변경합니다
+         * 닉네임 입력기 값 변경을 감지하여 버튼 활성화 및 텍스트 색상을 변경합니다.
+         * 입력된 닉네임 텍스트 길이가 0인 경우 다음 버튼이 비활성화 됩니다.
+         * 입력된 닉네임 텍스트 길이가 10을 초과하면 다음 버튼이 비활성화되고, 글자 수 제한 텍스트 색상이 빨간색으로 표시됩니다.
          */
-        vm.username.observe(this) {
-            if (it.isNullOrBlank() || it.length > 10) {
+        binding.textEditorUsername.doOnTextChanged { text, _, _, _ ->
+            val inputText = text.toString()
+            val isLengthExceeded = inputText.length > 10
+
+            if (isLengthExceeded || inputText.isBlank()) {
                 binding.nextButton.isEnabled = false
                 binding.nextButton.setBackgroundColor(
                     ContextCompat.getColor(
@@ -154,28 +154,15 @@ class SignUpActivity : AppCompatActivity() {
                 )
             }
 
-            if (it.length > 10) {
+            if (isLengthExceeded) {
                 binding.usernameLengthChecker.setTextColor(
-                    resources.getColor(
-                        R.color.system_error_primary,
-                        null
-                    )
+                    ContextCompat.getColor(this, R.color.system_error_primary)
                 )
             } else {
                 binding.usernameLengthChecker.setTextColor(
-                    resources.getColor(
-                        R.color.text_default_tertiary,
-                        null
-                    )
+                    ContextCompat.getColor(this, R.color.text_default_tertiary)
                 )
             }
-        }
-
-        /**
-         * 닉네임 입력기 값 변경을 감지합니다
-         */
-        binding.textEditorUsername.doOnTextChanged { text, _, _, _ ->
-            vm.setUsername(text.toString())
         }
 
         /**
@@ -194,7 +181,7 @@ class SignUpActivity : AppCompatActivity() {
                     setStroke(
                         0,
                         ContextCompat.getColor(this@SignUpActivity, R.color.border_default_tertiary)
-                    ) // 포커스 없을 때 stroke 제거
+                    )
                 }
                 setColor(
                     ContextCompat.getColor(
@@ -211,5 +198,16 @@ class SignUpActivity : AppCompatActivity() {
             setColor(ContextCompat.getColor(this@SignUpActivity, R.color.surface_default_primary))
         }
 
+        /**
+         * 초기 버튼 상태를 비활성화로 설정
+         */
+        binding.nextButton.isEnabled = false
+        binding.nextButton.setBackgroundColor(
+            ContextCompat.getColor(
+                this,
+                R.color.surface_default_base
+            )
+        )
     }
+
 }

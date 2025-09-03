@@ -38,8 +38,13 @@ class LibraryViewModel : ViewModel() {
     /**
      * 관찰용 live-data 선언
      */
+    private val _isLoading = MutableLiveData(true)
+    private val _isError = MutableLiveData(false)
     private val _savedBookCount = MutableLiveData<Int>()
     private val _savedArticleCount = MutableLiveData<Int>()
+
+    val isLoading: LiveData<Boolean> = _isLoading
+    val isError: LiveData<Boolean> = _isError
     val savedBookCount: LiveData<Int> = _savedBookCount
     val savedArticleCount: LiveData<Int> = _savedArticleCount
 
@@ -85,15 +90,21 @@ class LibraryViewModel : ViewModel() {
     /**
      * 서재의 모든 데이터를 다시 불러옵니다
      */
-    private fun reloadData() {
+    fun reloadData() {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
+                _isError.value = false
+
                 _savedBookCount.value = bookService.getSavedBooks().unwrapOrThrow().total
                 _savedArticleCount.value = articleService.getSavedArticles().unwrapOrThrow().total
             } catch (e: Exception) {
-                Log.e(TAG, e.toString())
+                Log.e(TAG, "LibraryViewModel.kt::reloadData()", e)
+                _isError.value = true
+            } finally {
+                _isLoading.value = false
             }
-            // Paging 목록 갱신을 위해 트리거를 발동시킵니다.
+
             refreshTrigger.value++
         }
     }

@@ -1,15 +1,19 @@
 package com.bonda.bonda.ui.article
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import coil3.load
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.FragmentBookCardBinding
+import com.bonda.bonda.model.ArticleCategory
+import com.bonda.bonda.model.toArticleCategory
 import com.bonda.bonda.model.toBookCategory
 import com.bonda.bonda.ui.book.BookActivity
 
@@ -26,6 +30,7 @@ class BookCardFragment : Fragment(R.layout.fragment_book_card) {
         private const val ARG_TITLE = "arg_title"
         private const val ARG_AUTHOR = "arg_author"
         private const val ARG_BODY = "arg_body"
+        private const val ARG_ARTICLE_CATEGORY = "arg_article_category"
 
         fun newInstance(
             index: Int,
@@ -35,6 +40,7 @@ class BookCardFragment : Fragment(R.layout.fragment_book_card) {
             title: String,
             author: String,
             body: String,
+            articleCategory: String
         ) = BookCardFragment().apply {
             arguments = bundleOf(
                 ARG_INDEX to index,
@@ -44,6 +50,7 @@ class BookCardFragment : Fragment(R.layout.fragment_book_card) {
                 ARG_TITLE to title,
                 ARG_AUTHOR to author,
                 ARG_BODY to body,
+                ARG_ARTICLE_CATEGORY to articleCategory
             )
         }
     }
@@ -72,10 +79,42 @@ class BookCardFragment : Fragment(R.layout.fragment_book_card) {
         val title = args.getString(ARG_TITLE)
         val author = args.getString(ARG_AUTHOR)
         val body = args.getString(ARG_BODY)
+        val articleCategory = args.getString(ARG_ARTICLE_CATEGORY)!!.toArticleCategory()
+
+        val cardBackgroundColorRes: Int
+        val chipTextColorRes: Int
+        val chipStrokeColorRes: Int
+
+        when (articleCategory) {
+            ArticleCategory.AUTHOR_OR_PUBLISHER -> {
+                cardBackgroundColorRes = R.color.surface_context_writer
+                chipTextColorRes = R.color.text_context_writer
+                chipStrokeColorRes = R.color.border_context_writer
+            }
+            ArticleCategory.BOOKSTORE -> {
+                cardBackgroundColorRes = R.color.surface_context_store
+                chipTextColorRes = R.color.text_context_store
+                chipStrokeColorRes = R.color.border_context_store
+            }
+            else -> { // THEME 및 기타
+                cardBackgroundColorRes = R.color.surface_context_theme
+                chipTextColorRes = R.color.text_context_theme
+                chipStrokeColorRes = R.color.border_context_theme
+            }
+        }
+
+        // 카드 배경색 변경
+        binding.card.setCardBackgroundColor(ContextCompat.getColor(requireContext(), cardBackgroundColorRes))
+        // 칩 배경색을 카드 배경색과 동일하게 변경
+        binding.category.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), cardBackgroundColorRes))
+        // 칩 텍스트 색상 변경
+        binding.category.setTextColor(ContextCompat.getColor(requireContext(), chipTextColorRes))
+        // 칩 테두리 색상 변경
+        binding.category.chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), chipStrokeColorRes))
 
         binding.index.text = "%02d".format(index + 1)
         binding.coverImage.load(coverImage)
-        binding.category.root.text = category
+        binding.category.text = category
         binding.title.text = title
         binding.author.text = author
         binding.body.text = body

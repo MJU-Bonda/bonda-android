@@ -49,10 +49,9 @@ class MainActivity : AppCompatActivity() {
             val refreshToken = prefs.getString(PREF_KEY_REFRESH_TOKEN, null)
 
             /**
-             * 로그인이 되어있지 않은 경우
+             * 로그인이 되어있지 않은 경우(refresh key가 없는 경우) 로그인 페이지로 이동합니다
              */
             if (refreshToken == null) {
-                Log.d(TAG, "로그인이 필요한 서비스입니다")
                 val intent = Intent(this, SignInActivity::class.java)
                 startActivity(intent)
                 initFinished = true

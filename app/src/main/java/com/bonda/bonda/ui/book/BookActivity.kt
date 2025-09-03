@@ -7,15 +7,14 @@ import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import coil3.load
+import com.bonda.bonda.ui.components.BaseActivity
 import com.bonda.bonda.model.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityBookDetailBinding
@@ -32,7 +31,9 @@ import com.bonda.bonda.model.TAG
 import com.bonda.bonda.ui.components.showSnackbar
 import kotlinx.coroutines.launch
 
-class BookActivity : AppCompatActivity() {
+class BookActivity : BaseActivity() {
+
+    private val bookId: Long by lazy { intent.getLongExtra("book_detail_id", 0) }
 
     private lateinit var binding: ActivityBookDetailBinding
     private val vm: BookViewModel by viewModels()
@@ -41,15 +42,20 @@ class BookActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityBookDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setBaseContent(binding.root)
 
+        /**
+         * 인셋 설정
+         */
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val bookId = intent.getLongExtra("book_detail_id", 0)
+        /**
+         * 데이터 로드
+         */
         vm.getBookDetail(bookId)
 
         /**
@@ -59,12 +65,6 @@ class BookActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         vm.title.observe(this) { binding.toolbar.title = it }
-
-        /**
-         * 에러 페이지 처리
-         */
-        binding.errorNetwork.buttonRetry.setOnClickListener { vm.getBookDetail(bookId) }
-        vm.isError.observe(this) { binding.errorNetwork.root.isVisible = it }
 
         /**
          * 도서 북마크 버튼 처리
@@ -87,11 +87,12 @@ class BookActivity : AppCompatActivity() {
                                 message = "도서 저장이 완료되었습니다!",
                                 buttonText = "서재로 이동",
                                 onButtonClick = {
-                                    val intent = Intent(this@BookActivity, HomeActivity::class.java)
-                                    intent.putExtra("navDest", "library")
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                    val intent = Intent(this@BookActivity, HomeActivity::class.java).apply {
+                                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                        putExtra("destination_id", R.id.navigation_library)
+                                        putExtra("library_tab_position", 0) // 0: 도서, 1: 아티클
+                                    }
                                     startActivity(intent)
-                                    finish()
                                 },
                                 type = SnackbarType.SAVE
                             )
@@ -238,6 +239,16 @@ class BookActivity : AppCompatActivity() {
                 }
             }
         }
+
+        /**
+         * 로딩 및 에러 페이지 처리
+         */
+        vm.isError.observe(this) { showErrorView(it) }
+        vm.isLoading.observe(this) { showLoadingView(it) }
+    }
+
+    override fun onRetry() {
+        vm.getBookDetail(bookId)
     }
 
 }

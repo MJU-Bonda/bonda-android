@@ -123,13 +123,13 @@
 
     <style name="Caption2">
         <item name="fontFamily">@font/pretendard_semibold</item>
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:lineHeight">14sp</item>
     </style>
 
     <style name="Caption3">
-        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="fontFamily">@font/pretendard_semibold</item>
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:lineHeight">16.8sp</item>

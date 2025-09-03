@@ -52,7 +52,7 @@
 
     <include
         android:id="@+id/error_network"
-        layout="@layout/layout_error_network"
+        layout="@layout/layout_error"
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

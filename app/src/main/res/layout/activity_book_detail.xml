@@ -188,6 +188,7 @@
                     android:id="@+id/book_theme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:checkable="false"
                     android:clickable="false"
                     android:enabled="false"
@@ -198,7 +199,6 @@
                     app:chipCornerRadius="16dp"
                     app:chipMinTouchTargetSize="0dp"
                     app:chipStrokeColor="@color/border_default_tertiary"
-                    android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/book_theme_header" />
 
@@ -250,10 +250,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <include
-        android:id="@+id/error_network"
-        layout="@layout/layout_error_network"
-        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

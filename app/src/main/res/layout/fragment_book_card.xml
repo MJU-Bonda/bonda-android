@@ -1,122 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:backgroundTint="@color/surface_context_theme"
-    app:cardCornerRadius="12dp"
-    app:strokeWidth="0dp">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="20dp">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="24dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="3:4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="0dp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/index"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/Body7"
-            android:textColor="@color/text_default_primary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="/ 04"
-            android:textAppearance="@style/Body7"
-            android:textColor="@color/text_default_secondary"
-            app:layout_constraintBottom_toBottomOf="@id/index"
-            app:layout_constraintStart_toEndOf="@id/index"
-            app:layout_constraintTop_toTopOf="@id/index" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Body7"
+                android:textColor="@color/text_default_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/image_holder"
-            style="@style/Widget.Bonda.Card.Enabled"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/index">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="/ 04"
+                android:textAppearance="@style/Body7"
+                android:textColor="@color/text_default_secondary"
+                app:layout_constraintBottom_toBottomOf="@id/index"
+                app:layout_constraintStart_toEndOf="@id/index"
+                app:layout_constraintTop_toTopOf="@id/index" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/cover_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/book_image_description" />
-        </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/image_holder"
+                style="@style/Widget.Bonda.Card.Enabled"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/index">
 
-        <include
-            android:id="@+id/category"
-            layout="@layout/view_chip_book_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            app:layout_constraintBottom_toTopOf="@id/title"
-            app:layout_constraintStart_toEndOf="@id/image_holder"
-            app:layout_constraintTop_toTopOf="@id/image_holder" />
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/cover_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/book_image_description" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="@style/Title1"
-            android:textColor="@color/text_default_primary"
-            app:layout_constraintBottom_toTopOf="@id/author"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/image_holder"
-            app:layout_constraintTop_toBottomOf="@id/category" />
+            </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/author"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="@style/Body8"
-            android:textColor="@color/text_default_secondary"
-            app:layout_constraintBottom_toBottomOf="@id/image_holder"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/image_holder"
-            app:layout_constraintTop_toBottomOf="@id/title" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="false"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false"
+                android:textAppearance="@style/Caption1"
+                android:textColor="@color/text_context_theme"
+                app:chipBackgroundColor="@color/surface_context_theme"
+                app:chipCornerRadius="16dp"
+                app:chipEndPadding="0dp"
+                app:chipMinHeight="24dp"
+                app:chipMinTouchTargetSize="0dp"
+                app:chipStartPadding="0dp"
+                app:chipStrokeWidth="1dp"
+                app:chipStrokeColor="@color/text_context_theme"
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toTopOf="@id/title"
+                app:layout_constraintStart_toEndOf="@id/image_holder"
+                app:layout_constraintTop_toTopOf="@id/image_holder" />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="28dp"
-            app:dividerColor="@color/border_default_tertiary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_holder" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/Title1"
+                android:textColor="@color/text_default_primary"
+                app:layout_constraintBottom_toTopOf="@id/author"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image_holder"
+                app:layout_constraintTop_toBottomOf="@id/category" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/body"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
-            android:textAppearance="@style/Body5"
-            android:textColor="@color/text_default_secondary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/author"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/Body8"
+                android:textColor="@color/text_default_secondary"
+                app:layout_constraintBottom_toBottomOf="@id/image_holder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image_holder"
+                app:layout_constraintTop_toBottomOf="@id/title" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button"
-            style="@style/Widget.Bonda.Button.Outlined"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/get_book_detail"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="28dp"
+                app:dividerColor="@color/border_default_tertiary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_holder" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:textAppearance="@style/Body5"
+                android:textColor="@color/text_default_secondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button"
+                style="@style/Widget.Bonda.Button.Outlined"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:text="@string/get_book_detail"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

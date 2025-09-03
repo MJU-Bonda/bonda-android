@@ -64,6 +64,13 @@ class LibraryBooksFragment : Fragment() {
             )
         )
 
+        /**
+         * RecyclerView가 실제로 화면에 그려지고 사이즈가 결정된 후에 ItemDecoration을 다시 그리도록 요청합니다.
+         */
+        binding.rv.post {
+            binding.rv.invalidateItemDecorations()
+        }
+
         vm.savedBookCount.observe(viewLifecycleOwner) {
             if (it < 1000) binding.tvItemCount.text = it.toString()
             else binding.tvItemCount.text = "999+"
@@ -83,6 +90,9 @@ class LibraryBooksFragment : Fragment() {
             }
         }
 
+        /**
+         * 정렬순서 변경 버튼
+         */
         binding.btSort.setOnClickListener { vm.toggleBookSortOrder() }
     }
 
@@ -90,4 +100,5 @@ class LibraryBooksFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

@@ -8,19 +8,17 @@ import android.view.View
 import android.widget.GridLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import coil3.load
+import com.bonda.bonda.ui.components.BaseActivity
 import com.bonda.bonda.model.AppEvents
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityArticleDetailBinding
@@ -38,7 +36,9 @@ import com.bonda.bonda.model.setCategoryStyle
 import com.bonda.bonda.ui.components.showSnackbar
 import kotlinx.coroutines.launch
 
-class ArticleActivity : AppCompatActivity() {
+class ArticleActivity : BaseActivity() {
+
+    private val articleId: Long by lazy { intent.getLongExtra("article_detail_id", 0) }
 
     private lateinit var binding: ActivityArticleDetailBinding
     private val vm: ArticleViewModel by viewModels()
@@ -47,7 +47,7 @@ class ArticleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityArticleDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setBaseContent(binding.root)
 
         /**
          * display inset을 전달합니다
@@ -59,9 +59,8 @@ class ArticleActivity : AppCompatActivity() {
         }
 
         /**
-         * activity 실행 시 전달받은 article id를 받아옵니다
+         * article id로 article 데이터를 얻습니다
          */
-        val articleId = intent.getLongExtra("article_detail_id", 0)
         vm.getArticleData(articleId)
 
         /**
@@ -93,34 +92,12 @@ class ArticleActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
 
         /**
-         * 오류 페이지 처리
-         */
-        vm.isError.observe(this) {
-            binding.errorNetwork.root.isVisible = it
-            binding.scrollView.isGone = it
-        }
-
-        binding.errorNetwork.buttonRetry.setOnClickListener { vm.getArticleData(articleId) }
-
-        /**
          * 데이터 바인딩
          */
         vm.title.observe(this) { binding.titleTv.text = it.replace("\\n", "\n") }
         vm.subTitle.observe(this) { binding.subtitleTv.text = it }
         vm.body.observe(this) { binding.articleBody.text = it }
-        vm.coverImage.observe(this) { imageUrl ->
-            binding.articleImage.load(imageUrl) {
-                listener(
-                    onSuccess = { _, _ ->
-                        binding.articleImageGradient.isVisible = true
-                    },
-                    onError = { _, result ->
-                        Log.e(TAG, "ArticleActivity::coverImage", result.throwable)
-                        vm.setErrorState(true)
-                    }
-                )
-            }
-        }
+        vm.coverImage.observe(this) { binding.articleImage.load(it) }
         vm.category.observe(this) { binding.categoryChip.root.setCategoryStyle(it) }
 
         /**
@@ -145,11 +122,15 @@ class ArticleActivity : AppCompatActivity() {
                                 message = "아티클 저장이 완료되었습니다!",
                                 buttonText = "서재로 이동",
                                 onButtonClick = {
-                                    val intent =
-                                        Intent(this@ArticleActivity, HomeActivity::class.java)
-                                    intent.putExtra("navDest", "library")
-                                    intent.putExtra("initialTab", "article")
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                    val intent = Intent(
+                                        this@ArticleActivity,
+                                        HomeActivity::class.java
+                                    ).apply {
+                                        flags =
+                                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                        putExtra("destination_id", R.id.navigation_library)
+                                        putExtra("library_tab_position", 1) // 0: 도서, 1: 아티클
+                                    }
                                     startActivity(intent)
                                 },
                                 type = SnackbarType.SAVE
@@ -194,6 +175,8 @@ class ArticleActivity : AppCompatActivity() {
          * 도서 카드 목록 도서 데이터 바인딩
          */
         vm.books.observe(this) { books ->
+            val articleCategory = vm.category.value ?: return@observe
+
             val fragments = books.mapIndexed { index, book ->
                 BookCardFragment.newInstance(
                     index,
@@ -202,7 +185,8 @@ class ArticleActivity : AppCompatActivity() {
                     book.category,
                     book.title,
                     book.author,
-                    book.body
+                    book.body,
+                    articleCategory
                 )
             }
 
@@ -327,5 +311,16 @@ class ArticleActivity : AppCompatActivity() {
                 lastAddedViewId = itemBinding.root.id
             }
         }
+
+        /**
+         * 오류 및 로딩 페이지 처리
+         */
+        vm.isError.observe(this) { showErrorView(it) }
+        vm.isLoading.observe(this) { showLoadingView(it) }
     }
+
+    override fun onRetry() {
+        vm.getArticleData(articleId)
+    }
+
 }

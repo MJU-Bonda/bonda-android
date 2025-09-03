@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
+import com.bonda.bonda.ui.components.BaseActivity
 import com.bonda.bonda.R
 import com.bonda.bonda.databinding.ActivityMyActivityBinding
 import com.bonda.bonda.databinding.ViewGraphLegendBinding
@@ -20,7 +20,7 @@ import com.bonda.bonda.network.ApiClient
 import com.bonda.bonda.ui.modal.BadgeDetailViewModal
 import kotlinx.coroutines.launch
 
-class MyActivityActivity : AppCompatActivity() {
+class MyActivityActivity : BaseActivity() {
 
     private val memberService = ApiClient.memberService
     private lateinit var binding: ActivityMyActivityBinding
@@ -30,7 +30,7 @@ class MyActivityActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMyActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setBaseContent(binding.root)
 
         /**
          * 디스플레이 인셋 적용
@@ -143,8 +143,20 @@ class MyActivityActivity : AppCompatActivity() {
 
                 if (badgeList[index].isUnlocked) {
                     badgeView.badgeImage.setImageResource(badgeImages[index])
+                    badgeView.badgeTitle.setTextColor(
+                        ContextCompat.getColor(
+                            this@MyActivityActivity,
+                            R.color.text_accent_primary
+                        )
+                    )
                 } else {
                     badgeView.badgeImage.setImageResource(badgeDisabledImages[index])
+                    badgeView.badgeTitle.setTextColor(
+                        ContextCompat.getColor(
+                            this@MyActivityActivity,
+                            R.color.text_default_tertiary
+                        )
+                    )
                 }
 
                 badgeView.root.setOnClickListener {
@@ -174,6 +186,19 @@ class MyActivityActivity : AppCompatActivity() {
                 }
             }
         }
+
+        /**
+         * 로딩 및 오류 상태 처리
+         */
+        vm.isLoading.observe(this) { showLoadingView(it) }
+        vm.isError.observe(this) { showErrorView(it) }
+    }
+
+    /**
+     * 오류 페이지 재시도 버튼 클릭 시
+     */
+    override fun onRetry() {
+        vm.getMyActivity()
     }
 
     /**

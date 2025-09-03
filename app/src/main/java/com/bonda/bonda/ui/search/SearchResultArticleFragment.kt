@@ -6,17 +6,17 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bonda.bonda.databinding.FragmentSearchResultBinding
+import com.bonda.bonda.model.GridSpacingItemDecoration
+import com.bonda.bonda.model.dpToPx
 import com.bonda.bonda.ui.article.ArticleActivity
+import com.bonda.bonda.ui.components.BaseFragment
 
-class SearchResultArticleFragment : Fragment() {
+class SearchResultArticleFragment : BaseFragment() {
 
     companion object {
         fun newInstance(): SearchResultArticleFragment = SearchResultArticleFragment()
@@ -27,15 +27,35 @@ class SearchResultArticleFragment : Fragment() {
     private val vm: SearchViewModel by activityViewModels()
     private lateinit var articleAdapter: ArticleAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        _binding = FragmentSearchResultBinding.inflate(layoutInflater)
+        setBaseContent(binding.root)
+
         setupRecyclerView()
+
+        /**
+         * 로딩 상태를 관찰합니다
+         */
+        vm.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            // 페이지네이션 중에는 전체 화면 로딩을 표시하지 않음
+            val isPaginating = articleAdapter.itemCount > 0
+            if (!isPaginating) {
+                showLoadingView(isLoading)
+                binding.root.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+            }
+        }
+
+        /**
+         * 에러 상태를 관찰합니다
+         */
+        vm.isError.observe(viewLifecycleOwner) { isError ->
+            showErrorView(isError)
+            if (isError) {
+                binding.root.visibility = View.INVISIBLE
+            }
+        }
 
         /**
          * 정렬 토글 버튼 클릭 리스너
@@ -79,6 +99,16 @@ class SearchResultArticleFragment : Fragment() {
         }
     }
 
+    /**
+     * 오류화면에서 재시도 버튼을 클릭했을 때
+     */
+    override fun onRetry() {
+        vm.search(vm.searchKeyword)
+    }
+
+    /**
+     * RecyclerView를 초기화합니다
+     */
     private fun setupRecyclerView() {
         articleAdapter = ArticleAdapter { article ->
             val intent = Intent(requireContext(), ArticleActivity::class.java)
@@ -88,9 +118,19 @@ class SearchResultArticleFragment : Fragment() {
 
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
 
+        /**
+         * item 사이 gap을 추가합니다
+         */
+        val horizontalSpacing = 10.dpToPx()
+        val verticalSpacing = 16.dpToPx()
+
         binding.rv.apply {
             adapter = articleAdapter
             layoutManager = gridLayoutManager
+
+            addItemDecoration(
+                GridSpacingItemDecoration(2, horizontalSpacing, verticalSpacing)
+            )
 
             /**
              * 화면의 아래에 닿으면 다음 페이지를 로드합니다

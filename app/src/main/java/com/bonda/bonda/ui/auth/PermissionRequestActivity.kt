@@ -22,18 +22,6 @@ class PermissionRequestActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPermissionRequestBinding
 
-    /**
-     * private val requestPermissionLauncher: ActivityResultLauncher<String> =
-     *         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-     *             val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-     *             prefs.edit() { putBoolean(PREF_KEY_PERMISSION_REQUIRED, false) }
-     *
-     *             val intent = Intent(this, MainActivity::class.java)
-     *             startActivity(intent)
-     *             finish()
-     *         }
-     */
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -52,30 +40,13 @@ class PermissionRequestActivity : AppCompatActivity() {
         }
 
         /**
-         * '확인했어요' 버튼 클릭 시 권한 요청 한번 수행 후 activity 종료
+         * '확인했어요' 버튼 클릭 시 activity 종료
          */
         binding.nextButton.setOnClickListener {
             prefs.edit() { putBoolean(PREF_KEY_PERMISSION_REQUIRED, false) }
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
-
-            /**
-             * when {
-             *                 ContextCompat.checkSelfPermission(
-             *                     this,
-             *                     Manifest.permission.CAMERA
-             *                 ) == PackageManager.PERMISSION_GRANTED -> {
-             *                     prefs.edit() { putBoolean(PREF_KEY_PERMISSION_REQUIRED, false) }
-             *                     val intent = Intent(this, MainActivity::class.java)
-             *                     startActivity(intent)
-             *                     finish()
-             *                 }
-             *                 else -> {
-             *                     requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-             *                 }
-             *             }
-             */
         }
     }
 

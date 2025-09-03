@@ -6,17 +6,17 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bonda.bonda.databinding.FragmentSearchResultBinding
+import com.bonda.bonda.model.GridSpacingItemDecoration
+import com.bonda.bonda.model.dpToPx
 import com.bonda.bonda.ui.book.BookActivity
+import com.bonda.bonda.ui.components.BaseFragment
 
-class SearchResultBookFragment : Fragment() {
+class SearchResultBookFragment : BaseFragment() {
 
     companion object {
         fun newInstance(): SearchResultBookFragment = SearchResultBookFragment()
@@ -27,15 +27,37 @@ class SearchResultBookFragment : Fragment() {
     private val vm: SearchViewModel by activityViewModels()
     private lateinit var bookAdapter: BookAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        _binding = FragmentSearchResultBinding.inflate(layoutInflater)
+        setBaseContent(binding.root)
+
         setupRecyclerView()
+
+        /**
+         * 로딩 상태를 관찰해서 화면에 반영합니다
+         */
+        vm.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            /**
+             * 페이지네이션 중에는 전체 화면 로딩을 표시하지 않음
+             */
+            val isPaginating = bookAdapter.itemCount > 0
+            if (!isPaginating) {
+                showLoadingView(isLoading)
+                binding.root.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+            }
+        }
+
+        /**
+         * 오류 상태를 관찰해서 화면에 반영합니다
+         */
+        vm.isError.observe(viewLifecycleOwner) { isError ->
+            showErrorView(isError)
+            if (isError) {
+                binding.root.visibility = View.INVISIBLE
+            }
+        }
 
         /**
          * 정렬 토글 버튼 클릭 리스너
@@ -79,6 +101,13 @@ class SearchResultBookFragment : Fragment() {
         }
     }
 
+    /**
+     * 오류 페이지에서 재시도 버튼을 클릭했을 때
+     */
+    override fun onRetry() {
+        vm.search(vm.searchKeyword)
+    }
+
     private fun setupRecyclerView() {
         bookAdapter = BookAdapter { book ->
             val intent = Intent(requireContext(), BookActivity::class.java)
@@ -88,9 +117,19 @@ class SearchResultBookFragment : Fragment() {
 
         val gridLayoutManager = GridLayoutManager(requireContext(), 3)
 
+        /**
+         * item 사이 gap을 추가합니다
+         */
+        val horizontalSpacing = 12.dpToPx()
+        val verticalSpacing = 24.dpToPx()
+
         binding.rv.apply {
             adapter = bookAdapter
             layoutManager = gridLayoutManager
+
+            addItemDecoration(
+                GridSpacingItemDecoration(3, horizontalSpacing, verticalSpacing)
+            )
 
             /**
              * 화면의 아래까지 스크롤되면 다음 페이지를 로드합니다
@@ -118,4 +157,5 @@ class SearchResultBookFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

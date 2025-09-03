@@ -11,9 +11,16 @@ import com.bonda.bonda.model.TAG
 import kotlinx.coroutines.launch
 
 class MyActivityViewModel : ViewModel() {
-
+    /**
+     * 네트워크 인스턴스 로드
+     */
     private val memberService = ApiClient.memberService
 
+    /**
+     * 라이브 데이터
+     */
+    private val _isLoading = MutableLiveData(true)
+    private val _isError = MutableLiveData(false)
     private val _viewedBookCount = MutableLiveData<Int>()
     private val _collectedBookCount = MutableLiveData<Int>()
     private val _collectedBadgeCount = MutableLiveData<Int>()
@@ -21,6 +28,13 @@ class MyActivityViewModel : ViewModel() {
     private val _collectedBadgeList =
         MutableLiveData<List<GetCollectedBadgesResponse.Badge>>(emptyList())
 
+    /**
+     * 읽기 전용 데이터
+     */
+    val isLoading: MutableLiveData<Boolean>
+        get() = _isLoading
+    val isError: MutableLiveData<Boolean>
+        get() = _isError
     val viewedBookCount: MutableLiveData<Int>
         get() = _viewedBookCount
     val collectedBookCount: MutableLiveData<Int>
@@ -33,8 +47,15 @@ class MyActivityViewModel : ViewModel() {
         get() = _collectedBadgeList
 
     init {
+        getMyActivity()
+    }
+
+    fun getMyActivity() {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
+                _isError.value = false
+
                 val bookRes = memberService.getMyActivity().unwrapOrThrow()
                 val badgeRes = memberService.getCollectedBadges().unwrapOrThrow()
 
@@ -57,7 +78,10 @@ class MyActivityViewModel : ViewModel() {
                 _collectedBadgeList.value = (badgeRes.viewBadgeList + badgeRes.saveBadgeList)
 
             } catch (e: Exception) {
+                _isError.value = true
                 Log.e(TAG, e.toString())
+            } finally {
+                _isLoading.value = false
             }
         }
     }

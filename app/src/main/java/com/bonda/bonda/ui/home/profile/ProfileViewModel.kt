@@ -19,6 +19,8 @@ class ProfileViewModel : ViewModel() {
     /**
      * live-data declaration
      */
+    private val _isLoading = MutableLiveData(true)
+    private val _isError = MutableLiveData(false)
     private val _username = MutableLiveData<String>()
     private val _profileImage = MutableLiveData("")
     private val _savedBookCount = MutableLiveData<Int>()
@@ -27,6 +29,8 @@ class ProfileViewModel : ViewModel() {
     /**
      * read-only properties
      */
+    val isLoading: LiveData<Boolean> = _isLoading
+    val isError: LiveData<Boolean> = _isError
     val username: LiveData<String> = _username
     val profileImage: LiveData<String> = _profileImage
     val savedBookCount: LiveData<Int> = _savedBookCount
@@ -43,9 +47,12 @@ class ProfileViewModel : ViewModel() {
     /**
      * 프로필 로드
      */
-    private fun loadProfile() {
+    fun loadProfile() {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
+                _isError.value = false
+
                 val res = memberService.getProfile().unwrapOrThrow()
 
                 _username.value = res.nickname
@@ -54,7 +61,10 @@ class ProfileViewModel : ViewModel() {
                 _savedBookCount.value = res.savedBookCount
                 _collectedBadgeCount.value = res.badgeCount
             } catch (e: Exception) {
-                Log.e(TAG, e.message.toString())
+                Log.e(TAG, "ProfileViewModel.kt::loadProfile()", e)
+                _isError.value = true
+            } finally {
+                _isLoading.value = false
             }
         }
     }

@@ -14,11 +14,12 @@ class ArticleViewModel : ViewModel() {
      * 서비스 인스턴스 선언
      */
     private val articleService = ApiClient.articleService
-    private var isLoading = false
+    private var isSaving = false
 
     /**
      * live-data 선언
      */
+    private val _isLoading = MutableLiveData(true)
     private val _isError = MutableLiveData(false)
     private val _id = MutableLiveData<Long>()
     private val _isSaved = MutableLiveData<Boolean>()
@@ -34,6 +35,7 @@ class ArticleViewModel : ViewModel() {
     /**
      * 관찰용 live-data 선언
      */
+    val isLoading: LiveData<Boolean> = _isLoading
     val isError: LiveData<Boolean> = _isError
     val id: LiveData<Long> = _id
     val isSaved: LiveData<Boolean> = _isSaved
@@ -71,8 +73,10 @@ class ArticleViewModel : ViewModel() {
     fun getArticleData(articleId: Long) {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
+                _isError.value = false
+
                 val response = articleService.getArticleDetail(articleId).unwrapOrThrow()
-                Log.d(TAG, response.toString())
 
                 _id.value = response.articleId
                 _isSaved.value = response.isBookmarked
@@ -100,11 +104,11 @@ class ArticleViewModel : ViewModel() {
                     )
                 }
                 _hasNewBadge.value = response.isNewBadge
-
-                _isError.value = false
             } catch (e: Exception) {
                 Log.e(TAG, "ArticleViewModel.kt::getArticleData()", e)
                 _isError.value = true
+            } finally {
+                _isLoading.value = false
             }
         }
     }
@@ -113,9 +117,10 @@ class ArticleViewModel : ViewModel() {
      * 아티클 저장 토글
      */
     suspend fun toggleSaved(): Boolean {
-        if (isLoading)
+        if (isSaving)
             return false
-        isLoading = true
+
+        isSaving = true
 
         val currentlySaved = _isSaved.value ?: return false
         val currentArticleId = _id.value ?: return false
@@ -123,19 +128,12 @@ class ArticleViewModel : ViewModel() {
         try {
             val res = articleService.saveArticle(currentArticleId).unwrapOrThrow()
             _isSaved.value = !currentlySaved
-            isLoading = false
             return res.isNewBadge
         } catch (e: Exception) {
-            isLoading = false
             throw e
+        } finally {
+            isSaving = false
         }
-    }
-
-    /**
-     * 에러상태 토글
-     */
-    fun setErrorState(isError: Boolean) {
-        _isError.value = isError
     }
 
 }

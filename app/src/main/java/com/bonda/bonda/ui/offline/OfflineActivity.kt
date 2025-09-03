@@ -6,18 +6,18 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bonda.bonda.MainActivity
-import com.bonda.bonda.databinding.LayoutErrorNetworkBinding
+import com.bonda.bonda.databinding.LayoutErrorBinding
 import com.bonda.bonda.model.ERROR_CALLBACK_ACTIVITY
 import com.bonda.bonda.model.NetworkStatus
 
 class OfflineActivity : AppCompatActivity() {
 
-    private lateinit var binding: LayoutErrorNetworkBinding
+    private lateinit var binding: LayoutErrorBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = LayoutErrorNetworkBinding.inflate(layoutInflater)
+        binding = LayoutErrorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val errorCallbackActivity = intent.getStringExtra(ERROR_CALLBACK_ACTIVITY)

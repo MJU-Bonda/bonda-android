@@ -12,5 +12,5 @@
     app:chipStrokeWidth="1dp"
     app:closeIconEnabled="true"
     app:closeIconTint="@color/border_default_secondary"
-    app:textEndPadding="12dp"
-    app:textStartPadding="12dp" />
+    app:textEndPadding="8dp"
+    app:textStartPadding="8dp" />
