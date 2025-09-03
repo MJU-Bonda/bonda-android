@@ -17,26 +17,27 @@ import com.bonda.bonda.databinding.ViewChipBookCategoryFilterBinding
 import com.bonda.bonda.model.BookCategory
 import com.bonda.bonda.model.BookTheme
 import com.bonda.bonda.ui.book.BookActivity
+import com.bonda.bonda.ui.components.BaseFragment
 import com.bonda.bonda.ui.search.SearchActivity
 
-class BooksFragment : Fragment() {
+class BooksFragment : BaseFragment() {
 
     private var _binding: FragmentHomeBooksBinding? = null
     private val binding get() = _binding!!
     private val vm: BooksViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHomeBooksBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /**
+         * layout binding
+         */
+        _binding = FragmentHomeBooksBinding.inflate(layoutInflater)
+        setBaseContent(binding.root)
+
+        /**
+         * 검색하기 버튼 클릭 시
+         */
         binding.searchButton.setOnClickListener {
             startActivity(Intent(requireContext(), SearchActivity::class.java))
         }
@@ -168,6 +169,19 @@ class BooksFragment : Fragment() {
                 binding.mostLovedBooksContainer.addView(itemBinding.root)
             }
         }
+
+        /**
+         * 에러 및 로딩 상태 반영
+         */
+        vm.isLoading.observe(viewLifecycleOwner) { showLoadingView(it) }
+        vm.isError.observe(viewLifecycleOwner) { showErrorView(it) }
+    }
+
+    /**
+     * 오류 발생 시 재시도 버튼 클릭
+     */
+    override fun onRetry() {
+        vm.fetchInitialData()
     }
 
     override fun onDestroyView() {

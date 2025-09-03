@@ -2,11 +2,8 @@ package com.bonda.bonda.ui.home.profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.fragment.app.Fragment
 import coil3.load
 import com.bonda.bonda.databinding.FragmentHomeProfileBinding
 import com.bonda.bonda.ui.profile.EditProfileActivity
@@ -17,8 +14,9 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import com.bonda.bonda.model.BONDA_NOTICE_URL
 import com.bonda.bonda.model.BONDA_TERMS_OF_POLICY_URL
+import com.bonda.bonda.ui.components.BaseFragment
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : BaseFragment() {
 
     private var _binding: FragmentHomeProfileBinding? = null
     private val binding get() = _binding!!
@@ -26,6 +24,9 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        _binding = FragmentHomeProfileBinding.inflate(layoutInflater)
+        setBaseContent(binding.root)
 
         /**
          * 회원 정보 binding
@@ -87,15 +88,19 @@ class ProfileFragment : Fragment() {
             val customTabsIntent = builder.build()
             customTabsIntent.launchUrl(requireContext(), BONDA_TERMS_OF_POLICY_URL.toUri())
         }
+
+        /**
+         * 로딩 및 에러 상태 반영
+         */
+        vm.isLoading.observe(viewLifecycleOwner) { showLoadingView(it) }
+        vm.isError.observe(viewLifecycleOwner) { showErrorView(it) }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHomeProfileBinding.inflate(inflater, container, false)
-        return binding.root
+    /**
+     * 재시도 버튼 클릭 시
+     */
+    override fun onRetry() {
+        vm.loadProfile()
     }
 
     override fun onDestroyView() {

@@ -49,7 +49,7 @@ class ArticlesViewModel : ViewModel() {
     /**
      * 아티클 전체를 불러옵니다
      */
-    private fun getArticles() {
+    fun getArticles() {
         viewModelScope.launch {
             try {
                 _isLoading.value = true
