@@ -42,6 +42,18 @@ class LibraryFragment : BaseFragment() {
         }.attach()
 
         /**
+         * argument로 tab position을 받고, 0이면 도서, 1이면 아티클로 이동
+         */
+        arguments?.let {
+            val tabPosition = it.getInt("library_tab_position", -1)
+            if (tabPosition != -1) {
+                binding.viewPager.setCurrentItem(tabPosition, false)
+                // 인자를 한 번만 사용하도록 사용 후 제거
+                it.remove("library_tab_position")
+            }
+        }
+
+        /**
          * 로딩 및 에러 상태 반영
          */
         vm.isLoading.observe(viewLifecycleOwner) { showLoadingView(it) }

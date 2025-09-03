@@ -106,10 +106,11 @@ class ArticlesListFragment : Fragment() {
                                         message = "아티클 저장이 완료되었습니다!",
                                         buttonText = "서재로 이동",
                                         onButtonClick = {
-                                            val intent =
-                                                Intent(requireContext(), HomeActivity::class.java)
-                                            intent.putExtra("navDest", "library")
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                                            val intent = Intent(requireContext(), HomeActivity::class.java).apply {
+                                                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                                putExtra("destination_id", R.id.navigation_library)
+                                                putExtra("library_tab_position", 1) // 0: 도서, 1: 아티클
+                                            }
                                             startActivity(intent)
                                         },
                                         type = SnackbarType.SAVE
