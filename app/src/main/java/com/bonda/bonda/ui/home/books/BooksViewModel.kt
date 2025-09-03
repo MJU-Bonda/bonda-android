@@ -21,6 +21,7 @@ class BooksViewModel : ViewModel() {
      * 현재 진행 중인 네트워크 요청의 수를 추적하는 카운터
      */
     private var activeNetworkCalls = 0
+    private var isInitialLoad = true // 초기 로딩인지 확인하는 플래그
 
     /**
      * view model 데이터 선언
@@ -47,7 +48,9 @@ class BooksViewModel : ViewModel() {
         if (activeNetworkCalls == 0) {
             _isError.value = false
         }
-        _isLoading.value = true
+        if (isInitialLoad) {
+            _isLoading.value = true
+        }
         activeNetworkCalls++
 
         viewModelScope.launch {
@@ -71,6 +74,7 @@ class BooksViewModel : ViewModel() {
                 activeNetworkCalls--
                 if (activeNetworkCalls == 0) {
                     _isLoading.value = false
+                    isInitialLoad = false // 첫 로드가 끝나면 false로 변경
                 }
             }
         }
@@ -83,7 +87,9 @@ class BooksViewModel : ViewModel() {
         if (activeNetworkCalls == 0) {
             _isError.value = false
         }
-        _isLoading.value = true
+        if (isInitialLoad) {
+            _isLoading.value = true
+        }
         activeNetworkCalls++
 
         viewModelScope.launch {
@@ -107,6 +113,7 @@ class BooksViewModel : ViewModel() {
                 activeNetworkCalls--
                 if (activeNetworkCalls == 0) {
                     _isLoading.value = false
+                    isInitialLoad = false // 첫 로드가 끝나면 false로 변경
                 }
             }
         }
@@ -116,6 +123,7 @@ class BooksViewModel : ViewModel() {
      * 데이터 초기화 및 재시도용 함수
      */
     fun fetchInitialData() {
+        isInitialLoad = true // 재시도 시 다시 초기 로딩으로 설정
         setSelectedMostLovedBooksCategory(BookCategory.ALL.code)
         setSelectedNewArrivedBooksCategory(BookCategory.ALL.code)
     }
