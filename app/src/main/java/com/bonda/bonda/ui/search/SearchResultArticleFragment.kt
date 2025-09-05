@@ -39,11 +39,20 @@ class SearchResultArticleFragment : BaseFragment() {
          * 로딩 상태를 관찰합니다
          */
         vm.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            // 페이지네이션 중에는 전체 화면 로딩을 표시하지 않음
-            val isPaginating = articleAdapter.itemCount > 0
-            if (!isPaginating) {
-                showLoadingView(isLoading)
-                binding.root.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+            if (isLoading) {
+                /**
+                 * 로딩이 시작될 때, 현재 표시된 아이템이 없다면 로딩 화면을 보여줍니다
+                 */
+                if (articleAdapter.itemCount == 0) {
+                    showLoadingView(true)
+                    binding.root.visibility = View.INVISIBLE
+                }
+            } else {
+                /**
+                 * 로딩이 끝나면 항상 로딩 화면을 숨기고 콘텐츠를 보여줍니다
+                 */
+                showLoadingView(false)
+                binding.root.visibility = View.VISIBLE
             }
         }
 
