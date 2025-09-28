@@ -1,6 +1,7 @@
 package com.bonda.bonda.ui.home.library
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,17 +14,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bonda.bonda.databinding.FragmentHomeLibraryArticlesBinding
-import com.bonda.bonda.model.GridSpacingItemDecoration
 import com.bonda.bonda.model.toSortOrder
 import com.bonda.bonda.ui.article.ArticleActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-
 class LibraryArticlesFragment : Fragment() {
 
-    private var _binding: FragmentHomeLibraryArticlesBinding? = null // 변경된 부분
+    private var _binding: FragmentHomeLibraryArticlesBinding? = null
     private val binding get() = _binding!!
 
     private val vm: LibraryViewModel by viewModels({ requireParentFragment() })
@@ -34,39 +34,47 @@ class LibraryArticlesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeLibraryArticlesBinding.inflate(inflater, container, false) // 변경된 부분
+        _binding = FragmentHomeLibraryArticlesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 아티클 목록 표시 로직만 남김
         articlesAdapter = SavedArticlePagingAdapter { article ->
             val intent = Intent(requireContext(), ArticleActivity::class.java)
             intent.putExtra("article_detail_id", article.articleId)
             startActivity(intent)
         }
 
-        /**
-         * 아티클 사이 상하좌우 gap을 설정합니다
-         */
-        fun dpToPx(dp: Int): Int {
-            return (dp * resources.displayMetrics.density).toInt()
-        }
-
-        val spanCount = 2
-        val horizontalSpacing = dpToPx(10)
-        val verticalSpacing = dpToPx(16)
-
-        binding.rv.layoutManager = GridLayoutManager(requireContext(), spanCount)
-
-        if (binding.rv.itemDecorationCount > 0) {
-            binding.rv.removeItemDecorationAt(0)
-        }
-        binding.rv.addItemDecoration(GridSpacingItemDecoration(spanCount, horizontalSpacing, verticalSpacing))
-
+        binding.rv.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rv.adapter = articlesAdapter
+
+        /**
+         * dp 값을 pixel 값으로 변환합니다.
+         */
+        fun Int.dpToPx(): Int {
+            return (this * resources.displayMetrics.density).toInt()
+        }
+
+        /**
+         * RecyclerView 아이템 간 상하 10dp, 좌우 16dp의 간격을 추가합니다.
+         */
+        binding.rv.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                super.getItemOffsets(outRect, view, parent, state)
+                outRect.left = 5.dpToPx()
+                outRect.right = 5.dpToPx()
+
+                outRect.top = 8.dpToPx()
+                outRect.bottom = 8.dpToPx()
+            }
+        })
 
         /**
          * 로딩 상태에 따라 빈 목록 뷰(tv_empty)의 노출 여부를 결정합니다.
